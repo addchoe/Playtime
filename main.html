@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Playtime!</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: #EEEEEE;
+      font-family: 'Pretendard', -apple-system, sans-serif;
+      font-weight: 400;
+      font-size: 18px;
+      color: #111111;
+      overflow-x: hidden;
+    }
+
+    /* ── LOGO ── */
+    .site-logo {
+      position: fixed;
+      top: 29px;
+      left: 60px;
+      z-index: 100;
+      width: 144px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .site-logo img {
+      width: 144px;
+      height: 36px;
+      object-fit: contain;
+      object-position: left center;
+    }
+
+    /* ── OVERLAY ── */
+    .nav-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(17,17,17,0.4);
+      z-index: 150;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .nav-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* ── NAV PILL ── */
+    .nav-pill {
+      position: fixed;
+      top: 29px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 200;
+      background: #111111;
+      overflow: hidden;
+
+      /* closed state */
+      width: 264px;
+      height: 36px;
+      border-radius: 18px;
+
+      transition:
+        width        0.42s cubic-bezier(0.4, 0, 0.2, 1),
+        height       0.42s cubic-bezier(0.4, 0, 0.2, 1),
+        border-radius 0.42s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .nav-pill.open {
+      width: 324px;
+      height: 395px;
+      border-radius: 18px;
+    }
+
+    /* ── TOP BAR ── */
+    .nav-top {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 36px;
+      padding: 0 31px;
+      cursor: pointer;
+    }
+
+    /* closed row: Time + clock */
+    .nav-top-closed {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 31px;
+      transition: opacity 0.15s ease;
+    }
+
+    /* open row: Time + Close */
+    .nav-top-open {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 31px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.15s ease;
+    }
+
+    .nav-pill.open .nav-top-closed { opacity: 0; pointer-events: none; }
+    .nav-pill.open .nav-top-open   { opacity: 1; pointer-events: auto; }
+
+    .nav-label {
+      font-family: 'Pretendard', sans-serif;
+      font-weight: 400;
+      font-size: 18px;
+      letter-spacing: -0.04em;
+      color: rgba(238,238,238,0.45);
+      user-select: none;
+    }
+
+    .nav-time {
+      font-family: 'Pretendard', sans-serif;
+      font-weight: 400;
+      font-size: 18px;
+      color: #EEEEEE;
+    }
+
+    .nav-close {
+      font-family: 'Pretendard', sans-serif;
+      font-weight: 400;
+      font-size: 18px;
+      letter-spacing: -0.04em;
+      color: rgba(238,238,238,0.45);
+      cursor: pointer;
+    }
+    .nav-close:hover { color: #EEEEEE; }
+
+    /* ── EXPANDED CONTENT ── */
+    .nav-body {
+      position: absolute;
+      top: 36px; left: 0; right: 0; bottom: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 0 20px 9px 27px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.18s ease;
+    }
+
+    .nav-pill.open .nav-body {
+      opacity: 1;
+      pointer-events: auto;
+      transition: opacity 0.2s ease 0.25s;
+    }
+
+    .nav-menu {
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+      padding-top: 42px;
+      padding-left: 12px;
+    }
+
+    .nav-menu-item {
+      font-family: 'SK Concretica', 'Pretendard', sans-serif;
+      font-weight: 400;
+      font-size: 30px;
+      letter-spacing: -0.02em;
+      color: #EEEEEE;
+      text-decoration: none;
+      cursor: pointer;
+      line-height: 1.2;
+      transition: opacity 0.15s;
+    }
+    .nav-menu-item:hover { opacity: 0.5; }
+
+    .nav-footer {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+
+    .nav-copyright {
+      font-family: 'Pretendard', sans-serif;
+      font-weight: 400;
+      font-size: 16px;
+      letter-spacing: -0.04em;
+      color: rgba(238,238,238,0.45);
+      padding-bottom: 12px;
+    }
+
+    .nav-icons {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-right: 0;
+    }
+
+    .nav-icon-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 43px;
+      height: 42px;
+      text-decoration: none;
+      opacity: 0.7;
+      transition: opacity 0.15s;
+    }
+    .nav-icon-link:hover { opacity: 1; }
+    .nav-icon-link img {
+      width: 39px;
+      height: 38px;
+      object-fit: contain;
+    }
+
+    /* ── CONTACT BUTTON ── */
+    .contact-btn {
+      position: fixed;
+      top: 29px;
+      right: 60px;
+      z-index: 100;
+      width: 114px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      background: #E2E2E2;
+      border-radius: 10px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .contact-btn:hover { background: #D5D5D5; }
+    .contact-btn.active { background: #111111; }
+    .contact-btn.active .contact-dot { background: #EEEEEE; }
+    .contact-btn.active .contact-label { color: #EEEEEE; }
+
+    .contact-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #111111;
+      flex-shrink: 0;
+    }
+    .contact-label {
+      font-family: 'Pretendard', sans-serif;
+      font-weight: 500;
+      font-size: 18px;
+      color: #111111;
+    }
+
+    /* ── PAGES ── */
+    .page { display: none; min-height: 1011px; }
+    .page.active { display: flex; flex-direction: column; }
+    #page-main { align-items: center; justify-content: center; }
+
+    #page-contact { align-items: center; justify-content: center; gap: 48px; }
+    .contact-heading {
+      font-family: 'Pretendard', sans-serif;
+      font-weight: 500;
+      font-size: 64px;
+      color: #111111;
+      text-align: center;
+      line-height: 1.1;
+    }
+    .contact-list { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+    .contact-item {
+      font-family: 'Pretendard', sans-serif;
+      font-weight: 500;
+      font-size: 18px;
+      color: #111111;
+      text-decoration: none;
+      opacity: 0.35;
+      transition: opacity 0.2s;
+    }
+    .contact-item:hover { opacity: 1; }
+  </style>
+</head>
+<body>
+
+  <a class="site-logo" onclick="showPage('main')">
+    <img src="img/logo.svg" alt="Playtime!" />
+  </a>
+
+  <div class="nav-overlay" id="nav-overlay" onclick="closeNav()"></div>
+
+  <div class="nav-pill" id="nav-pill">
+
+    <div class="nav-top" onclick="toggleNav()">
+      <!-- closed: Time + clock -->
+      <div class="nav-top-closed">
+        <span class="nav-label">Time</span>
+        <span class="nav-time" id="nav-time">12:00 AM</span>
+      </div>
+      <!-- open: Time + Close -->
+      <div class="nav-top-open">
+        <span class="nav-label">Time</span>
+        <span class="nav-close" onclick="event.stopPropagation(); closeNav()">Close</span>
+      </div>
+    </div>
+
+    <div class="nav-body">
+      <nav class="nav-menu">
+        <a class="nav-menu-item" onclick="navGo('main')">Home</a>
+        <a class="nav-menu-item" onclick="navGo('washup')">Wash Up</a>
+        <a class="nav-menu-item" onclick="navGo('lunch')">Lunch Time</a>
+        <a class="nav-menu-item" onclick="navGo('walk')">Take A Walk</a>
+        <a class="nav-menu-item" onclick="navGo('sleep')">Ready For Sleep</a>
+      </nav>
+
+      <div class="nav-footer">
+        <span class="nav-copyright">©Labvoid</span>
+        <div class="nav-icons">
+          <a class="nav-icon-link" href="#" target="_blank">
+            <img src="img/insta.svg" alt="Instagram" />
+          </a>
+          <a class="nav-icon-link" href="#" target="_blank">
+            <img src="img/behance.svg" alt="Behance" />
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <a class="contact-btn" id="contact-btn" onclick="showPage('contact')">
+    <span class="contact-dot"></span>
+    <span class="contact-label">Contact</span>
+  </a>
+
+  <section class="page active" id="page-main"></section>
+
+  <section class="page" id="page-contact">
+    <div class="contact-heading">Let's talk.</div>
+    <div class="contact-list">
+      <a class="contact-item" href="mailto:hello@playtime.studio">hello@playtime.studio</a>
+      <a class="contact-item" href="#">Instagram</a>
+      <a class="contact-item" href="#">Twitter / X</a>
+    </div>
+  </section>
+
+  <script>
+    function updateTime() {
+      const now = new Date();
+      let h = now.getHours();
+      const m = String(now.getMinutes()).padStart(2, '0');
+      const ampm = h >= 12 ? 'PM' : 'AM';
+      h = h % 12 || 12;
+      document.getElementById('nav-time').textContent = h + ':' + m + ' ' + ampm;
+    }
+    updateTime();
+    setInterval(updateTime, 1000);
+
+    let isOpen = false;
+
+    function toggleNav() {
+      isOpen ? closeNav() : openNav();
+    }
+
+    function openNav() {
+      isOpen = true;
+      document.getElementById('nav-pill').classList.add('open');
+      document.getElementById('nav-overlay').classList.add('open');
+    }
+
+    function closeNav() {
+      isOpen = false;
+      document.getElementById('nav-pill').classList.remove('open');
+      document.getElementById('nav-overlay').classList.remove('open');
+    }
+
+    function navGo(name) {
+      closeNav();
+      showPage(name);
+    }
+
+    function showPage(name) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById('contact-btn').classList.remove('active');
+      const t = document.getElementById('page-' + name);
+      if (t) t.classList.add('active');
+      if (name === 'contact') document.getElementById('contact-btn').classList.add('active');
+    }
+  </script>
+</body>
+</html>
