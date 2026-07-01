@@ -63,7 +63,7 @@
       overflow: hidden;
 
       /* closed state */
-      width: 264px;
+      width: 411px;
       height: 36px;
       border-radius: 18px;
 
@@ -74,7 +74,7 @@
     }
 
     .nav-pill.open {
-      width: 324px;
+      width: 411px;
       height: 395px;
       border-radius: 18px;
     }
@@ -180,6 +180,28 @@
       transition: opacity 0.15s;
     }
     .nav-menu-item:hover { opacity: 0.5; }
+
+    .nav-thumb-preview {
+      position: absolute;
+      right: 20px;
+      width: 97px;
+      height: 60px;
+      border-radius: 6px;
+      overflow: hidden;
+      pointer-events: none;
+      opacity: 0;
+      transform: scale(0.95);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+    .nav-thumb-preview.visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+    .nav-thumb-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
 
     .nav-footer {
       display: flex;
@@ -292,6 +314,7 @@
 
   <div class="nav-overlay" id="nav-overlay" onclick="closeNav()"></div>
 
+
   <div class="nav-pill" id="nav-pill">
 
     <div class="nav-top" onclick="toggleNav()">
@@ -310,11 +333,15 @@
     <div class="nav-body">
       <nav class="nav-menu">
         <a class="nav-menu-item" onclick="navGo('main')">Home</a>
-        <a class="nav-menu-item" onclick="navGo('washup')">Wash Up</a>
-        <a class="nav-menu-item" onclick="navGo('lunch')">Lunch Time</a>
-        <a class="nav-menu-item" onclick="navGo('walk')">Take A Walk</a>
-        <a class="nav-menu-item" onclick="navGo('sleep')">Ready For Sleep</a>
+        <a class="nav-menu-item" data-thumb="img/thumb-washup.jpg" onclick="navGo('washup')">Wash Up</a>
+        <a class="nav-menu-item" data-thumb="img/thumb-lunch.jpg" onclick="navGo('lunch')">Lunch Time</a>
+        <a class="nav-menu-item" data-thumb="img/thumb-walk.jpg" onclick="navGo('walk')">Take A Walk</a>
+        <a class="nav-menu-item" data-thumb="img/thumb-sleep.jpg" onclick="navGo('sleep')">Ready For Sleep</a>
       </nav>
+
+      <div class="nav-thumb-preview" id="nav-preview">
+        <img id="nav-preview-img" src="" alt="" />
+      </div>
 
       <div class="nav-footer">
         <span class="nav-copyright">©Labvoid</span>
@@ -381,6 +408,23 @@
       closeNav();
       showPage(name);
     }
+
+    const preview = document.getElementById('nav-preview');
+    const previewImg = document.getElementById('nav-preview-img');
+    const navBody = document.querySelector('.nav-body');
+
+    document.querySelectorAll('.nav-menu-item[data-thumb]').forEach(item => {
+      item.addEventListener('mouseenter', function() {
+        const itemRect = this.getBoundingClientRect();
+        const bodyRect = navBody.getBoundingClientRect();
+        previewImg.src = this.dataset.thumb;
+        preview.style.top = (itemRect.bottom - bodyRect.top - 60) + 'px';
+        preview.classList.add('visible');
+      });
+      item.addEventListener('mouseleave', function() {
+        preview.classList.remove('visible');
+      });
+    });
 
     function showPage(name) {
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
