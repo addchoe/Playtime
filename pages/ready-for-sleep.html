@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ready for Sleep · Playtime!</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/ready-for-sleep.css" />
+</head>
+<body>
+
+  <a class="site-logo" href="../main.html">
+    <img src="../img/logo.svg" alt="Playtime!" />
+  </a>
+
+  <div class="nav-overlay" id="nav-overlay" onclick="closeNav()"></div>
+
+  <div class="nav-pill" id="nav-pill">
+    <div class="nav-top" onclick="toggleNav()">
+      <div class="nav-top-closed">
+        <span class="nav-label">Time</span>
+        <span class="nav-time" id="nav-time">12:00 AM</span>
+      </div>
+      <div class="nav-top-open">
+        <span class="nav-label">Time</span>
+        <span class="nav-close" onclick="event.stopPropagation(); closeNav()">Close</span>
+      </div>
+    </div>
+
+    <div class="nav-body">
+      <nav class="nav-menu">
+        <a class="nav-menu-item" href="../main.html">Home</a>
+        <a class="nav-menu-item" href="washup.html">Wash Up</a>
+        <a class="nav-menu-item" href="#">Lunch Time</a>
+        <a class="nav-menu-item" href="#">Take A Walk</a>
+        <a class="nav-menu-item" aria-current="page">Ready For Sleep</a>
+      </nav>
+
+      <div class="nav-footer">
+        <span class="nav-copyright">©Labvoid</span>
+        <div class="nav-icons">
+          <a class="nav-icon-link" href="#" target="_blank">
+            <img src="../img/insta.svg" alt="Instagram" />
+          </a>
+          <a class="nav-icon-link" href="#" target="_blank">
+            <img src="../img/behance.svg" alt="Behance" />
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <a class="contact-btn" id="contact-btn" href="../main.html#contact">
+    <span class="contact-dot"></span>
+    <span class="contact-label">Contact</span>
+  </a>
+
+  <main class="rfs-root">
+
+    <!-- SCREEN 1: 최초 로딩 -->
+    <section class="rfs-screen rfs-screen--loading active" id="rfs-screen-loading">
+      <h1 class="rfs-loading-title">Ready for sleep!</h1>
+      <p class="rfs-loading-sub">잘 준비해요! 나만의 잠생네컷을 남겨보세요.</p>
+      <div class="rfs-loading-object-wrap">
+        <img src="../public/assets/ready-for-sleep/loading-object.png" alt="" class="rfs-loading-object" />
+      </div>
+      <p class="rfs-loading-label">Loading..</p>
+      <p class="rfs-loading-hint">카메라가 곧 준비돼요. 멋진 수면 포즈를 준비해요!</p>
+    </section>
+
+    <!-- SCREEN 2: 촬영 (Cut 1~4 공통 컴포넌트) -->
+    <section class="rfs-screen rfs-screen--capture" id="rfs-screen-capture">
+      <div class="rfs-capture-info">
+        <h2 class="rfs-cut-title" id="rfs-cut-title">Cut 1</h2>
+        <span class="rfs-cut-caption" id="rfs-cut-caption">형도니잠</span>
+      </div>
+
+      <div class="rfs-viewport" id="rfs-viewport">
+        <video id="rfs-video" class="rfs-video" autoplay muted playsinline></video>
+        <img id="rfs-object-img" class="rfs-object-img" alt="촬영 오브젝트" />
+        <img id="rfs-captured-img" class="rfs-captured-img" alt="촬영 결과" hidden />
+
+        <div class="rfs-countdown-overlay" id="rfs-countdown-overlay" hidden>
+          <img id="rfs-countdown-img" class="rfs-countdown-img" alt="촬영 카운트다운" />
+        </div>
+
+        <div class="rfs-camera-status" id="rfs-camera-status">
+          <span class="rfs-camera-dot" id="rfs-camera-dot"></span>
+          <span id="rfs-camera-status-text">카메라 연결 중…</span>
+        </div>
+
+        <div class="rfs-permission" id="rfs-permission" hidden>
+          <p class="rfs-permission-text" id="rfs-permission-text">카메라 권한이 필요합니다.</p>
+          <button type="button" class="rfs-retry-btn" onclick="requestRfsCamera()">다시 시도</button>
+        </div>
+      </div>
+
+      <div class="rfs-timer-ring" id="rfs-timer-ring">
+        <div class="rfs-timer-ticks" aria-hidden="true">
+          <span></span><span></span><span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <span class="rfs-timer-num" id="rfs-timer-num">30</span>
+      </div>
+
+      <button type="button" class="rfs-retake-btn" id="rfs-retake-btn" onclick="rfsRetake()" disabled aria-disabled="true">
+        <svg class="rfs-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12a8 8 0 1 1 2.34 5.66M4 12V6m0 6h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>다시 촬영하기</span>
+        <span id="rfs-retake-count">0/3</span>
+      </button>
+
+      <button type="button" class="rfs-shutter-btn" id="rfs-shutter-btn" onclick="rfsManualCapture()" aria-label="촬영하기"></button>
+
+      <button type="button" class="rfs-next-btn" id="rfs-next-btn" onclick="rfsGoNext()" disabled aria-disabled="true">
+        <span>다음 촬영하기</span>
+        <svg class="rfs-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+
+      <p class="rfs-sr-status" id="rfs-capture-status" role="status" aria-live="polite"></p>
+    </section>
+
+    <!-- SCREEN 3: 결과 이미지 생성 로딩 -->
+    <section class="rfs-screen rfs-screen--loading" id="rfs-screen-result-loading">
+      <div class="rfs-loading-object-wrap">
+        <img src="../public/assets/ready-for-sleep/loading-object.png" alt="" class="rfs-loading-object" />
+      </div>
+      <p class="rfs-loading-label">Loading..</p>
+      <p class="rfs-loading-hint">사진을 준비중이에요..</p>
+    </section>
+
+    <!-- SCREEN 4: 마지막 결과 -->
+    <section class="rfs-screen rfs-screen--result" id="rfs-screen-result">
+      <canvas class="rfs-final-canvas" id="rfs-final-canvas"></canvas>
+      <div class="rfs-result-actions">
+        <button type="button" class="rfs-result-btn" onclick="rfsRetakeAll()">다시 촬영하기</button>
+        <button type="button" class="rfs-result-btn rfs-result-btn--primary" onclick="rfsSaveImage()">저장하기</button>
+        <button type="button" class="rfs-result-btn" onclick="rfsShareImage()">공유하기</button>
+      </div>
+    </section>
+
+  </main>
+
+  <div class="rfs-toast" id="rfs-toast" role="status" aria-live="polite" hidden></div>
+
+  <script src="../js/ready-for-sleep.js"></script>
+</body>
+</html>

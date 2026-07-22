@@ -310,10 +310,10 @@
     <div class="nav-body">
       <nav class="nav-menu">
         <a class="nav-menu-item" onclick="navGo('main')">Home</a>
-        <a class="nav-menu-item" onclick="navGo('washup')">Wash Up</a>
+        <a class="nav-menu-item" href="pages/washup.html">Wash Up</a>
         <a class="nav-menu-item" onclick="navGo('lunch')">Lunch Time</a>
         <a class="nav-menu-item" onclick="navGo('walk')">Take A Walk</a>
-        <a class="nav-menu-item" onclick="navGo('sleep')">Ready For Sleep</a>
+        <a class="nav-menu-item" href="pages/ready-for-sleep.html">Ready For Sleep</a>
       </nav>
 
       <div class="nav-footer">
@@ -389,6 +389,8 @@
       if (t) t.classList.add('active');
       if (name === 'contact') document.getElementById('contact-btn').classList.add('active');
     }
+
+    if (location.hash === '#contact') showPage('contact');
   </script>
 </body>
 </html>
