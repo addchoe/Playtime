@@ -70,6 +70,7 @@
 
     <!-- SCREEN 2: 촬영 (Cut 1~4 공통 컴포넌트) -->
     <section class="rfs-screen rfs-screen--capture" id="rfs-screen-capture">
+      <h1 class="rfs-capture-heading">Ready for sleep!</h1>
       <div class="rfs-capture-info">
         <h2 class="rfs-cut-title" id="rfs-cut-title">Cut 1</h2>
         <span class="rfs-cut-caption" id="rfs-cut-caption">형도니잠</span>
@@ -104,7 +105,7 @@
       </div>
 
       <button type="button" class="rfs-retake-btn" id="rfs-retake-btn" onclick="rfsRetake()" disabled aria-disabled="true">
-        <svg class="rfs-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12a8 8 0 1 1 2.34 5.66M4 12V6m0 6h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg class="rfs-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
         <span>다시 촬영하기</span>
         <span id="rfs-retake-count">0/3</span>
       </button>
@@ -132,9 +133,18 @@
     <section class="rfs-screen rfs-screen--result" id="rfs-screen-result">
       <canvas class="rfs-final-canvas" id="rfs-final-canvas"></canvas>
       <div class="rfs-result-actions">
-        <button type="button" class="rfs-result-btn" onclick="rfsRetakeAll()">다시 촬영하기</button>
-        <button type="button" class="rfs-result-btn rfs-result-btn--primary" onclick="rfsSaveImage()">저장하기</button>
-        <button type="button" class="rfs-result-btn" onclick="rfsShareImage()">공유하기</button>
+        <button type="button" class="rfs-result-btn" onclick="rfsRetakeAll()">
+          <img class="rfs-result-icon" src="../img/re.svg" alt="" />
+          <span>다시 촬영하기</span>
+        </button>
+        <button type="button" class="rfs-result-btn rfs-result-btn--primary" onclick="rfsSaveImage()">
+          <img class="rfs-result-icon" src="../img/save.svg" alt="" />
+          <span>저장하기</span>
+        </button>
+        <button type="button" class="rfs-result-btn" onclick="rfsShareImage()">
+          <img class="rfs-result-icon" src="../img/share.svg" alt="" />
+          <span>공유하기</span>
+        </button>
       </div>
     </section>
 

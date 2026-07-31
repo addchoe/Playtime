@@ -1,4 +1,4 @@
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; letter-spacing: -0.04em; }
 
 body {
   background-color: #EEEEEE;
@@ -189,6 +189,19 @@ body {
 .rfs-screen--capture { display: none; }
 .rfs-screen--capture.active { display: block; }
 
+.rfs-capture-heading {
+  position: absolute;
+  left: 50%;
+  top: 12cqh;
+  transform: translateX(-50%);
+  font-family: 'SK Concretica', 'Pretendard', sans-serif;
+  font-size: 2.92cqw;
+  letter-spacing: -0.02em;
+  color: #111111;
+  text-align: center;
+  white-space: nowrap;
+}
+
 .rfs-capture-info {
   position: absolute;
   left: 3.75cqw;
@@ -326,7 +339,7 @@ body {
   height: 8%;
   margin-left: -1px;
   background: rgba(17,17,17,0.3);
-  transform-origin: 50% 46cqh;
+  transform-origin: 50% 575%;
 }
 .rfs-timer-ticks span:nth-child(1)  { transform: rotate(0deg); }
 .rfs-timer-ticks span:nth-child(2)  { transform: rotate(30deg); }
@@ -353,7 +366,7 @@ body {
 .rfs-retake-btn {
   position: absolute;
   left: 21.41cqw;
-  top: 86.48cqh;
+  top: 89.26cqh;
   transform: translateY(-50%);
   display: flex;
   align-items: center;
@@ -375,7 +388,7 @@ body {
 .rfs-next-btn {
   position: absolute;
   left: 66.72cqw;
-  top: 86.48cqh;
+  top: 89.26cqh;
   transform: translateY(-50%);
   display: flex;
   align-items: center;
@@ -441,6 +454,11 @@ body {
 
 .rfs-result-actions { display: flex; gap: 16px; }
 .rfs-result-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-width: 180px;
   padding: 14px 28px;
   border: none;
   border-radius: 22px;
@@ -452,9 +470,11 @@ body {
   cursor: pointer;
   transition: background 0.2s;
 }
+.rfs-result-icon { width: 20px; height: 20px; flex-shrink: 0; }
 .rfs-result-btn:hover { background: #D5D5D5; }
 .rfs-result-btn--primary { background: #111111; color: #EEEEEE; }
 .rfs-result-btn--primary:hover { background: #2a2a2a; }
+.rfs-result-btn--primary .rfs-result-icon { filter: invert(1); }
 
 /* ── TOAST ── */
 .rfs-toast {

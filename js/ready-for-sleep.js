@@ -1,11 +1,21 @@
 /* ── NAV (main.html / washup.html과 공통) ── */
-function updateTime() {
-  const now = new Date();
-  let h = now.getHours();
-  const m = String(now.getMinutes()).padStart(2, '0');
+function rfsFormatTime(date) {
+  let h = date.getHours();
+  const m = String(date.getMinutes()).padStart(2, '0');
   const ampm = h >= 12 ? 'PM' : 'AM';
   h = h % 12 || 12;
-  document.getElementById('nav-time').textContent = h + ':' + m + ' ' + ampm;
+  return h + ':' + m + ' ' + ampm;
+}
+
+function rfsFormatDate(date) {
+  const yy = String(date.getFullYear()).slice(-2);
+  const mm = String(date.getMonth() + 1).padStart(2, '0');
+  const dd = String(date.getDate()).padStart(2, '0');
+  return yy + '.' + mm + '.' + dd;
+}
+
+function updateTime() {
+  document.getElementById('nav-time').textContent = rfsFormatTime(new Date());
 }
 updateTime();
 setInterval(updateTime, 1000);
@@ -64,13 +74,17 @@ const RFS_COUNTDOWN_IMAGES = {
 };
 
 const RFS_FRAME_SRC = RFS_ASSET_DIR + 'four-cut-frame.png';
-const RFS_FRAME_SIZE = { width: 258, height: 678 };
+const RFS_FRAME_SIZE = { width: 1029, height: 2711 };
 const RFS_FRAME_SLOTS = [
   { left: 5.814, top: 2.212, width: 88.369, height: 18.917 },
   { left: 5.814, top: 22.660, width: 88.369, height: 18.917 },
   { left: 5.814, top: 43.109, width: 88.369, height: 18.917 },
   { left: 5.814, top: 63.558, width: 88.369, height: 18.917 },
 ];
+// 프레임 이미지 좌측 하단에 찍힌 "Zzz..." 자리 — 실제 촬영 시각으로 덮어씀
+const RFS_TIME_SLOT = { left: 4.7, top: 83.7, width: 22, height: 3.2 };
+// "Playtime!" 워드마크 바로 아래, 반쯤 잘린 원형 시계 그래픽 위에 겹치는 위치
+const RFS_DATE_POS = { top: 96.8 };
 
 const RFS_MAIN_TIME = 30;
 const RFS_MAX_RETAKE = 3;
@@ -400,9 +414,9 @@ function rfsComposeFinalImage() {
       reject(new Error('missing captured photo'));
       return;
     }
-    const scale = 3;
-    const W = RFS_FRAME_SIZE.width * scale;
-    const H = RFS_FRAME_SIZE.height * scale;
+    const W = RFS_FRAME_SIZE.width;
+    const frameH = RFS_FRAME_SIZE.height;
+    const H = frameH;
 
     const canvas = rfsFinalCanvasEl;
     canvas.width = W;
@@ -411,14 +425,14 @@ function rfsComposeFinalImage() {
 
     Promise.all([rfsLoadImage(RFS_FRAME_SRC), ...rfsCapturedPhotos.map((src) => rfsLoadImage(src))])
       .then(([frameImg, ...photoImgs]) => {
-        ctx.drawImage(frameImg, 0, 0, W, H);
+        ctx.drawImage(frameImg, 0, 0, W, frameH);
 
         photoImgs.forEach((img, i) => {
           const slot = RFS_FRAME_SLOTS[i];
           const x = (slot.left / 100) * W;
-          const y = (slot.top / 100) * H;
+          const y = (slot.top / 100) * frameH;
           const w = (slot.width / 100) * W;
-          const h = (slot.height / 100) * H;
+          const h = (slot.height / 100) * frameH;
           ctx.save();
           ctx.beginPath();
           ctx.rect(x, y, w, h);
@@ -426,6 +440,26 @@ function rfsComposeFinalImage() {
           rfsDrawImageCover(ctx, img, x, y, w, h);
           ctx.restore();
         });
+
+        const tx = (RFS_TIME_SLOT.left / 100) * W;
+        const ty = (RFS_TIME_SLOT.top / 100) * frameH;
+        const tw = (RFS_TIME_SLOT.width / 100) * W;
+        const th = (RFS_TIME_SLOT.height / 100) * frameH;
+        ctx.fillStyle = '#000000';
+        ctx.fillRect(tx, ty, tw, th);
+        ctx.fillStyle = '#ffffff';
+        ctx.font = Math.round(th * 0.42) + "px 'SK Concretica', 'Pretendard', sans-serif";
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(rfsFormatTime(new Date()), tx, ty + th / 2);
+
+        const dy = (RFS_DATE_POS.top / 100) * frameH;
+        ctx.fillStyle = 'rgba(255,255,255,0.55)';
+        ctx.font = (Math.round(frameH * 0.018) - 2) + "px 'SK Concretica', 'Pretendard', sans-serif";
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(rfsFormatDate(new Date()), W / 2, dy);
+
         resolve();
       })
       .catch(reject);
