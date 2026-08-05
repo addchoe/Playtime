@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wash Up · Playtime!</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/washup.css" />
+</head>
+<body>
+
+  <a class="site-logo" href="../main.html">
+    <img src="../img/logo.svg" alt="Playtime!" />
+  </a>
+
+  <div class="nav-overlay" id="nav-overlay" onclick="closeNav()"></div>
+
+  <div class="nav-pill" id="nav-pill">
+
+    <div class="nav-top" onclick="toggleNav()">
+      <!-- closed: Time + clock -->
+      <div class="nav-top-closed">
+        <span class="nav-label">Time</span>
+        <span class="nav-time" id="nav-time">12:00 AM</span>
+      </div>
+      <!-- open: Time + Close -->
+      <div class="nav-top-open">
+        <span class="nav-label">Time</span>
+        <span class="nav-close" onclick="event.stopPropagation(); closeNav()">Close</span>
+      </div>
+    </div>
+
+    <div class="nav-body">
+      <nav class="nav-menu">
+        <a class="nav-menu-item" href="../main.html">Home</a>
+        <a class="nav-menu-item" aria-current="page">Wash Up</a>
+        <a class="nav-menu-item" href="#">Lunch Time</a>
+        <a class="nav-menu-item" href="#">Take A Walk</a>
+        <a class="nav-menu-item" href="ready-for-sleep.html">Ready For Sleep</a>
+      </nav>
+
+      <div class="nav-footer">
+        <span class="nav-copyright">©Labvoid</span>
+        <div class="nav-icons">
+          <a class="nav-icon-link" href="#" target="_blank">
+            <img src="../img/insta.svg" alt="Instagram" />
+          </a>
+          <a class="nav-icon-link" href="#" target="_blank">
+            <img src="../img/behance.svg" alt="Behance" />
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <a class="contact-btn" id="contact-btn" href="../main.html#contact">
+    <span class="contact-dot"></span>
+    <span class="contact-label">Contact</span>
+  </a>
+
+  <main class="washup-stage">
+    <video id="washup-video" class="washup-video" autoplay muted playsinline></video>
+    <canvas id="washup-canvas" class="washup-canvas" aria-hidden="true"></canvas>
+
+    <div class="washup-camera-status" id="washup-camera-status">
+      <span class="washup-camera-dot" id="washup-camera-dot"></span>
+      <span id="washup-camera-status-text">카메라 연결 중…</span>
+    </div>
+
+    <div class="washup-permission" id="washup-permission" hidden>
+      <p class="washup-permission-text" id="washup-permission-text">카메라 권한이 필요합니다.</p>
+      <button type="button" class="washup-retry-btn" onclick="requestWashUpCamera()">다시 시도</button>
+    </div>
+
+    <div class="washup-showerhead" aria-hidden="true">
+      <div class="washup-showerhead-rail"></div>
+      <div class="washup-showerhead-nozzles">
+        <span class="washup-nozzle"></span>
+        <span class="washup-nozzle"></span>
+        <span class="washup-nozzle"></span>
+        <span class="washup-nozzle"></span>
+        <span class="washup-nozzle"></span>
+        <span class="washup-nozzle"></span>
+        <span class="washup-nozzle"></span>
+        <span class="washup-nozzle"></span>
+        <span class="washup-nozzle"></span>
+      </div>
+    </div>
+
+    <div class="washup-faucet">
+      <span class="washup-faucet-label washup-faucet-label--cold" id="washup-label-cold">COLD</span>
+      <div class="washup-handle-wrap">
+        <div class="washup-handle-base"></div>
+        <div
+          class="washup-handle"
+          id="washup-handle"
+          role="slider"
+          tabindex="0"
+          aria-label="온도 조절 손잡이"
+          aria-valuemin="-60"
+          aria-valuemax="60"
+          aria-valuenow="0"
+          aria-valuetext="Off"
+        >
+          <span class="washup-handle-stick"></span>
+        </div>
+      </div>
+      <span class="washup-faucet-label washup-faucet-label--hot" id="washup-label-hot">HOT</span>
+    </div>
+
+    <p class="washup-state-status" id="washup-state-status" role="status" aria-live="polite">Off</p>
+  </main>
+
+  <script src="../js/washup.js"></script>
+</body>
+</html>

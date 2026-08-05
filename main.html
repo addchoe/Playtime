@@ -1460,6 +1460,8 @@
     document.getElementById('walk-start-btn').addEventListener('click', startWalkGame);
     document.getElementById('walk-retry').addEventListener('click', resetWalkGame);
     document.getElementById('maze-wrap').addEventListener('mousemove', handleWalkMove);
+
+    if (location.hash === '#contact') showPage('contact');
   </script>
 </body>
 </html>
