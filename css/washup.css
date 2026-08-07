@@ -67,7 +67,7 @@ body {
 
 .nav-pill.open {
   width: 324px;
-  height: 395px;
+  height: 439px;
   border-radius: 18px;
 }
 
@@ -154,7 +154,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 11px;
-  padding-top: 42px;
+  padding-top: 26px;
   padding-left: 12px;
 }
 

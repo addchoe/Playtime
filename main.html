@@ -82,7 +82,7 @@
       overflow: hidden;
 
       /* closed state */
-      width: 411px;
+      width: 264px;
       height: 36px;
       border-radius: 18px;
 
@@ -93,8 +93,8 @@
     }
 
     .nav-pill.open {
-      width: 411px;
-      height: 395px;
+      width: 324px;
+      height: 439px;
       border-radius: 18px;
     }
 
@@ -183,7 +183,7 @@
       display: flex;
       flex-direction: column;
       gap: 11px;
-      padding-top: 42px;
+      padding-top: 26px;
       padding-left: 12px;
     }
 
@@ -199,28 +199,7 @@
       transition: opacity 0.15s;
     }
     .nav-menu-item:hover { opacity: 0.5; }
-
-    .nav-thumb-preview {
-      position: absolute;
-      right: 20px;
-      width: 97px;
-      height: 60px;
-      border-radius: 6px;
-      overflow: hidden;
-      pointer-events: none;
-      opacity: 0;
-      transform: scale(0.95);
-      transition: opacity 0.2s ease, transform 0.2s ease;
-    }
-    .nav-thumb-preview.visible {
-      opacity: 1;
-      transform: scale(1);
-    }
-    .nav-thumb-preview img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+    .nav-menu-item[aria-current="page"] { opacity: 0.5; cursor: default; }
 
     .nav-footer {
       display: flex;
@@ -534,17 +513,13 @@
 
     <div class="nav-body">
       <nav class="nav-menu">
-        <a class="nav-menu-item" onclick="navGo('main')">Home</a>
-        <a class="nav-menu-item" data-thumb="img/thumb-washup.jpg" href="pages/washup.html">Wash Up</a>
-        <a class="nav-menu-item" data-thumb="img/thumb-lunch.jpg" onclick="navGo('lunch')">Lunch Time</a>
+        <a class="nav-menu-item" href="pages/washup.html">Wash Up</a>
+        <a class="nav-menu-item" onclick="navGo('lunch')">Lunch Time</a>
         <a class="nav-menu-item" href="pages/secret-break.html">Secret Break</a>
-        <a class="nav-menu-item" data-thumb="img/thumb-walk.jpg" onclick="navGo('walk')">Take A Walk</a>
-        <a class="nav-menu-item" data-thumb="img/thumb-sleep.jpg" href="pages/ready-for-sleep.html">Ready For Sleep</a>
+        <a class="nav-menu-item" onclick="navGo('walk')">Take A Walk</a>
+        <a class="nav-menu-item" href="pages/drawing.html">Drawing</a>
+        <a class="nav-menu-item" href="pages/ready-for-sleep.html">Ready For Sleep</a>
       </nav>
-
-      <div class="nav-thumb-preview" id="nav-preview">
-        <img id="nav-preview-img" src="" alt="" />
-      </div>
 
       <div class="nav-footer">
         <span class="nav-copyright">©Labvoid</span>
@@ -1246,23 +1221,6 @@
       showPage(name);
     }
 
-    const preview = document.getElementById('nav-preview');
-    const previewImg = document.getElementById('nav-preview-img');
-    const navBody = document.querySelector('.nav-body');
-
-    document.querySelectorAll('.nav-menu-item[data-thumb]').forEach(item => {
-      item.addEventListener('mouseenter', function() {
-        const itemRect = this.getBoundingClientRect();
-        const bodyRect = navBody.getBoundingClientRect();
-        previewImg.src = this.dataset.thumb;
-        preview.style.top = (itemRect.bottom - bodyRect.top - 60) + 'px';
-        preview.classList.add('visible');
-      });
-      item.addEventListener('mouseleave', function() {
-        preview.classList.remove('visible');
-      });
-    });
-
     function showPage(name) {
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
       document.getElementById('contact-btn').classList.remove('active');
@@ -1463,6 +1421,7 @@
     document.getElementById('maze-wrap').addEventListener('mousemove', handleWalkMove);
 
     if (location.hash === '#contact') showPage('contact');
+    if (location.hash === '#walk') showPage('walk');
   </script>
 </body>
 </html>
