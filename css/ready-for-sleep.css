@@ -130,6 +130,78 @@ body {
 .contact-dot { width: 6px; height: 6px; border-radius: 50%; background: #111111; flex-shrink: 0; }
 .contact-label { font-family: 'Pretendard', sans-serif; font-weight: 500; font-size: 18px; color: #111111; }
 
+/* ── READY FOR SLEEP: 준비중 (최초 로딩, 1920×1080 GNB 캔버스 기준) ── */
+.rfs-intro {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  background: #EEEEEE;
+  transition: opacity 0.4s ease;
+}
+.rfs-intro--out { opacity: 0; pointer-events: none; }
+
+.rfs-intro-title {
+  position: absolute;
+  left: 50%;
+  top: 321px;
+  transform: translateX(-50%);
+  font-family: 'SK Concretica', 'Pretendard', sans-serif;
+  font-size: 56px;
+  letter-spacing: -0.04em;
+  color: #000000;
+  text-align: center;
+  white-space: nowrap;
+}
+.rfs-intro-sub {
+  position: absolute;
+  left: 50%;
+  top: 401px;
+  transform: translateX(-50%);
+  font-family: 'Pretendard', sans-serif;
+  font-size: 28px;
+  letter-spacing: -0.04em;
+  color: #000000;
+  white-space: nowrap;
+}
+.rfs-intro-object {
+  position: absolute;
+  left: 50%;
+  top: 513px;
+  transform: translateX(-50%);
+  width: 105px;
+}
+.rfs-intro-object img { display: block; width: 100%; height: auto; }
+
+.rfs-intro-label {
+  position: absolute;
+  left: 50%;
+  top: 710px;
+  transform: translateX(-50%);
+  font-family: 'Pretendard', sans-serif;
+  font-size: 24px;
+  letter-spacing: -0.04em;
+  color: rgba(0,0,0,0.29);
+  white-space: nowrap;
+}
+.rfs-intro-tip {
+  position: absolute;
+  left: 50%;
+  top: 765px;
+  transform: translateX(-50%);
+  width: 444px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.05);
+  border-radius: 100px;
+  font-family: 'Pretendard', sans-serif;
+  font-size: 20px;
+  letter-spacing: -0.04em;
+  color: rgba(0,0,0,0.8);
+  white-space: nowrap;
+}
+
 /* ── READY FOR SLEEP ── */
 .rfs-root { position: relative; }
 
@@ -162,19 +234,6 @@ body {
 }
 .rfs-screen--loading.active { display: flex; }
 
-.rfs-loading-title {
-  font-family: 'SK Concretica', 'Pretendard', sans-serif;
-  font-size: 4.2cqw;
-  letter-spacing: -0.02em;
-  color: #111111;
-}
-.rfs-loading-sub {
-  font-family: 'Pretendard', sans-serif;
-  font-weight: 400;
-  font-size: 2.2cqw;
-  color: #111111;
-  margin-top: -12px;
-}
 .rfs-loading-object-wrap {
   width: 8cqw;
   display: flex;

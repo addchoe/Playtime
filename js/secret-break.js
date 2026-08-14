@@ -115,19 +115,6 @@ function sbClearTimers() {
   }
 }
 
-/* ── 화면 전환 (디졸브) ── */
-function sbShowScreen(id) {
-  const current = document.querySelector('.sb-screen.active');
-  const next = document.getElementById(id);
-  if (!next || current === next) return;
-  if (current) {
-    current.classList.add('sb-fade-out');
-    sbSetTimeout(() => current.classList.remove('active', 'sb-fade-out'), 350);
-  }
-  next.classList.add('active', 'sb-fade-in');
-  sbSetTimeout(() => next.classList.remove('sb-fade-in'), 350);
-}
-
 /* ── 문/콘텐츠 렌더링 ── */
 function sbSetDoorState(index, state) {
   sbDoorEls[index].dataset.state = state;
@@ -311,13 +298,16 @@ function sbQuit() {
   window.location.href = '../main.html';
 }
 
+/* ── 준비중 (로딩) ── */
+function sbHideLoading() {
+  document.getElementById('sb-loading').classList.add('sb-loading--out');
+  sbStartRound();
+}
+
 /* ── 초기화 ── */
 function sbInit() {
   sbCacheDom();
-  sbSetTimeout(() => {
-    sbShowScreen('sb-screen-game');
-    sbStartRound();
-  }, SB_LOADING_DURATION);
+  sbSetTimeout(sbHideLoading, SB_LOADING_DURATION);
 }
 
 window.addEventListener('pagehide', sbClearTimers);

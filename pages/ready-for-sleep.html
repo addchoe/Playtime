@@ -35,7 +35,7 @@
           <a class="nav-menu-item" href="washup.html">Wash Up</a>
           <a class="nav-menu-item" href="#">Lunch Time</a>
           <a class="nav-menu-item" href="secret-break.html">Secret Break</a>
-          <a class="nav-menu-item" href="../main.html#walk">Take A Walk</a>
+          <a class="nav-menu-item" href="take-a-walk.html">Take A Walk</a>
           <a class="nav-menu-item" href="drawing.html">Drawing</a>
           <a class="nav-menu-item" aria-current="page">Ready For Sleep</a>
         </nav>
@@ -59,21 +59,21 @@
       <span class="contact-label">Contact</span>
     </a>
 
+    <!-- 준비중 (최초 로딩) -->
+    <div class="rfs-intro" id="rfs-intro">
+      <p class="rfs-intro-title">Ready for sleep</p>
+      <p class="rfs-intro-sub">잘 준비해요! 나만의 잠생네컷을 남겨보세요.</p>
+      <div class="rfs-intro-object">
+        <img src="../public/assets/ready-for-sleep/loading-object.png" alt="" />
+      </div>
+      <p class="rfs-intro-label">Loading ...</p>
+      <div class="rfs-intro-tip">Tip. 카메라가 곧 준비돼요. 멋진 수면 포즈를 준비해요!</div>
+    </div>
+
   </div>
   </div>
 
   <main class="rfs-root">
-
-    <!-- SCREEN 1: 최초 로딩 -->
-    <section class="rfs-screen rfs-screen--loading active" id="rfs-screen-loading">
-      <h1 class="rfs-loading-title">Ready for sleep!</h1>
-      <p class="rfs-loading-sub">잘 준비해요! 나만의 잠생네컷을 남겨보세요.</p>
-      <div class="rfs-loading-object-wrap">
-        <img src="../public/assets/ready-for-sleep/loading-object.png" alt="" class="rfs-loading-object" />
-      </div>
-      <p class="rfs-loading-label">Loading..</p>
-      <p class="rfs-loading-hint">카메라가 곧 준비돼요. 멋진 수면 포즈를 준비해요!</p>
-    </section>
 
     <!-- SCREEN 2: 촬영 (Cut 1~4 공통 컴포넌트) -->
     <section class="rfs-screen rfs-screen--capture" id="rfs-screen-capture">

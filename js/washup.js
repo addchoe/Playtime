@@ -73,6 +73,13 @@ function washupInit() {
   washupResizeCanvas();
   requestWashUpCamera();
   washupAnimate();
+  setTimeout(washupHideLoading, WASHUP_LOADING_DURATION);
+}
+
+/* ── 준비중 (로딩) ── */
+const WASHUP_LOADING_DURATION = 2600;
+function washupHideLoading() {
+  document.getElementById('washup-loading').classList.add('washup-loading--out');
 }
 
 async function requestWashUpCamera() {

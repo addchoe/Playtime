@@ -466,3 +466,80 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .washup-handle { transition: none; }
 }
+
+/* ── WASH UP: 준비중 (로딩) ── */
+.washup-loading {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  background: #EEEEEE;
+  transition: opacity 0.4s ease;
+}
+.washup-loading--out { opacity: 0; pointer-events: none; }
+
+.washup-heading-title {
+  position: absolute;
+  left: 50%;
+  top: 321px;
+  transform: translateX(-50%);
+  font-family: 'SK Concretica', 'Pretendard', sans-serif;
+  font-size: 56px;
+  letter-spacing: -0.04em;
+  color: #000000;
+  text-align: center;
+  white-space: nowrap;
+}
+.washup-heading-sub {
+  position: absolute;
+  left: 50%;
+  top: 401px;
+  transform: translateX(-50%);
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 400;
+  font-size: 28px;
+  letter-spacing: -0.04em;
+  color: #000000;
+  text-align: center;
+  white-space: nowrap;
+}
+.washup-roulette {
+  position: absolute;
+  left: 50%;
+  top: 511px;
+  transform: translateX(-50%);
+  width: 139px;
+  height: 146px;
+}
+.washup-roulette img { display: block; width: 100%; height: 100%; }
+
+.washup-loading-label {
+  position: absolute;
+  left: 50%;
+  top: 710px;
+  transform: translateX(-50%);
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 400;
+  font-size: 24px;
+  letter-spacing: -0.04em;
+  color: rgba(0,0,0,0.29);
+  white-space: nowrap;
+}
+
+.washup-tip {
+  position: absolute;
+  left: 50%;
+  top: 765px;
+  transform: translateX(-50%);
+  width: 288px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.05);
+  border-radius: 100px;
+  font-family: 'Pretendard', sans-serif;
+  font-size: 20px;
+  letter-spacing: -0.04em;
+  color: rgba(0,0,0,0.8);
+  white-space: nowrap;
+}

@@ -546,11 +546,17 @@ function rfsShowToast(message, isError) {
   }, 2600);
 }
 
+/* ── 준비중 (최초 로딩) ── */
+function rfsHideIntro() {
+  document.getElementById('rfs-intro').classList.add('rfs-intro--out');
+}
+
 /* ── 초기화 ── */
 function rfsInit() {
   rfsCacheDom();
   requestRfsCamera();
   setTimeout(() => {
+    rfsHideIntro();
     rfsShowCapture(0);
   }, 1800);
 }
