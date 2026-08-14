@@ -1,0 +1,389 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; letter-spacing: -0.04em; }
+
+html, body { height: 100%; overflow: hidden; }
+
+body {
+  background-color: #EEEEEE;
+  font-family: 'Pretendard', -apple-system, sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  color: #111111;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── FIXED 1920×1080 DESIGN CANVAS (main.html과 공통, 1:1 배율 매칭) ── */
+.viewport-scale {
+  position: relative;
+  width: 1920px;
+  height: 1080px;
+  flex-shrink: 0;
+  background-color: #EEEEEE;
+  transform: scale(1);
+  transform-origin: center center;
+}
+
+/* ── LOGO (main.html과 공통) ── */
+.site-logo {
+  position: fixed;
+  top: 29px;
+  left: 60px;
+  z-index: 100;
+  width: 144px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  text-decoration: none;
+}
+.site-logo img {
+  width: 144px;
+  height: 36px;
+  object-fit: contain;
+  object-position: left center;
+}
+
+/* ── OVERLAY (main.html과 공통) ── */
+/* 크기/위치는 fitViewport()가 JS로 계산해서 채운다 (실제 창 전체를 덮도록, letterbox로
+   남는 여백까지 포함). .viewport-scale 안에 중첩되어 있어야 site-logo(100)/contact-btn(100)
+   보다는 위, nav-pill(200)보다는 아래로 올바르게 겹친다 — 밖으로 빼면 이 상대 순서를 만들 수 없다. */
+.nav-overlay {
+  position: absolute;
+  background: rgba(17,17,17,0.4);
+  z-index: 150;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.nav-overlay.open { opacity: 1; pointer-events: auto; }
+
+/* ── NAV PILL (main.html과 공통) ── */
+.nav-pill {
+  position: fixed;
+  top: 29px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 200;
+  background: #111111;
+  overflow: hidden;
+  width: 264px;
+  height: 36px;
+  border-radius: 18px;
+  transition:
+    width        0.42s cubic-bezier(0.4, 0, 0.2, 1),
+    height       0.42s cubic-bezier(0.4, 0, 0.2, 1),
+    border-radius 0.42s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.nav-pill.open { width: 324px; height: 439px; border-radius: 18px; }
+
+.nav-top { position: absolute; top: 0; left: 0; right: 0; height: 36px; padding: 0 31px; cursor: pointer; }
+.nav-top-closed {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: space-between;
+  padding: 0 31px; transition: opacity 0.15s ease;
+}
+.nav-top-open {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: space-between;
+  padding: 0 31px; opacity: 0; pointer-events: none; transition: opacity 0.15s ease;
+}
+.nav-pill.open .nav-top-closed { opacity: 0; pointer-events: none; }
+.nav-pill.open .nav-top-open   { opacity: 1; pointer-events: auto; }
+
+.nav-label { font-family: 'Pretendard', sans-serif; font-size: 18px; color: rgba(238,238,238,0.45); user-select: none; }
+.nav-time { font-family: 'Pretendard', sans-serif; font-size: 18px; color: #EEEEEE; }
+.nav-close { font-family: 'Pretendard', sans-serif; font-size: 18px; color: rgba(238,238,238,0.45); cursor: pointer; }
+.nav-close:hover { color: #EEEEEE; }
+
+.nav-body {
+  position: absolute; top: 36px; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column;
+  justify-content: space-between; padding: 0 20px 9px 27px; opacity: 0; pointer-events: none; transition: opacity 0.18s ease;
+}
+.nav-pill.open .nav-body { opacity: 1; pointer-events: auto; transition: opacity 0.2s ease 0.25s; }
+
+.nav-menu { display: flex; flex-direction: column; gap: 11px; padding-top: 46px; padding-left: 12px; }
+.nav-menu-item {
+  font-family: 'SK Concretica', 'Pretendard', sans-serif; font-size: 30px; letter-spacing: -0.02em;
+  color: #EEEEEE; text-decoration: none; cursor: pointer; line-height: 1.2; transition: opacity 0.15s;
+}
+.nav-menu-item:hover { opacity: 0.5; }
+.nav-menu-item[aria-current="page"] { opacity: 0.5; cursor: default; }
+
+.nav-footer { display: flex; align-items: flex-end; justify-content: space-between; }
+.nav-copyright { font-family: 'Pretendard', sans-serif; font-size: 16px; color: rgba(238,238,238,0.45); padding-bottom: 12px; }
+.nav-icons { display: flex; align-items: center; gap: 4px; }
+.nav-icon-link { display: flex; align-items: center; justify-content: center; width: 43px; height: 42px; text-decoration: none; opacity: 0.7; transition: opacity 0.15s; }
+.nav-icon-link:hover { opacity: 1; }
+.nav-icon-link img { width: 39px; height: 38px; object-fit: contain; }
+
+/* ── CONTACT BUTTON (main.html과 공통) ── */
+.contact-btn {
+  position: fixed; top: 29px; right: 60px; z-index: 100; width: 114px; height: 36px; display: flex;
+  align-items: center; justify-content: center; gap: 7px; background: #E2E2E2; border-radius: 10px;
+  cursor: pointer; text-decoration: none; transition: background 0.2s;
+}
+.contact-btn:hover { background: #D5D5D5; }
+.contact-dot { width: 6px; height: 6px; border-radius: 50%; background: #111111; flex-shrink: 0; }
+.contact-label { font-family: 'Pretendard', sans-serif; font-weight: 500; font-size: 18px; color: #111111; }
+
+/* ── TAKE A WALK ── */
+.walk-root { position: absolute; inset: 0; }
+
+.walk-screen { position: absolute; inset: 0; display: none; }
+.walk-screen.active { display: block; }
+
+.walk-fade-out { animation: walkFadeOut 0.35s ease forwards; }
+.walk-fade-in { animation: walkFadeIn 0.35s ease forwards; }
+@keyframes walkFadeOut { to { opacity: 0; } }
+@keyframes walkFadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* ── 헤딩 (준비중 / 마무리 공통) ── */
+.walk-heading-title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'SK Concretica', 'Pretendard', sans-serif;
+  font-size: 56px;
+  letter-spacing: -0.04em;
+  color: #000000;
+  text-align: center;
+  white-space: nowrap;
+}
+.walk-heading-sub {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 400;
+  font-size: 28px;
+  letter-spacing: -0.04em;
+  color: #000000;
+  text-align: center;
+  white-space: nowrap;
+}
+.walk-dog-icon {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 206px;
+  height: auto;
+  display: block;
+}
+
+/* ── 준비중 ── */
+.walk-screen--loading .walk-heading-title { top: 321px; }
+.walk-screen--loading .walk-heading-sub { top: 401px; }
+.walk-screen--loading .walk-dog-icon { top: 550px; }
+
+.walk-loading-label {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 710px;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 400;
+  font-size: 24px;
+  letter-spacing: -0.04em;
+  color: rgba(0,0,0,0.29);
+  white-space: nowrap;
+}
+.walk-loading-dots { display: inline-block; min-width: 1.2em; text-align: left; }
+
+.walk-tip {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 765px;
+  width: 412px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.05);
+  border-radius: 100px;
+  font-family: 'Pretendard', sans-serif;
+  font-size: 20px;
+  letter-spacing: -0.04em;
+  color: rgba(0,0,0,0.8);
+  white-space: nowrap;
+}
+
+/* ── 마무리 (게임오버 / 게임성공 공통) — 게임 화면 위 블러 오버레이 ── */
+.walk-end-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  background: rgba(238,238,238,0.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.walk-end-overlay.show { opacity: 1; pointer-events: auto; }
+
+.walk-end-overlay .walk-heading-title { top: 415px; }
+.walk-end-overlay .walk-heading-sub { top: 495px; }
+.walk-end-overlay .walk-dog-icon { top: 644px; }
+
+.walk-end {
+  position: absolute;
+  left: 1636px;
+  top: 873px;
+  width: 179.67px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+}
+.walk-end-item {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  cursor: pointer;
+  text-decoration: none;
+  opacity: 0.4;
+  transition: opacity 0.2s ease;
+}
+.walk-end-item:hover,
+.walk-end-item:focus-visible { opacity: 1; }
+.walk-end-icon {
+  width: 14px;
+  height: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.walk-end-icon img {
+  width: 12px;
+  height: 10.5px;
+  transform: rotate(90deg);
+  display: block;
+}
+.walk-end-label {
+  font-family: 'SK Concretica', 'Pretendard', sans-serif;
+  font-size: 30px;
+  letter-spacing: -0.04em;
+  color: #111111;
+  white-space: nowrap;
+  line-height: normal;
+}
+
+/* ── GAME (미로 게임) ── */
+.walk-stage {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 140px 260px 100px;
+}
+
+.maze-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+#maze-canvas {
+  display: block;
+}
+
+.walk-start,
+.walk-end-marker {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  transform: translateY(-50%);
+}
+
+.walk-start { left: -210px; width: 190px; }
+.walk-end-marker { right: -110px; width: 90px; }
+
+.dog-icon-svg { width: 108px; height: 51px; }
+
+.start-btn {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 500;
+  font-size: 20px;
+  letter-spacing: -0.04em;
+  line-height: 1.6;
+  color: #111111;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: opacity 0.15s;
+}
+.start-btn:hover { opacity: 0.6; }
+.walk-start.hidden { opacity: 0; pointer-events: none; }
+
+.walk-end-label {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 500;
+  font-size: 20px;
+  letter-spacing: -0.04em;
+  line-height: 1.6;
+  color: #111111;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tri-icon { width: 12px; height: 14px; flex-shrink: 0; }
+
+.walk-footprints {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.paw {
+  position: absolute;
+  width: 19px;
+  height: 20px;
+  margin: -10px 0 0 -9.5px;
+  opacity: 0.9;
+  animation: pawFade 5s ease forwards;
+}
+.paw img { width: 100%; height: 100%; display: block; }
+
+@keyframes pawFade {
+  0%   { opacity: 0.9; }
+  75%  { opacity: 0.9; }
+  100% { opacity: 0; }
+}
+
+.walk-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: 340px;
+  background: rgba(17,17,17,0.02);
+  backdrop-filter: blur(2.4px);
+  -webkit-backdrop-filter: blur(2.4px);
+  border: 0.96px solid rgba(17,17,17,0.3);
+  border-radius: 44px;
+  box-shadow: inset 0 3.379px 3.379px 0 rgba(255,255,255,0.25);
+  padding: 13px 26px;
+  text-align: center;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 500;
+  font-size: 20px;
+  letter-spacing: -0.04em;
+  line-height: 1.4;
+  color: #111111;
+  transition: opacity 0.35s ease;
+}
+.walk-hint.hidden { opacity: 0; pointer-events: none; }

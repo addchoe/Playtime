@@ -3,6 +3,16 @@ let uiScale = 1;
 function fitViewport() {
   uiScale = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
   document.getElementById('viewport-scale').style.transform = 'scale(' + uiScale + ')';
+
+  /* nav-overlay는 .viewport-scale 안에 중첩되어 함께 스케일되므로, 스케일 후에도
+     실제 창 전체를 덮도록 축소분을 상쇄하는 크기로 역산해서 채워준다. */
+  const overlay = document.getElementById('nav-overlay');
+  const w = window.innerWidth / uiScale;
+  const h = window.innerHeight / uiScale;
+  overlay.style.width = w + 'px';
+  overlay.style.height = h + 'px';
+  overlay.style.left = ((1920 - w) / 2) + 'px';
+  overlay.style.top = ((1080 - h) / 2) + 'px';
 }
 fitViewport();
 window.addEventListener('resize', fitViewport);
