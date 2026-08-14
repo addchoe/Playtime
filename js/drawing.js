@@ -1,4 +1,4 @@
-/* ── GNB SCALE (main.html과 공통) ── */
+/* ── GNB SCALE (index.html과 공통) ── */
 let uiScale = 1;
 function fitViewport() {
   uiScale = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
@@ -7,8 +7,9 @@ function fitViewport() {
   /* nav-overlay는 .viewport-scale 안에 중첩되어 함께 스케일되므로, 스케일 후에도
      실제 창 전체를 덮도록 축소분을 상쇄하는 크기로 역산해서 채워준다. */
   const overlay = document.getElementById('nav-overlay');
-  const w = window.innerWidth / uiScale;
-  const h = window.innerHeight / uiScale;
+  const overscan = 4 / uiScale; // 라운딩 오차로 양옆/위아래에 여백이 생기지 않도록 실제 화면 기준 여유분을 더해준다
+  const w = window.innerWidth / uiScale + overscan;
+  const h = window.innerHeight / uiScale + overscan;
   overlay.style.width = w + 'px';
   overlay.style.height = h + 'px';
   overlay.style.left = ((1920 - w) / 2) + 'px';
@@ -17,7 +18,7 @@ function fitViewport() {
 fitViewport();
 window.addEventListener('resize', fitViewport);
 
-/* ── NAV (main.html과 공통) ── */
+/* ── NAV (index.html과 공통) ── */
 function updateTime() {
   const now = new Date();
   let h = now.getHours();
