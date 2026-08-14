@@ -100,51 +100,51 @@
         </div>
       </section>
 
-      <!-- SCREEN 3: 마무리 (게임오버) -->
-      <section class="walk-screen walk-screen--gameover" id="walk-screen-gameover">
-        <p class="walk-heading-title">Game Over</p>
-        <p class="walk-heading-sub">이번 판은 연습이었어요! 아마도...</p>
-        <img class="walk-dog-icon" src="../public/assets/take-a-walk/dog-icon.svg" alt="" />
-
-        <nav class="walk-end" aria-label="게임 종료 메뉴">
-          <button type="button" class="walk-end-item" data-walk-play-again>
-            <span class="walk-end-icon"><img src="../public/assets/take-a-walk/end-arrow.svg" alt="" /></span>
-            <span class="walk-end-label">Play again</span>
-          </button>
-          <a class="walk-end-item" href="drawing.html">
-            <span class="walk-end-icon"><img src="../public/assets/take-a-walk/end-arrow.svg" alt="" /></span>
-            <span class="walk-end-label">Next Game</span>
-          </a>
-          <a class="walk-end-item" href="../main.html">
-            <span class="walk-end-icon"><img src="../public/assets/take-a-walk/end-arrow.svg" alt="" /></span>
-            <span class="walk-end-label">Home</span>
-          </a>
-        </nav>
-      </section>
-
-      <!-- SCREEN 4: 마무리 (게임성공) -->
-      <section class="walk-screen walk-screen--success" id="walk-screen-success">
-        <p class="walk-heading-title">Nice Walk!</p>
-        <p class="walk-heading-sub">오늘의 산책을 마쳤어요</p>
-        <img class="walk-dog-icon" src="../public/assets/take-a-walk/dog-icon.svg" alt="" />
-
-        <nav class="walk-end" aria-label="게임 종료 메뉴">
-          <button type="button" class="walk-end-item" data-walk-play-again>
-            <span class="walk-end-icon"><img src="../public/assets/take-a-walk/end-arrow.svg" alt="" /></span>
-            <span class="walk-end-label">Play again</span>
-          </button>
-          <a class="walk-end-item" href="drawing.html">
-            <span class="walk-end-icon"><img src="../public/assets/take-a-walk/end-arrow.svg" alt="" /></span>
-            <span class="walk-end-label">Next Game</span>
-          </a>
-          <a class="walk-end-item" href="../main.html">
-            <span class="walk-end-icon"><img src="../public/assets/take-a-walk/end-arrow.svg" alt="" /></span>
-            <span class="walk-end-label">Home</span>
-          </a>
-        </nav>
-      </section>
-
     </main>
+
+    <!-- 마무리 (게임오버) — 게임 화면 위 블러 오버레이 -->
+    <div class="walk-end-overlay" id="walk-overlay-gameover">
+      <p class="walk-heading-title">Game Over</p>
+      <p class="walk-heading-sub">이번 판은 연습이었어요! 아마도...</p>
+      <img class="walk-dog-icon" src="../public/assets/take-a-walk/dog-icon.svg" alt="" />
+
+      <nav class="walk-end" aria-label="게임 종료 메뉴">
+        <button type="button" class="walk-end-item" data-walk-play-again>
+          <span class="walk-end-icon"><img src="../public/assets/take-a-walk/end-arrow.svg" alt="" /></span>
+          <span class="walk-end-label">Play again</span>
+        </button>
+        <a class="walk-end-item" href="drawing.html">
+          <span class="walk-end-icon"><img src="../public/assets/take-a-walk/end-arrow.svg" alt="" /></span>
+          <span class="walk-end-label">Next Game</span>
+        </a>
+        <a class="walk-end-item" href="../main.html">
+          <span class="walk-end-icon"><img src="../public/assets/take-a-walk/end-arrow.svg" alt="" /></span>
+          <span class="walk-end-label">Home</span>
+        </a>
+      </nav>
+    </div>
+
+    <!-- 마무리 (게임성공) — 게임 화면 위 블러 오버레이 -->
+    <div class="walk-end-overlay" id="walk-overlay-success">
+      <p class="walk-heading-title">Nice Walk!</p>
+      <p class="walk-heading-sub">오늘의 산책을 마쳤어요</p>
+      <img class="walk-dog-icon" src="../public/assets/take-a-walk/dog-icon.svg" alt="" />
+
+      <nav class="walk-end" aria-label="게임 종료 메뉴">
+        <button type="button" class="walk-end-item" data-walk-play-again>
+          <span class="walk-end-icon"><img src="../public/assets/take-a-walk/end-arrow.svg" alt="" /></span>
+          <span class="walk-end-label">Play again</span>
+        </button>
+        <a class="walk-end-item" href="drawing.html">
+          <span class="walk-end-icon"><img src="../public/assets/take-a-walk/end-arrow.svg" alt="" /></span>
+          <span class="walk-end-label">Next Game</span>
+        </a>
+        <a class="walk-end-item" href="../main.html">
+          <span class="walk-end-icon"><img src="../public/assets/take-a-walk/end-arrow.svg" alt="" /></span>
+          <span class="walk-end-label">Home</span>
+        </a>
+      </nav>
+    </div>
 
   </div>
 

@@ -34,10 +34,19 @@ function closeNav() {
   document.getElementById('nav-overlay').classList.remove('open');
 }
 
-/* ── 화면 전환 (준비중 → 게임 → 마무리) ── */
+/* ── 화면 전환 (준비중 ↔ 게임) ── */
 function walkShowScreen(id) {
   document.querySelectorAll('.walk-screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
+}
+
+/* ── 마무리 오버레이 (게임 화면 위에 블러로 표시) ── */
+function walkShowEndOverlay(id) {
+  document.querySelectorAll('.walk-end-overlay').forEach(el => el.classList.remove('show'));
+  document.getElementById(id).classList.add('show');
+}
+function walkHideEndOverlays() {
+  document.querySelectorAll('.walk-end-overlay').forEach(el => el.classList.remove('show'));
 }
 
 /* ── 로딩 점 애니메이션: 1개 → 3개 순차 반복 ── */
@@ -239,13 +248,13 @@ function startWalkGame() {
 function gameOverWalk() {
   walkState.active = false;
   walkState.over = true;
-  walkShowScreen('walk-screen-gameover');
+  walkShowEndOverlay('walk-overlay-gameover');
 }
 
 function winWalkGame() {
   walkState.active = false;
   walkState.over = true;
-  walkShowScreen('walk-screen-success');
+  walkShowEndOverlay('walk-overlay-success');
 }
 
 function resetWalkGame() {
@@ -259,9 +268,10 @@ function resetWalkGame() {
   document.querySelector('.walk-hint').classList.remove('hidden');
 }
 
-/* ── END 컴포넌트 (마무리 화면 버튼) ── */
+/* ── END 컴포넌트 (마무리 화면 버튼) — 재시작은 로딩 없이 바로 게임으로 ── */
 function walkPlayAgain() {
-  walkBeginLoading();
+  walkHideEndOverlays();
+  resetWalkGame();
 }
 
 document.getElementById('walk-start-btn').addEventListener('click', startWalkGame);

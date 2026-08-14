@@ -206,13 +206,23 @@ body {
   white-space: nowrap;
 }
 
-/* ── 마무리 (게임오버 / 게임성공 공통) ── */
-.walk-screen--gameover .walk-heading-title,
-.walk-screen--success .walk-heading-title { top: 415px; }
-.walk-screen--gameover .walk-heading-sub,
-.walk-screen--success .walk-heading-sub { top: 495px; }
-.walk-screen--gameover .walk-dog-icon,
-.walk-screen--success .walk-dog-icon { top: 644px; }
+/* ── 마무리 (게임오버 / 게임성공 공통) — 게임 화면 위 블러 오버레이 ── */
+.walk-end-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  background: rgba(238,238,238,0.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.walk-end-overlay.show { opacity: 1; pointer-events: auto; }
+
+.walk-end-overlay .walk-heading-title { top: 415px; }
+.walk-end-overlay .walk-heading-sub { top: 495px; }
+.walk-end-overlay .walk-dog-icon { top: 644px; }
 
 .walk-end {
   position: absolute;
