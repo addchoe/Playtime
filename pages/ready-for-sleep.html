@@ -10,13 +10,13 @@
 <body>
 
   <div class="viewport-scale-outer">
+  <div class="nav-overlay" id="nav-overlay" onclick="closeNav()"></div>
+  <div class="rfs-intro-bg" id="rfs-intro-bg"></div>
   <div class="viewport-scale" id="viewport-scale">
 
     <a class="site-logo" href="../main.html">
       <img src="../img/logo.svg" alt="Playtime!" />
     </a>
-
-    <div class="nav-overlay" id="nav-overlay" onclick="closeNav()"></div>
 
     <div class="nav-pill" id="nav-pill">
       <div class="nav-top" onclick="toggleNav()">
@@ -66,7 +66,7 @@
       <div class="rfs-intro-object">
         <img src="../public/assets/ready-for-sleep/loading-object.png" alt="" />
       </div>
-      <p class="rfs-intro-label">Loading ...</p>
+      <p class="rfs-intro-label">Loading <span class="rfs-intro-dots" id="rfs-intro-dots">.</span></p>
       <div class="rfs-intro-tip">Tip. 카메라가 곧 준비돼요. 멋진 수면 포즈를 준비해요!</div>
     </div>
 

@@ -547,14 +547,32 @@ function rfsShowToast(message, isError) {
 }
 
 /* ── 준비중 (최초 로딩) ── */
+const RFS_INTRO_DOT_INTERVAL = 450;
+let rfsIntroDotsTimer = null;
+function rfsStartIntroDots() {
+  const el = document.getElementById('rfs-intro-dots');
+  let n = 1;
+  el.textContent = '.'.repeat(n);
+  rfsIntroDotsTimer = setInterval(() => {
+    n = (n % 3) + 1;
+    el.textContent = '.'.repeat(n);
+  }, RFS_INTRO_DOT_INTERVAL);
+}
+function rfsStopIntroDots() {
+  if (rfsIntroDotsTimer) clearInterval(rfsIntroDotsTimer);
+  rfsIntroDotsTimer = null;
+}
 function rfsHideIntro() {
+  rfsStopIntroDots();
   document.getElementById('rfs-intro').classList.add('rfs-intro--out');
+  document.getElementById('rfs-intro-bg').classList.add('rfs-intro-bg--out');
 }
 
 /* ── 초기화 ── */
 function rfsInit() {
   rfsCacheDom();
   requestRfsCamera();
+  rfsStartIntroDots();
   setTimeout(() => {
     rfsHideIntro();
     rfsShowCapture(0);

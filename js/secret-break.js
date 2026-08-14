@@ -299,14 +299,32 @@ function sbQuit() {
 }
 
 /* ── 준비중 (로딩) ── */
+const SB_LOADING_DOT_INTERVAL = 450;
+let sbLoadingDotsTimer = null;
+function sbStartLoadingDots() {
+  const el = document.getElementById('sb-loading-dots');
+  let n = 1;
+  el.textContent = '.'.repeat(n);
+  sbLoadingDotsTimer = setInterval(() => {
+    n = (n % 3) + 1;
+    el.textContent = '.'.repeat(n);
+  }, SB_LOADING_DOT_INTERVAL);
+}
+function sbStopLoadingDots() {
+  if (sbLoadingDotsTimer) clearInterval(sbLoadingDotsTimer);
+  sbLoadingDotsTimer = null;
+}
 function sbHideLoading() {
+  sbStopLoadingDots();
   document.getElementById('sb-loading').classList.add('sb-loading--out');
+  document.getElementById('sb-loading-bg').classList.add('sb-loading-bg--out');
   sbStartRound();
 }
 
 /* ── 초기화 ── */
 function sbInit() {
   sbCacheDom();
+  sbStartLoadingDots();
   sbSetTimeout(sbHideLoading, SB_LOADING_DURATION);
 }
 

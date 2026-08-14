@@ -10,13 +10,13 @@
 <body>
 
   <div class="viewport-scale-outer">
+  <div class="nav-overlay" id="nav-overlay" onclick="closeNav()"></div>
+  <div class="washup-loading-bg" id="washup-loading-bg"></div>
   <div class="viewport-scale" id="viewport-scale">
 
     <a class="site-logo" href="../main.html">
       <img src="../img/logo.svg" alt="Playtime!" />
     </a>
-
-    <div class="nav-overlay" id="nav-overlay" onclick="closeNav()"></div>
 
     <div class="nav-pill" id="nav-pill">
 
@@ -70,7 +70,7 @@
       <div class="washup-roulette">
         <img src="../public/assets/washup/roulette-icon.svg" alt="" />
       </div>
-      <p class="washup-loading-label">Loading ...</p>
+      <p class="washup-loading-label">Loading <span class="washup-loading-dots" id="washup-loading-dots">.</span></p>
       <div class="washup-tip">Tip. 고민은 룰렛에게 맡겨보세요</div>
     </div>
 

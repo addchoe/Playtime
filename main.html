@@ -27,10 +27,10 @@
     /* ── FIXED 1920×1080 DESIGN CANVAS, SCALED TO FIT THE WINDOW ── */
     .viewport-scale {
       position: relative;
+      z-index: 200;
       width: 1920px;
       height: 1080px;
       flex-shrink: 0;
-      background-color: #EEEEEE;
       transform: scale(1);
       transform-origin: center center;
       overflow: hidden;
@@ -487,14 +487,12 @@
   </style>
 </head>
 <body>
+<div class="nav-overlay" id="nav-overlay" onclick="closeNav()"></div>
 <div class="viewport-scale" id="viewport-scale">
 
   <a class="site-logo" onclick="showPage('main')">
     <img src="img/logo.svg" alt="Playtime!" />
   </a>
-
-  <div class="nav-overlay" id="nav-overlay" onclick="closeNav()"></div>
-
 
   <div class="nav-pill" id="nav-pill">
 

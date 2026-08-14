@@ -73,13 +73,31 @@ function washupInit() {
   washupResizeCanvas();
   requestWashUpCamera();
   washupAnimate();
+  washupStartLoadingDots();
   setTimeout(washupHideLoading, WASHUP_LOADING_DURATION);
 }
 
 /* ── 준비중 (로딩) ── */
 const WASHUP_LOADING_DURATION = 2600;
+const WASHUP_LOADING_DOT_INTERVAL = 450;
+let washupLoadingDotsTimer = null;
+function washupStartLoadingDots() {
+  const el = document.getElementById('washup-loading-dots');
+  let n = 1;
+  el.textContent = '.'.repeat(n);
+  washupLoadingDotsTimer = setInterval(() => {
+    n = (n % 3) + 1;
+    el.textContent = '.'.repeat(n);
+  }, WASHUP_LOADING_DOT_INTERVAL);
+}
+function washupStopLoadingDots() {
+  if (washupLoadingDotsTimer) clearInterval(washupLoadingDotsTimer);
+  washupLoadingDotsTimer = null;
+}
 function washupHideLoading() {
+  washupStopLoadingDots();
   document.getElementById('washup-loading').classList.add('washup-loading--out');
+  document.getElementById('washup-loading-bg').classList.add('washup-loading-bg--out');
 }
 
 async function requestWashUpCamera() {
