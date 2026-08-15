@@ -3,7 +3,6 @@ let uiScale = 1;
 function fitViewport() {
   uiScale = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
   document.getElementById('viewport-scale').style.transform = 'scale(' + uiScale + ')';
-  document.documentElement.style.setProperty('--ui-scale', uiScale);
 
   /* nav-overlay는 .viewport-scale 안에 중첩되어 함께 스케일되므로, 스케일 후에도
      실제 창 전체를 덮도록 축소분을 상쇄하는 크기로 역산해서 채워준다. */

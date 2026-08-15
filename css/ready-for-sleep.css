@@ -218,15 +218,19 @@ body {
 }
 
 /* ── READY FOR SLEEP ── */
+/* .rfs-root가 #viewport-scale 안에 중첩되어 있어서 GNB와 같은 uiScale로 함께 커지고
+   작아진다 (take-a-walk의 .walk-root, secret-break의 .sb-root와 동일한 패턴). */
 .rfs-root { position: relative; }
 
+/* 1920x1080 캔버스 기준 고정 px. vw/vh 기반이 아니라 캔버스 좌표계를 쓰기 때문에
+   ancestor의 transform:scale(uiScale)을 그대로 물려받아 나머지 화면과 같은 비율로 스케일된다. */
 .rfs-screen {
   display: none;
   position: fixed;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: min(94vw, 177.78vh, 1760px);
+  width: 1760px;
   aspect-ratio: 16 / 9;
   container-type: size;
   z-index: 1;
@@ -246,8 +250,6 @@ body {
 }
 .rfs-screen--loading.active { display: flex; }
 
-/* GNB/최초 로딩(rfs-intro)과 동일하게 uiScale로 스케일해서, .rfs-screen(94vw 기반)이 아니라
-   나머지 화면과 같은 비율로 커지고 작아지게 한다. */
 .rfs-loading-inner {
   display: flex;
   flex-direction: column;
@@ -255,7 +257,6 @@ body {
   justify-content: center;
   gap: 24px;
   text-align: center;
-  transform: scale(var(--ui-scale, 1));
 }
 
 .rfs-loading-object-wrap {
