@@ -1,11 +1,29 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+html, body { height: 100%; }
+
 body {
   background-color: #000000;
   font-family: 'Pretendard', -apple-system, sans-serif;
   font-weight: 400;
   font-size: 18px;
   color: #111111;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* index.html의 .viewport-scale과 동일한 구조 — 네비도 이 안에 있어야 스케일된
+   조상의 position:fixed 컨테이닝 블록 규칙 덕분에 콘텐츠와 같이 스케일된다. */
+.washup-viewport-scale {
+  position: relative;
+  width: 1920px;
+  height: 1080px;
+  flex-shrink: 0;
+  background-color: #000000;
+  transform: scale(1);
+  transform-origin: center center;
   overflow: hidden;
 }
 
@@ -351,7 +369,7 @@ body {
   align-items: center;
 }
 .washup-showerhead-rail {
-  width: min(58vw, 590px);
+  width: 590px;
   height: 36px;
   background: rgba(238,238,238,0.9);
   border: 1px solid #111111;
@@ -360,7 +378,7 @@ body {
 .washup-showerhead-nozzles {
   display: flex;
   justify-content: space-between;
-  width: min(52vw, 530px);
+  width: 530px;
   margin-top: -1px;
 }
 .washup-nozzle {
@@ -374,7 +392,7 @@ body {
 .washup-faucet {
   position: absolute;
   left: 50%;
-  bottom: max(64px, 9vh);
+  bottom: 97px;
   transform: translateX(-50%);
   z-index: 3;
   display: flex;
