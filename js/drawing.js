@@ -3,15 +3,6 @@ let uiScale = 1;
 function fitViewport() {
   uiScale = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
   document.getElementById('viewport-scale').style.transform = 'scale(' + uiScale + ')';
-
-  const overlay = document.getElementById('nav-overlay');
-  const overscan = 4 / uiScale;
-  const w = window.innerWidth / uiScale + overscan;
-  const h = window.innerHeight / uiScale + overscan;
-  overlay.style.width = w + 'px';
-  overlay.style.height = h + 'px';
-  overlay.style.left = ((1920 - w) / 2) + 'px';
-  overlay.style.top = ((1080 - h) / 2) + 'px';
 }
 fitViewport();
 window.addEventListener('resize', fitViewport);
