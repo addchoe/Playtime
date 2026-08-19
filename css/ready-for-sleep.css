@@ -457,6 +457,13 @@ body {
   gap: 1.04cqw;
 }
 
+/* Save/Copy — Play again 그룹 위, 좀 더 촘촘한 간격으로 별도 클러스터 */
+.rfs-result-actions--media {
+  top: 62.5cqh;
+  gap: 0.78cqw;
+}
+.rfs-result-actions--media .rfs-result-btn { gap: 0.729cqw; }
+
 .rfs-result-btn {
   display: flex;
   align-items: center;
@@ -473,6 +480,8 @@ body {
   transition: color 0.25s ease;
 }
 .rfs-result-btn:hover { color: #111111; }
+
+.rfs-result-icon { flex-shrink: 0; width: 1.146cqw; height: 1.146cqw; }
 
 .rfs-result-arrow {
   flex-shrink: 0;
