@@ -92,6 +92,8 @@ function sbCacheDom() {
   sbDoorEls.forEach((door) => {
     door.addEventListener('click', () => sbOnDoorClick(door));
   });
+
+  document.getElementById('sb-result-retry').addEventListener('click', sbResultRetry);
 }
 
 function sbSlotIndexOfGroup(groupEl) {
@@ -272,7 +274,7 @@ function sbOnDoorClick(doorEl) {
 function sbOnCorrect() {
   sbHideBubble();
   if (sbLevel >= SB_MAX_LEVEL) {
-    sbShowPopup('success');
+    sbShowPopup();
     return;
   }
   sbSetAllDoors('closed');
@@ -282,21 +284,25 @@ function sbOnCorrect() {
   }, SB_CLOSE_PAUSE);
 }
 
+/* 실패 시 팝업 오버레이 대신 결과 화면으로 디졸브 전환 (Figma: 마무리_Secret break) */
 function sbOnWrong() {
   sbHideBubble();
-  sbShowPopup('fail');
+  sbGameState = 'idle';
+  sbShowScreen('sb-screen-result');
 }
 
-/* ── 팝업 ── */
-function sbShowPopup(type) {
+function sbResultRetry() {
+  sbClearTimers();
+  sbLevel = 1;
+  sbShowScreen('sb-screen-game');
+  sbStartRound();
+}
+
+/* ── 팝업 (성공 시에만 사용) ── */
+function sbShowPopup() {
   sbGameState = 'idle';
-  if (type === 'success') {
-    sbPopupTitleEl.textContent = 'Good~';
-    sbPopupSubEl.textContent = '월루 잡기 제법인데?';
-  } else {
-    sbPopupTitleEl.textContent = 'Try again!';
-    sbPopupSubEl.textContent = '월루 범인 찾기 실패!';
-  }
+  sbPopupTitleEl.textContent = 'Good~';
+  sbPopupSubEl.textContent = '월루 잡기 제법인데?';
   sbPopupOverlayEl.hidden = false;
 }
 
