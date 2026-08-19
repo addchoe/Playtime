@@ -114,6 +114,20 @@ body {
 .contact-label { font-family: 'Pretendard', sans-serif; font-weight: 500; font-size: 18px; color: #111111; }
 
 /* ── READY FOR SLEEP ── */
+
+/* index.html의 .viewport-scale과 동일한 구조 — 네비도 이 안에 있어야 스케일된
+   조상의 position:fixed 컨테이닝 블록 규칙 덕분에 콘텐츠와 같이 스케일된다. */
+.rfs-viewport-scale {
+  position: relative;
+  width: 1920px;
+  height: 1080px;
+  flex-shrink: 0;
+  background-color: #EEEEEE;
+  transform: scale(1);
+  transform-origin: center center;
+  overflow: hidden;
+}
+
 .rfs-root { position: relative; }
 
 .rfs-screen {
@@ -121,11 +135,7 @@ body {
   position: relative;
   width: 1920px;
   height: 1080px;
-  flex-shrink: 0;
-  transform: scale(1);
-  transform-origin: center center;
   container-type: size;
-  z-index: 1;
 }
 .rfs-screen.active { display: block; }
 

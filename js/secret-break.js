@@ -25,12 +25,10 @@ function closeNav() {
   document.getElementById('nav-overlay').classList.remove('open');
 }
 
-/* ── 1920x1080 고정 디자인 캔버스를 화면에 맞춰 스케일 (main.html의 .viewport-scale과 동일 방식) ── */
+/* ── 1920x1080 고정 디자인 캔버스를 화면에 맞춰 스케일 (index.html의 .viewport-scale과 동일 방식) ── */
 function sbFitViewport() {
   const scale = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
-  document.querySelectorAll('.sb-screen').forEach((el) => {
-    el.style.transform = 'scale(' + scale + ')';
-  });
+  document.getElementById('sb-viewport-scale').style.transform = 'scale(' + scale + ')';
 }
 sbFitViewport();
 window.addEventListener('resize', sbFitViewport);
