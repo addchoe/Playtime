@@ -25,6 +25,16 @@ function closeNav() {
   document.getElementById('nav-overlay').classList.remove('open');
 }
 
+/* ── 1920x1080 고정 디자인 캔버스를 화면에 맞춰 스케일 (main.html의 .viewport-scale과 동일 방식) ── */
+function sbFitViewport() {
+  const scale = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+  document.querySelectorAll('.sb-screen').forEach((el) => {
+    el.style.transform = 'scale(' + scale + ')';
+  });
+}
+sbFitViewport();
+window.addEventListener('resize', sbFitViewport);
+
 /* ── SECRET BREAK: 설정 ── */
 const SB_ASSET_DIR = '../public/assets/secret-break/';
 const SB_DOOR_CLOSED_SRC = SB_ASSET_DIR + 'door-closed.svg';
@@ -299,7 +309,7 @@ function sbRetry() {
 
 function sbQuit() {
   sbClearTimers();
-  window.location.href = '../main.html';
+  window.location.href = '../index.html';
 }
 
 /* ── 초기화 ── */
