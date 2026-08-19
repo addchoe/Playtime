@@ -481,7 +481,14 @@ body {
 }
 .rfs-result-btn:hover { color: #111111; }
 
-.rfs-result-icon { flex-shrink: 0; width: 1.146cqw; height: 1.146cqw; }
+.rfs-result-icon {
+  flex-shrink: 0;
+  width: 1.146cqw;
+  height: 1.146cqw;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+.rfs-result-btn:hover .rfs-result-icon { opacity: 1; }
 
 .rfs-result-arrow {
   flex-shrink: 0;
