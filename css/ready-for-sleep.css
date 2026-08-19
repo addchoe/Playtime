@@ -432,49 +432,59 @@ body {
   white-space: nowrap;
 }
 
-/* ── RESULT ── */
-.rfs-screen--result {
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 32px;
-}
-.rfs-screen--result.active { display: flex; }
+/* ── RESULT (Figma: 잠생네컷 결과, node 248:687) ── */
+.rfs-screen--result { display: none; }
+.rfs-screen--result.active { display: block; }
 
 .rfs-final-canvas {
-  max-width: 42cqw;
-  max-height: 82cqh;
-  width: auto;
-  height: auto;
-  border-radius: 1cqw;
+  position: absolute;
+  left: 43.28cqw;
+  top: 22.96cqh;
+  width: 13.39cqw;
+  height: 62.74cqh;
+  border-radius: 0.3cqw;
   box-shadow: 0 12px 40px rgba(0,0,0,0.18);
   background: #ffffff;
 }
 
-.rfs-result-actions { display: flex; gap: 16px; }
+.rfs-result-actions {
+  position: absolute;
+  left: 84.27cqw;
+  top: 75.28cqh;
+  width: 9.35cqw;
+  display: flex;
+  flex-direction: column;
+  gap: 1.04cqw;
+}
+
 .rfs-result-btn {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 10px;
-  min-width: 180px;
-  padding: 14px 28px;
+  gap: 1.04cqw;
+  background: none;
   border: none;
-  border-radius: 22px;
-  background: #E0E0E0;
-  color: #111111;
-  font-family: 'Pretendard', sans-serif;
-  font-weight: 500;
-  font-size: 18px;
+  padding: 0;
   cursor: pointer;
-  transition: background 0.2s;
+  text-decoration: none;
+  font-family: 'SK Concretica', 'Pretendard', sans-serif;
+  font-size: 1.5625cqw;
+  letter-spacing: -0.02em;
+  color: rgba(0, 0, 0, 0.4);
+  transition: color 0.25s ease;
 }
-.rfs-result-icon { width: 20px; height: 20px; flex-shrink: 0; }
-.rfs-result-btn:hover { background: #D5D5D5; }
-.rfs-result-btn--primary { background: #111111; color: #EEEEEE; }
-.rfs-result-btn--primary:hover { background: #2a2a2a; }
-.rfs-result-btn--primary .rfs-result-icon { filter: invert(1); }
+.rfs-result-btn:hover { color: #111111; }
+
+.rfs-result-arrow {
+  flex-shrink: 0;
+  width: 0;
+  height: 0;
+  border-top: 0.47cqw solid transparent;
+  border-bottom: 0.47cqw solid transparent;
+  border-left: 0.625cqw solid currentColor;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+.rfs-result-btn:hover .rfs-result-arrow { opacity: 1; }
 
 /* ── TOAST ── */
 .rfs-toast {

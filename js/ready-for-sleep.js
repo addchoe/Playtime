@@ -490,38 +490,6 @@ function rfsRetakeAll() {
   rfsShowCapture(0);
 }
 
-function rfsSaveImage() {
-  try {
-    const dataUrl = rfsFinalCanvasEl.toDataURL('image/png');
-    const a = document.createElement('a');
-    a.href = dataUrl;
-    a.download = 'playtime-ready-for-sleep.png';
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    rfsShowToast('저장이 완료됐어요');
-  } catch (err) {
-    console.error('[ready-for-sleep] save failed', err);
-    rfsShowToast('저장에 실패했어요. 다시 시도해 주세요.', true);
-  }
-}
-
-async function rfsShareImage() {
-  try {
-    if (!navigator.clipboard || !window.ClipboardItem) {
-      throw new Error('clipboard image copy unsupported');
-    }
-    const blob = await new Promise((resolve, reject) => {
-      rfsFinalCanvasEl.toBlob((b) => (b ? resolve(b) : reject(new Error('toBlob failed'))), 'image/png');
-    });
-    await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
-    rfsShowToast('이미지가 복사됐어요!');
-  } catch (err) {
-    console.error('[ready-for-sleep] share failed', err);
-    rfsShowToast('이미지 복사를 지원하지 않거나 권한이 없어요.', true);
-  }
-}
-
 /* ── 토스트 ── */
 function rfsShowToast(message, isError) {
   rfsToastEl.textContent = message;
