@@ -1,5 +1,7 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; letter-spacing: -0.04em; }
 
+html, body { height: 100%; }
+
 body {
   background-color: #EEEEEE;
   font-family: 'Pretendard', -apple-system, sans-serif;
@@ -7,6 +9,9 @@ body {
   font-size: 18px;
   color: #111111;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* ── LOGO (main.html과 공통) ── */
@@ -113,12 +118,12 @@ body {
 
 .rfs-screen {
   display: none;
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: min(94vw, 177.78vh, 1760px);
-  aspect-ratio: 16 / 9;
+  position: relative;
+  width: 1920px;
+  height: 1080px;
+  flex-shrink: 0;
+  transform: scale(1);
+  transform-origin: center center;
   container-type: size;
   z-index: 1;
 }

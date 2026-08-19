@@ -33,6 +33,16 @@ function closeNav() {
   document.getElementById('nav-overlay').classList.remove('open');
 }
 
+/* ── 1920x1080 고정 디자인 캔버스를 화면에 맞춰 스케일 (secret-break.js와 동일 방식) ── */
+function rfsFitViewport() {
+  const scale = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+  document.querySelectorAll('.rfs-screen').forEach((el) => {
+    el.style.transform = 'scale(' + scale + ')';
+  });
+}
+rfsFitViewport();
+window.addEventListener('resize', rfsFitViewport);
+
 /* ── READY FOR SLEEP: 설정 ── */
 const RFS_ASSET_DIR = '../public/assets/ready-for-sleep/';
 
