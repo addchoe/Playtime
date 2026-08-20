@@ -29,9 +29,19 @@ function closeNav() {
 }
 
 /* ── 1920x1080 고정 디자인 캔버스를 화면에 맞춰 스케일 (index.html의 .viewport-scale과 동일 방식) ── */
+let washupUiScale = 1;
 function washupFitViewport() {
-  const scale = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
-  document.getElementById('washup-viewport-scale').style.transform = 'scale(' + scale + ')';
+  washupUiScale = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+  document.getElementById('washup-viewport-scale').style.transform = 'scale(' + washupUiScale + ')';
+
+  const overlay = document.getElementById('nav-overlay');
+  const overscan = 4 / washupUiScale;
+  const w = window.innerWidth / washupUiScale + overscan;
+  const h = window.innerHeight / washupUiScale + overscan;
+  overlay.style.width = w + 'px';
+  overlay.style.height = h + 'px';
+  overlay.style.left = ((1920 - w) / 2) + 'px';
+  overlay.style.top = ((1080 - h) / 2) + 'px';
 }
 washupFitViewport();
 window.addEventListener('resize', washupFitViewport);

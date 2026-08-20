@@ -9,11 +9,18 @@ body {
   font-size: 18px;
   color: #111111;
   overflow: hidden;
+}
+
+/* ── FIXED 1920×1080 GNB SCALE (index.html과 공통, 1:1 배율 매칭) ── */
+.viewport-scale-outer {
+  position: fixed;
+  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+  pointer-events: none;
+  z-index: 300;
 }
-
 /* index.html의 .viewport-scale과 동일한 구조 — 네비도 이 안에 있어야 스케일된
    조상의 position:fixed 컨테이닝 블록 규칙 덕분에 콘텐츠와 같이 스케일된다. */
 .washup-viewport-scale {
@@ -25,6 +32,9 @@ body {
   transform: scale(1);
   transform-origin: center center;
   overflow: hidden;
+}
+.washup-viewport-scale > * {
+  pointer-events: auto;
 }
 
 /* ── LOGO (main.html과 공통) ── */
@@ -49,8 +59,7 @@ body {
 
 /* ── OVERLAY (main.html과 공통) ── */
 .nav-overlay {
-  position: fixed;
-  inset: 0;
+  position: absolute;
   background: rgba(17,17,17,0.4);
   z-index: 150;
   opacity: 0;
@@ -85,7 +94,7 @@ body {
 
 .nav-pill.open {
   width: 324px;
-  height: 395px;
+  height: 439px;
   border-radius: 18px;
 }
 
@@ -172,7 +181,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 11px;
-  padding-top: 42px;
+  padding-top: 46px;
   padding-left: 12px;
 }
 
