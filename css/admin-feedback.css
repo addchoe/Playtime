@@ -1,0 +1,275 @@
+/* Time Archive page — a public gallery of Contact-page feedback drawings,
+   with an optional password-gated admin mode (delete/hide/reorder).
+   Not part of a Figma "scene" frame, so this is an original layout — it
+   deliberately skips the site's fixed 1920x1080 scaled-canvas pattern
+   (that pattern assumes a non-scrolling stage; a gallery is inherently
+   variable-length and needs to scroll), but reuses the site's palette,
+   Pretendard type, rounded-20 cards and dot-grid motif from the Contact
+   page's drawing canvas so it still feels like part of PLAYTIME. */
+
+@font-face {
+  font-family: 'SK Concretica';
+  src: url('../public/assets/SK Concretica Trial.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+* , *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* Several elements below are toggled via the `hidden` attribute from JS
+   (grid, empty-state, per-card admin controls, login modal) but also have
+   their own class-based `display` rule for when they ARE shown — an
+   attribute selector alone loses to a class selector of equal specificity
+   written later in the cascade, so without this !important, `hidden` would
+   silently stop working the moment any of those classes set `display`. */
+[hidden] { display: none !important; }
+
+html, body { min-height: 100%; }
+
+body {
+  background: #EEEEEE;
+  font-family: 'Pretendard', -apple-system, sans-serif;
+  color: #111111;
+}
+
+/* ── HEADER ── */
+.archive-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 29px 60px;
+}
+
+.archive-logo img {
+  width: 144px;
+  height: 36px;
+  object-fit: contain;
+  object-position: left center;
+}
+
+.archive-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.archive-home-link {
+  font-family: 'Pretendard', sans-serif;
+  font-size: 18px;
+  letter-spacing: -0.04em;
+  color: rgba(17,17,17,0.5);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.archive-home-link:hover { color: #111111; }
+
+.archive-admin-btn {
+  height: 36px;
+  padding: 0 20px;
+  border: none;
+  border-radius: 10px;
+  background: #E2E2E2;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+  letter-spacing: -0.04em;
+  color: #111111;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.archive-admin-btn:hover { background: #D5D5D5; }
+.archive-admin-btn.is-active { background: #111111; color: #EEEEEE; }
+.archive-admin-btn.is-active:hover { opacity: 0.85; }
+
+/* ── MAIN ── */
+.archive-main {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 40px 60px 120px;
+}
+
+.archive-title {
+  font-family: 'SK Concretica', 'Pretendard', sans-serif;
+  font-weight: 400;
+  font-size: 40px;
+  letter-spacing: -0.02em;
+  color: #111111;
+}
+
+.archive-subtitle {
+  margin-top: 10px;
+  font-family: 'Pretendard', sans-serif;
+  font-size: 18px;
+  letter-spacing: -0.02em;
+  color: rgba(17,17,17,0.5);
+}
+
+.archive-empty-state {
+  margin-top: 64px;
+  font-family: 'Pretendard', sans-serif;
+  font-size: 16px;
+  color: rgba(17,17,17,0.4);
+  text-align: center;
+}
+
+.archive-grid {
+  margin-top: 40px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+/* ── CARD ── */
+.archive-card {
+  background: #D9D9D9;
+  border-radius: 20px;
+  overflow: hidden;
+  transition: opacity 0.15s;
+}
+.archive-card.is-hidden { opacity: 0.45; }
+
+/* Plain background on purpose — the dot grid is part of the Contact page's
+   drawing *input* affordance, not something that should follow the drawing
+   into the Archive. The exported PNG itself was always dot-free too (the
+   grid is a CSS background on the input canvas's wrapper, never drawn to
+   the canvas), so this keeps the display consistent with what was sent. */
+.archive-card-image-wrap {
+  aspect-ratio: 890 / 305;
+  background-color: #DEDEDE;
+}
+
+.archive-card-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.archive-card-meta {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 14px 16px;
+  font-family: 'Pretendard', sans-serif;
+  font-size: 13px;
+  letter-spacing: -0.02em;
+  color: rgba(17,17,17,0.6);
+}
+
+.archive-card-id {
+  font-family: monospace;
+  font-size: 11px;
+  color: rgba(17,17,17,0.35);
+}
+
+.archive-card-admin-controls {
+  display: flex;
+  gap: 6px;
+  padding: 0 16px 16px;
+}
+
+.archive-card-btn {
+  height: 30px;
+  padding: 0 12px;
+  border: none;
+  border-radius: 8px;
+  background: rgba(17,17,17,0.08);
+  font-family: 'Pretendard', sans-serif;
+  font-size: 13px;
+  letter-spacing: -0.02em;
+  color: #111111;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.archive-card-btn:hover { background: rgba(17,17,17,0.15); }
+.archive-card-btn:disabled { opacity: 0.3; cursor: default; }
+.archive-card-btn:disabled:hover { background: rgba(17,17,17,0.08); }
+
+.archive-card-delete { color: #B23B3B; }
+.archive-card-delete:hover { background: rgba(178,59,59,0.15); }
+
+/* ── ADMIN LOGIN MODAL (centered per request) ── */
+.admin-login-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(17,17,17,0.4);
+}
+
+.admin-login-card {
+  width: 320px;
+  padding: 32px;
+  border-radius: 16px;
+  background: #EEEEEE;
+  text-align: center;
+}
+
+.admin-login-title {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+  letter-spacing: -0.02em;
+  color: #111111;
+}
+
+.admin-login-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.admin-password-input {
+  width: 100%;
+  height: 40px;
+  padding: 0 14px;
+  border: none;
+  border-radius: 8px;
+  background: #FFFFFF;
+  font-family: 'Pretendard', sans-serif;
+  font-size: 15px;
+  color: #111111;
+  text-align: center;
+}
+.admin-password-input:focus { outline: 2px solid rgba(17,17,17,0.2); }
+
+.admin-login-btn {
+  width: 100%;
+  height: 40px;
+  border: none;
+  border-radius: 8px;
+  background: #111111;
+  color: #EEEEEE;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 500;
+  font-size: 15px;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.admin-login-btn:hover { opacity: 0.85; }
+
+.admin-login-error {
+  margin-top: 12px;
+  font-size: 13px;
+  color: #C0392B;
+  text-align: center;
+}
+
+.admin-login-cancel {
+  display: block;
+  margin: 16px auto 0;
+  border: none;
+  background: none;
+  font-family: 'Pretendard', sans-serif;
+  font-size: 13px;
+  color: rgba(17,17,17,0.5);
+  cursor: pointer;
+  text-align: center;
+}
+.admin-login-cancel:hover { color: #111111; }

@@ -1,0 +1,95 @@
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.content {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px clamp(24px, 6vw, 100px) 100px;
+}
+
+.wheelColumn {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.sidebar {
+  position: absolute;
+  left: clamp(24px, 6vw, 100px);
+  bottom: 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: min(380px, 32vw);
+}
+
+.statusArea {
+  min-height: 24px;
+}
+
+.statusLoading {
+  margin: 0;
+  font-size: 15px;
+  color: rgba(17, 17, 17, 0.6);
+}
+
+.statusError {
+  margin: 0;
+  font-size: 15px;
+  color: #c0392b;
+}
+
+.statusResult {
+  margin: 0;
+  font-size: 18px;
+  letter-spacing: -0.03em;
+}
+
+.statusNote {
+  margin: 6px 0 0;
+  font-size: 13px;
+  color: rgba(17, 17, 17, 0.55);
+}
+
+@media (max-width: 1024px) {
+  .content {
+    padding: 32px clamp(20px, 4vw, 48px) 260px;
+  }
+
+  .sidebar {
+    left: clamp(20px, 4vw, 48px);
+    width: min(360px, 40vw);
+  }
+}
+
+@media (max-width: 768px) {
+  .content {
+    flex-direction: column;
+    gap: 32px;
+    padding: 24px 20px 40px;
+  }
+
+  .sidebar {
+    position: static;
+    width: 100%;
+    max-width: 420px;
+  }
+}

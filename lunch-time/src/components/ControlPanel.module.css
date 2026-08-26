@@ -1,0 +1,144 @@
+.panelStack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 380px;
+}
+
+.panel {
+  background: rgba(17, 17, 17, 0.03);
+  border: 1px solid var(--color-border);
+  border-radius: 5.5px;
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 0;
+}
+
+.divider {
+  height: 1px;
+  background: rgba(17, 17, 17, 0.15);
+}
+
+.label {
+  font-size: 17.6px;
+  letter-spacing: -0.04em;
+  color: var(--color-text);
+  flex-shrink: 0;
+}
+
+.input,
+.select {
+  width: 216px;
+  max-width: 60%;
+  height: 44px;
+  background: #ffffff;
+  border: 1px solid var(--color-border);
+  border-radius: 5.5px;
+  padding: 0 14px;
+  font-family: var(--font-sans);
+  font-size: 15.6px;
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  color: var(--color-text);
+}
+
+.input::placeholder {
+  color: rgba(17, 17, 17, 0.4);
+  font-weight: 400;
+}
+
+.select {
+  cursor: pointer;
+}
+
+.select:invalid {
+  color: rgba(17, 17, 17, 0.4);
+}
+
+.input:disabled,
+.select:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.countGroup {
+  display: flex;
+  gap: 12px;
+}
+
+.countButton {
+  width: 44px;
+  height: 44px;
+  background: #ffffff;
+  border: 1px solid var(--color-border);
+  border-radius: 5.5px;
+  font-family: var(--font-sans);
+  font-size: 15.6px;
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.countButton:hover:not(:disabled) {
+  background: #f2f2f2;
+}
+
+.countButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.countButtonActive,
+.countButtonActive:hover {
+  background: #111111;
+  color: #eeeeee;
+}
+
+.consentPanel {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(17, 17, 17, 0.02);
+  backdrop-filter: blur(3.85px);
+  -webkit-backdrop-filter: blur(3.85px);
+  opacity: 0.85;
+  border: 1.1px solid var(--color-border);
+  border-radius: 5.5px;
+  padding: 16px 20px;
+  font-size: 15px;
+  letter-spacing: -0.04em;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.checkbox {
+  width: 17.6px;
+  height: 17.6px;
+  border: 1.1px solid var(--color-border);
+  border-radius: 2.2px;
+  accent-color: #111111;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .panelStack {
+    max-width: none;
+  }
+
+  .input,
+  .select {
+    max-width: 55%;
+  }
+}

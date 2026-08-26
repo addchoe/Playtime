@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Time Archive · Playtime!</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/admin-feedback.css" />
+</head>
+<body>
+
+  <header class="archive-header">
+    <a class="archive-logo" href="../index.html">
+      <img src="../img/logo.svg" alt="Playtime!" />
+    </a>
+    <div class="archive-header-actions">
+      <button type="button" id="admin-toggle-btn" class="archive-admin-btn">관리자</button>
+      <a class="archive-home-link" href="../index.html">← Home</a>
+    </div>
+  </header>
+
+  <main class="archive-main">
+    <h1 class="archive-title">Time Archive</h1>
+    <p class="archive-subtitle">방문자들의 기록이 쌓이는 아카이브입니다.</p>
+
+    <p id="archive-empty-state" class="archive-empty-state" hidden>아직 기록이 없습니다.</p>
+
+    <div id="archive-grid" class="archive-grid"></div>
+  </main>
+
+  <!-- Centered password modal for entering admin mode. Hidden until the
+       관리자 button is clicked; the gallery above stays public either way. -->
+  <div id="admin-login-overlay" class="admin-login-overlay" hidden>
+    <div class="admin-login-card">
+      <p class="admin-login-title">관리자 비밀번호</p>
+      <form id="admin-login-form" class="admin-login-form">
+        <input
+          type="password"
+          id="admin-password-input"
+          class="admin-password-input"
+          placeholder="비밀번호"
+          autocomplete="off"
+        />
+        <button type="submit" class="admin-login-btn">입장</button>
+      </form>
+      <p id="admin-login-error" class="admin-login-error" hidden>비밀번호가 올바르지 않습니다.</p>
+      <button type="button" id="admin-login-cancel" class="admin-login-cancel">취소</button>
+    </div>
+  </div>
+
+  <template id="archive-card-template">
+    <article class="archive-card">
+      <div class="archive-card-image-wrap">
+        <img class="archive-card-image" alt="Drawing" />
+      </div>
+      <div class="archive-card-meta">
+        <span class="archive-card-date"></span>
+        <span class="archive-card-time"></span>
+        <span class="archive-card-id"></span>
+      </div>
+      <div class="archive-card-admin-controls" hidden>
+        <button type="button" class="archive-card-btn archive-card-move-up" title="앞으로">↑</button>
+        <button type="button" class="archive-card-btn archive-card-move-down" title="뒤로">↓</button>
+        <button type="button" class="archive-card-btn archive-card-hide-toggle"></button>
+        <button type="button" class="archive-card-btn archive-card-delete">삭제</button>
+      </div>
+    </article>
+  </template>
+
+  <script src="../js/services/feedbackService.js"></script>
+  <script src="../js/services/adminAuth.js"></script>
+  <script src="../js/admin-feedback.js"></script>
+</body>
+</html>

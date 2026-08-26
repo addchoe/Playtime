@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wash Up · Playtime!</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/washup.css" />
+</head>
+<body>
+
+  <!-- 1920x1080 스케일 wrapper 밖: 실제 브라우저 창 전체를 꽉 채우는 카메라 배경.
+       손 추적/세그멘테이션 좌표는 videoWidth/videoHeight 기준으로 별도 계산되므로
+       이 레이어를 스케일 wrapper 밖으로 빼도 좌표 정합성에는 영향 없다. -->
+  <video id="washup-video" class="washup-video-bg" autoplay muted playsinline></video>
+
+  <div class="washup-viewport-scale" id="washup-viewport-scale">
+
+  <a class="site-logo" href="../index.html">
+    <img src="../img/logo.svg" alt="Playtime!" />
+  </a>
+
+  <div class="nav-overlay" id="nav-overlay" onclick="closeNav()"></div>
+
+  <div class="nav-pill" id="nav-pill">
+
+    <div class="nav-top" onclick="toggleNav()">
+      <!-- closed: Time + clock -->
+      <div class="nav-top-closed">
+        <span class="nav-label">Time</span>
+        <span class="nav-time" id="nav-time">12:00 AM</span>
+      </div>
+      <!-- open: Time + Close -->
+      <div class="nav-top-open">
+        <span class="nav-label">Time</span>
+        <span class="nav-close" onclick="event.stopPropagation(); closeNav()">Close</span>
+      </div>
+    </div>
+
+    <div class="nav-body">
+      <nav class="nav-menu">
+        <a class="nav-menu-item" aria-current="page">Wash Up</a>
+        <a class="nav-menu-item" href="#">Lunch Time</a>
+        <a class="nav-menu-item" href="secret-break.html">Secret Break</a>
+        <a class="nav-menu-item" href="../index.html#walk">Take A Walk</a>
+        <a class="nav-menu-item" href="drawing.html">Drawing</a>
+        <a class="nav-menu-item" href="ready-for-sleep.html">Ready For Sleep</a>
+      </nav>
+
+      <div class="nav-footer">
+        <span class="nav-copyright">©Labvoid</span>
+        <div class="nav-icons">
+          <a class="nav-icon-link" href="https://www.instagram.com/lab_void/" target="_blank">
+            <img src="../img/insta.svg" alt="Instagram" />
+          </a>
+          <a class="nav-icon-link" href="https://www.behance.net/hidc_labvoid" target="_blank">
+            <img src="../img/behance.svg" alt="Behance" />
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <a class="contact-btn" id="contact-btn" href="../index.html#contact">
+    <span class="contact-dot"></span>
+    <span class="contact-label">Contact</span>
+  </a>
+
+  <main class="washup-stage" id="washup-stage">
+    <canvas id="washup-canvas" class="washup-canvas" aria-hidden="true"></canvas>
+
+    <div class="washup-camera-status" id="washup-camera-status">
+      <span class="washup-camera-dot" id="washup-camera-dot"></span>
+      <span id="washup-camera-status-text">카메라 연결 중…</span>
+    </div>
+
+    <div class="washup-permission" id="washup-permission" hidden>
+      <p class="washup-permission-text" id="washup-permission-text">카메라 권한이 필요합니다.</p>
+      <button type="button" class="washup-retry-btn" onclick="requestWashUpCamera()">다시 시도</button>
+    </div>
+
+    <img class="washup-shower" src="../img/shower.svg" alt="" aria-hidden="true" />
+
+    <div class="washup-handle-wrap" id="washup-handle-wrap" role="slider" tabindex="0"
+         aria-label="온도 조절 손잡이" aria-valuemin="-1" aria-valuemax="1" aria-valuenow="0" aria-valuetext="Off">
+      <img class="washup-temperture-visual" src="../img/handle.svg" alt="" aria-hidden="true" />
+      <div class="washup-handle-lever" id="washup-handle-lever" aria-hidden="true"></div>
+    </div>
+
+    <img class="washup-showerball" id="washup-showerball" src="../img/showerball.png" alt="샤워볼" tabindex="0" role="button" aria-label="샤워볼, 드래그해서 거품 내기" />
+    <img class="washup-duck" id="washup-duck" src="../img/duck.png" alt="오리 장난감" tabindex="0" role="button" aria-label="오리 장난감, 잡으면 물 위에 둥둥 떠다녀요" />
+
+    <p class="washup-state-status" id="washup-state-status" role="status" aria-live="polite">Off</p>
+  </main>
+
+  </div>
+
+  <script src="../js/washup.js"></script>
+</body>
+</html>

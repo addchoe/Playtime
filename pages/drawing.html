@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Drawing · Playtime!</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/drawing.css" />
+</head>
+<body>
+
+  <div class="viewport-scale-outer">
+  <div class="viewport-scale" id="viewport-scale">
+
+    <a class="site-logo" href="../index.html">
+      <img src="../img/logo.svg" alt="Playtime!" />
+    </a>
+
+    <div class="nav-overlay" id="nav-overlay" onclick="closeNav()"></div>
+
+    <div class="nav-pill" id="nav-pill">
+      <div class="nav-top" onclick="toggleNav()">
+        <div class="nav-top-closed">
+          <span class="nav-label">Time</span>
+          <span class="nav-time" id="nav-time">12:00 AM</span>
+        </div>
+        <div class="nav-top-open">
+          <span class="nav-label">Time</span>
+          <span class="nav-close" onclick="event.stopPropagation(); closeNav()">Close</span>
+        </div>
+      </div>
+
+      <div class="nav-body">
+        <nav class="nav-menu">
+          <a class="nav-menu-item" href="washup.html">Wash Up</a>
+          <a class="nav-menu-item" href="#">Lunch Time</a>
+          <a class="nav-menu-item" href="secret-break.html">Secret Break</a>
+          <a class="nav-menu-item" href="../index.html#walk">Take A Walk</a>
+          <a class="nav-menu-item" aria-current="page">Drawing</a>
+          <a class="nav-menu-item" href="ready-for-sleep.html">Ready For Sleep</a>
+        </nav>
+
+        <div class="nav-footer">
+          <span class="nav-copyright">©Labvoid</span>
+          <div class="nav-icons">
+            <a class="nav-icon-link" href="https://www.instagram.com/lab_void/" target="_blank">
+              <img src="../img/insta.svg" alt="Instagram" />
+            </a>
+            <a class="nav-icon-link" href="https://www.behance.net/hidc_labvoid" target="_blank">
+              <img src="../img/behance.svg" alt="Behance" />
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <a class="contact-btn" id="contact-btn" href="../index.html#contact">
+      <span class="contact-dot"></span>
+      <span class="contact-label">Contact</span>
+    </a>
+
+    <main class="drawing-root">
+
+      <!-- SCREEN 1: 실행 대기화면 -->
+      <section class="drawing-screen drawing-screen--loading active" id="drawing-screen-loading">
+        <p class="drawing-heading-title">Drawing</p>
+        <p class="drawing-heading-sub">손가락으로 선을 이어 그림을 완성해보세요!</p>
+        <div class="drawing-heart-icon">
+          <img src="../public/assets/drawing/heart-icon.svg" alt="" />
+        </div>
+        <p class="drawing-loading-label">Loading <span class="drawing-loading-dots" id="drawing-loading-dots">.</span></p>
+        <div class="drawing-tip">Tip. 눈이 손보다 먼저 움직여야 해요</div>
+      </section>
+
+      <!-- SCREEN 2: 게임 (점 연결) -->
+      <section class="drawing-screen drawing-screen--game" id="drawing-screen-game">
+
+        <div class="drawing-camera-bg" id="drawing-camera-bg">
+          <video id="drawing-video" autoplay playsinline muted></video>
+        </div>
+        <span class="drawing-camera-status" id="drawing-camera-status">카메라 연결 중…</span>
+
+        <svg class="drawing-line-layer" id="drawing-line-layer" viewBox="0 0 1920 1080" preserveAspectRatio="none">
+          <defs>
+            <filter id="drawing-glow" x="-60%" y="-60%" width="220%" height="220%">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
+          <path id="drawing-guide-path" class="drawing-guide-path" fill="none" />
+          <path id="drawing-drawn-path" class="drawing-drawn-path" fill="none" filter="url(#drawing-glow)" />
+          <line id="drawing-live-line" class="drawing-live-line" filter="url(#drawing-glow)" />
+        </svg>
+
+        <div class="drawing-dots" id="drawing-dots"></div>
+
+        <div class="drawing-cursor" id="drawing-cursor">
+          <span class="drawing-cursor-core"></span>
+        </div>
+
+        <p class="drawing-hint" id="drawing-hint">첫 번째 점에 손가락을 가져다 대보세요</p>
+      </section>
+
+    </main>
+
+    <!-- 마무리 (게임 완료) — 게임 화면 위 블러 오버레이 -->
+    <div class="drawing-end-overlay" id="drawing-end-overlay">
+      <p class="drawing-heading-title">Drawing</p>
+      <p class="drawing-heading-sub">그림 완성!!</p>
+      <div class="drawing-heart-icon">
+        <img src="../public/assets/drawing/heart-icon.svg" alt="" />
+      </div>
+
+      <nav class="drawing-end" aria-label="게임 종료 메뉴">
+        <button type="button" class="drawing-end-item" data-drawing-play-again>
+          <span class="drawing-end-icon"><img src="../img/arrow-triangle.svg" alt="" /></span>
+          <span class="drawing-end-label">Play again</span>
+        </button>
+        <a class="drawing-end-item" href="ready-for-sleep.html">
+          <span class="drawing-end-icon"><img src="../img/arrow-triangle.svg" alt="" /></span>
+          <span class="drawing-end-label">Next Game</span>
+        </a>
+        <a class="drawing-end-item" href="../index.html">
+          <span class="drawing-end-icon"><img src="../img/arrow-triangle.svg" alt="" /></span>
+          <span class="drawing-end-label">Home</span>
+        </a>
+      </nav>
+    </div>
+
+  </div>
+  </div>
+
+  <script src="../js/stageData.js"></script>
+  <script src="../js/handTracking.js"></script>
+  <script src="../js/drawing.js"></script>
+</body>
+</html>

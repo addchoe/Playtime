@@ -1,0 +1,466 @@
+@font-face {
+  font-family: 'SK Concretica';
+  src: url('../public/assets/SK Concretica Trial.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body { height: 100%; }
+
+body {
+  background-color: #000000;
+  font-family: 'Pretendard', -apple-system, sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  color: #111111;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* index.html의 .viewport-scale과 동일한 구조 — 네비도 이 안에 있어야 스케일된
+   조상의 position:fixed 컨테이닝 블록 규칙 덕분에 콘텐츠와 같이 스케일된다. */
+.washup-viewport-scale {
+  position: relative;
+  width: 1920px;
+  height: 1080px;
+  flex-shrink: 0;
+  background-color: transparent; /* .washup-video-bg가 실제 화면 전체를 채우는 배경이라 여기선 투명해야 레터박스 여백에도 카메라가 보인다 */
+  transform: scale(1);
+  transform-origin: center center;
+  overflow: hidden;
+}
+
+/* ── LOGO (main.html과 공통) ── */
+.site-logo {
+  position: fixed;
+  top: 29px;
+  left: 60px;
+  z-index: 100;
+  width: 144px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  text-decoration: none;
+}
+.site-logo img {
+  width: 144px;
+  height: 36px;
+  object-fit: contain;
+  object-position: left center;
+}
+
+/* ── OVERLAY (main.html과 공통) ── */
+.nav-overlay {
+  position: absolute;
+  background: rgba(17,17,17,0.4);
+  z-index: 150;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.nav-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ── NAV PILL (main.html과 공통) ── */
+.nav-pill {
+  position: fixed;
+  top: 29px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 200;
+  background: #111111;
+  overflow: hidden;
+
+  /* closed state */
+  width: 264px;
+  height: 36px;
+  border-radius: 18px;
+
+  transition:
+    width        0.42s cubic-bezier(0.4, 0, 0.2, 1),
+    height       0.42s cubic-bezier(0.4, 0, 0.2, 1),
+    border-radius 0.42s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-pill.open {
+  width: 324px;
+  height: 439px;
+  border-radius: 18px;
+}
+
+/* ── TOP BAR ── */
+.nav-top {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 36px;
+  padding: 0 31px;
+  cursor: pointer;
+}
+
+.nav-top-closed {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 31px;
+  transition: opacity 0.15s ease;
+}
+
+.nav-top-open {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 31px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+}
+
+.nav-pill.open .nav-top-closed { opacity: 0; pointer-events: none; }
+.nav-pill.open .nav-top-open   { opacity: 1; pointer-events: auto; }
+
+.nav-label {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  letter-spacing: -0.04em;
+  color: rgba(238,238,238,0.45);
+  user-select: none;
+}
+
+.nav-time {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  color: #EEEEEE;
+}
+
+.nav-close {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  letter-spacing: -0.04em;
+  color: rgba(238,238,238,0.45);
+  cursor: pointer;
+}
+.nav-close:hover { color: #EEEEEE; }
+
+/* ── EXPANDED CONTENT ── */
+.nav-body {
+  position: absolute;
+  top: 36px; left: 0; right: 0; bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0 20px 9px 27px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease;
+}
+
+.nav-pill.open .nav-body {
+  opacity: 1;
+  pointer-events: auto;
+  transition: opacity 0.2s ease 0.25s;
+}
+
+.nav-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  padding-top: 46px;
+  padding-left: 12px;
+}
+
+.nav-menu-item {
+  font-family: 'SK Concretica', 'Pretendard', sans-serif;
+  font-weight: 400;
+  font-size: 30px;
+  letter-spacing: -0.02em;
+  color: #EEEEEE;
+  text-decoration: none;
+  cursor: pointer;
+  line-height: 1.2;
+  transition: opacity 0.15s;
+}
+.nav-menu-item:hover { opacity: 0.5; }
+.nav-menu-item[aria-current="page"] { opacity: 0.5; cursor: default; }
+
+.nav-footer {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.nav-copyright {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  letter-spacing: -0.04em;
+  color: rgba(238,238,238,0.45);
+  padding-bottom: 12px;
+}
+
+.nav-icons {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-right: 0;
+}
+
+.nav-icon-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 43px;
+  height: 42px;
+  text-decoration: none;
+  opacity: 0.7;
+  transition: opacity 0.15s;
+}
+.nav-icon-link:hover { opacity: 1; }
+.nav-icon-link img {
+  width: 39px;
+  height: 38px;
+  object-fit: contain;
+}
+
+/* ── CONTACT BUTTON (main.html과 공통) ── */
+.contact-btn {
+  position: fixed;
+  top: 29px;
+  right: 60px;
+  z-index: 100;
+  width: 114px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  background: #E2E2E2;
+  border-radius: 10px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+.contact-btn:hover { background: #D5D5D5; }
+
+.contact-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #111111;
+  flex-shrink: 0;
+}
+.contact-label {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+  color: #111111;
+}
+
+/* ── WASH UP ── */
+:root {
+  --washup-cold: #3FA9E8;
+  --washup-hot: #F2573F;
+}
+
+.washup-stage {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+}
+
+/* 스케일 wrapper 밖에서 실제 브라우저 창(진짜 뷰포트) 전체를 덮는 배경 레이어.
+   1920x1080 박스 안에만 있으면 창 비율이 16:9가 아닐 때 레터박스(검은 여백)가
+   생겨서 카메라가 화면을 꽉 채우지 못했다 — wrapper 밖으로 빼서 해결. */
+.washup-video-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scaleX(-1);
+  background: #111;
+}
+
+.washup-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.washup-camera-status {
+  position: absolute;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: rgba(17,17,17,0.55);
+  border-radius: 14px;
+  color: #EEEEEE;
+  font-size: 14px;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+.washup-camera-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #888888;
+  flex-shrink: 0;
+}
+.washup-camera-status.active .washup-camera-dot { background: #4CD964; }
+.washup-camera-status.denied .washup-camera-dot { background: var(--washup-hot); }
+
+.washup-permission {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 24px;
+  text-align: center;
+  background: rgba(17,17,17,0.75);
+  color: #EEEEEE;
+}
+.washup-permission[hidden] { display: none; }
+.washup-permission-text {
+  max-width: 360px;
+  font-size: 18px;
+  line-height: 1.5;
+}
+.washup-retry-btn {
+  padding: 10px 24px;
+  border-radius: 18px;
+  border: none;
+  background: #EEEEEE;
+  color: #111111;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  cursor: pointer;
+}
+.washup-retry-btn:hover { background: #D5D5D5; }
+
+/* ── 샤워헤드 (Figma node 214:1571 절대 좌표, 1920x1080 캔버스 기준) ── */
+.washup-shower {
+  position: absolute;
+  left: 670px;
+  top: 0px;
+  width: 588px;
+  height: 237px;
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* ── 수도 손잡이 — Figma(214:1607/1869) 기준 온도 원판(Hot|Cold 라벨 + 중앙 구분선)은
+   고정, 그 위에 얹힌 레버만 원판 상단 피벗(WASHUP_HANDLE_CENTER, 890+70=960, 923+10=933)을
+   기준으로 좌우로 기울어진다. handle.svg/temperture.svg 둘 다 원판 자체를 내보낸 거의
+   동일한 에셋이라 레버 모양은 없음 → 레버는 CSS로 캡슐 모양을 그려서 회전시킨다.
+   레버가 원판 박스 위로 튀어나와 있으므로, 실제로 손으로 잡는 레버 몸통까지 클릭/드래그가
+   되도록 wrap(클릭 가능 영역)을 레버 길이(110px)만큼 위로 넓혔다 — 원판 자체 위치는
+   그대로 유지하기 위해 temperture-visual/lever는 넓어진 만큼 내부 좌표를 다시 잡는다. ── */
+.washup-handle-wrap {
+  position: absolute;
+  left: 890px;
+  top: 813px;   /* 923 - 110(레버 확장분) */
+  width: 140px;
+  height: 250px; /* 140(원판) + 110(레버 확장분) */
+  z-index: 4;
+  cursor: grab;
+  touch-action: none;
+}
+.washup-handle-wrap:active { cursor: grabbing; }
+.washup-handle-wrap:focus-visible {
+  outline: 2px solid #EEEEEE;
+  outline-offset: 3px;
+}
+.washup-temperture-visual {
+  position: absolute;
+  left: 0;
+  top: 110px; /* wrap이 위로 늘어난 만큼 보정 — 원판은 원래 절대좌표(890,923) 그대로 */
+  width: 140px;
+  height: 140px;
+  pointer-events: none;
+}
+.washup-handle-lever {
+  position: absolute;
+  left: 53px;
+  top: 20px; /* wrap 기준 피벗(70,120) - 레버 길이(100) */
+  width: 34px;
+  height: 100px;
+  background: #DCE6FB;
+  border: 2px solid #111111;
+  border-radius: 17px;
+  transform-origin: 50% 100%;
+  transform: rotate(0deg);
+  transition: transform 0.05s linear;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ── 샤워볼 / 오리 ── */
+.washup-showerball {
+  position: absolute;
+  left: 1624px;
+  top: 372px;
+  width: 229px;
+  height: 229px;
+  z-index: 6;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.washup-showerball:active { cursor: grabbing; }
+
+.washup-duck {
+  position: absolute;
+  left: 1631px;
+  top: 653px;
+  width: 215px;
+  height: 206px;
+  z-index: 6;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.washup-duck.is-floating { cursor: default; }
+
+.washup-state-status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .washup-handle-lever { transition: none; }
+}

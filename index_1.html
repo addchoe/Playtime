@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Playtime!</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: #EEEEEE;
+      font-family: 'Pretendard', -apple-system, sans-serif;
+      font-weight: 500;
+      font-size: 18px;
+      color: #111111;
+      overflow-x: hidden;
+    }
+
+    /* ── LOGO ── */
+    .site-logo {
+      position: fixed;
+      top: 29px;
+      left: 60px;
+      z-index: 100;
+      width: 144px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .site-logo img {
+      width: 144px;
+      height: 36px;
+      object-fit: contain;
+      object-position: left center;
+    }
+
+    /* ── NAV PILL (center) ── */
+    nav {
+      position: fixed;
+      top: 29px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+    }
+
+    .nav-pill {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #111111;
+      border-radius: 999px;
+      height: 36px;
+      width: 264px;
+      padding: 0 31px;
+      white-space: nowrap;
+    }
+
+    .nav-label {
+      font-family: 'Pretendard', sans-serif;
+      font-weight: 500;
+      font-size: 18px;
+      color: rgba(238,238,238,0.45);
+      user-select: none;
+    }
+
+    .nav-time {
+      font-family: 'Pretendard', sans-serif;
+      font-weight: 500;
+      font-size: 18px;
+      color: #EEEEEE;
+    }
+
+    /* ── CONTACT BUTTON ── */
+    .contact-btn {
+      position: fixed;
+      top: 29px;
+      right: 60px;
+      z-index: 100;
+      width: 114px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      background: #E2E2E2;
+      border-radius: 999px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+
+    .contact-btn:hover { background: #D5D5D5; }
+
+    .contact-btn.active {
+      background: #111111;
+    }
+
+    .contact-btn.active .contact-dot { background: #EEEEEE; }
+    .contact-btn.active .contact-label { color: #EEEEEE; }
+
+    .contact-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #111111;
+      flex-shrink: 0;
+    }
+
+    .contact-label {
+      font-family: 'Pretendard', sans-serif;
+      font-weight: 500;
+      font-size: 18px;
+      color: #111111;
+    }
+
+    /* ── PAGES ── */
+    .page {
+      display: none;
+      min-height: 1011px;
+    }
+
+    .page.active {
+      display: flex;
+      flex-direction: column;
+    }
+
+    #page-main {
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ── CONTACT PAGE ── */
+    #page-contact {
+      align-items: center;
+      justify-content: center;
+      gap: 48px;
+    }
+
+    .contact-heading {
+      font-family: 'Pretendard', sans-serif;
+      font-weight: 500;
+      font-size: 64px;
+      color: #111111;
+      text-align: center;
+      line-height: 1.1;
+    }
+
+    .contact-list {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .contact-item {
+      font-family: 'Pretendard', sans-serif;
+      font-weight: 500;
+      font-size: 18px;
+      color: #111111;
+      text-decoration: none;
+      opacity: 0.35;
+      transition: opacity 0.2s;
+    }
+
+    .contact-item:hover { opacity: 1; }
+  </style>
+</head>
+<body>
+
+  <!-- Logo -->
+  <a class="site-logo" onclick="showPage('main')">
+    <img src="img/logo.svg" alt="Playtime!" />
+  </a>
+
+  <!-- Center nav pill -->
+  <nav>
+    <div class="nav-pill">
+      <span class="nav-label">Time</span>
+      <span class="nav-time" id="nav-time">12:00 AM</span>
+    </div>
+  </nav>
+
+  <!-- Contact button -->
+  <a class="contact-btn" id="contact-btn" onclick="showPage('contact')">
+    <span class="contact-dot"></span>
+    <span class="contact-label">Contact</span>
+  </a>
+
+  <!-- MAIN -->
+  <section class="page active" id="page-main"></section>
+
+  <!-- CONTACT -->
+  <section class="page" id="page-contact">
+    <div class="contact-heading">Let's talk.</div>
+    <div class="contact-list">
+      <a class="contact-item" href="mailto:hello@playtime.studio">hello@playtime.studio</a>
+      <a class="contact-item" href="#">Instagram</a>
+      <a class="contact-item" href="#">Twitter / X</a>
+    </div>
+  </section>
+
+  <script>
+    function updateTime() {
+      const now = new Date();
+      let h = now.getHours();
+      const m = String(now.getMinutes()).padStart(2, '0');
+      const ampm = h >= 12 ? 'PM' : 'AM';
+      h = h % 12 || 12;
+      document.getElementById('nav-time').textContent = h + ':' + m + ' ' + ampm;
+    }
+    updateTime();
+    setInterval(updateTime, 1000);
+
+    function showPage(name) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById('contact-btn').classList.remove('active');
+      document.getElementById('page-' + name).classList.add('active');
+      if (name === 'contact') document.getElementById('contact-btn').classList.add('active');
+    }
+  </script>
+</body>
+</html>
