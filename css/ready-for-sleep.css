@@ -132,6 +132,7 @@ body {
   background-color: #EEEEEE;
   transform: scale(1);
   transform-origin: center center;
+  will-change: transform;
   overflow: hidden;
 }
 

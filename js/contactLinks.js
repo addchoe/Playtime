@@ -1,10 +1,16 @@
 // Contact page social links (index.html → #page-contact).
 //
-// Update these two URLs once the real Instagram / Behance profiles are
-// ready — every Contact link reads from this single object, so changing
-// a value here is the only edit needed to go live. Leave a value empty
+// Each team member has their own Instagram / Behance, so links are keyed
+// per-person. Update a URL here and every matching [data-contact-person]
+// link on the Contact page picks it up automatically. Leave a value empty
 // to keep that link inert (no navigation) until a real URL exists.
 const contactLinks = {
-  instagram: '',
-  behance: '',
+  shinChanhee: {
+    instagram: 'https://www.instagram.com/che2e2',
+    behance: 'https://www.behance.net/2aa13723',
+  },
+  choiYejun: {
+    instagram: 'https://www.instagram.com/addchoe',
+    behance: 'https://www.behance.net/addchoi',
+  },
 };

@@ -9,27 +9,33 @@
 </head>
 <body>
 
-  <header class="archive-header">
-    <a class="archive-logo" href="../index.html">
-      <img src="../img/logo.svg" alt="Playtime!" />
-    </a>
-    <div class="archive-header-actions">
-      <button type="button" id="admin-toggle-btn" class="archive-admin-btn">관리자</button>
-      <a class="archive-home-link" href="../index.html">← Home</a>
+  <!-- 다른 페이지들의 .viewport-scale과 동일한 1920x1080 캔버스 + 동일한
+       Math.min(w/1920,h/1080) 스케일 공식을 쓰는 고정 오버레이 레이어.
+       로고/Setting 버튼이 페이지가 바뀌어도 항상 같은 화면 좌표에 있도록
+       body를 직접 스케일하는 대신 position:fixed 레이어로 분리해서, 그
+       안에서는 다른 페이지와 완전히 동일하게 동작하면서 아래 갤러리는
+       평범하게 스크롤되도록 했다(가운데 시계/nav-pill은 이 페이지엔 없음). -->
+  <div class="archive-nav-layer" id="archive-nav-layer">
+    <div class="archive-nav-canvas" id="archive-nav-canvas">
+
+      <a class="site-logo archive-logo" href="../index.html">Time Archive</a>
+
+      <button type="button" id="admin-toggle-btn" class="contact-btn">
+        <span class="contact-dot"></span>
+        <span class="contact-label">Setting</span>
+      </button>
+
     </div>
-  </header>
+  </div>
 
   <main class="archive-main">
-    <h1 class="archive-title">Time Archive</h1>
-    <p class="archive-subtitle">방문자들의 기록이 쌓이는 아카이브입니다.</p>
-
     <p id="archive-empty-state" class="archive-empty-state" hidden>아직 기록이 없습니다.</p>
 
     <div id="archive-grid" class="archive-grid"></div>
   </main>
 
   <!-- Centered password modal for entering admin mode. Hidden until the
-       관리자 button is clicked; the gallery above stays public either way. -->
+       Setting button is clicked; the gallery above stays public either way. -->
   <div id="admin-login-overlay" class="admin-login-overlay" hidden>
     <div class="admin-login-card">
       <p class="admin-login-title">관리자 비밀번호</p>
@@ -55,8 +61,6 @@
       </div>
       <div class="archive-card-meta">
         <span class="archive-card-date"></span>
-        <span class="archive-card-time"></span>
-        <span class="archive-card-id"></span>
       </div>
       <div class="archive-card-admin-controls" hidden>
         <button type="button" class="archive-card-btn archive-card-move-up" title="앞으로">↑</button>

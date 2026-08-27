@@ -32,6 +32,7 @@ body {
   background-color: transparent; /* .washup-video-bg가 실제 화면 전체를 채우는 배경이라 여기선 투명해야 레터박스 여백에도 카메라가 보인다 */
   transform: scale(1);
   transform-origin: center center;
+  will-change: transform;
   overflow: hidden;
 }
 
