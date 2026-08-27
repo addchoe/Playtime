@@ -55,6 +55,8 @@ Home 하위에 6개 게임이 나란히 연결되는 플랫한 구조입니다.
 
 ![Team](<img/6팀소개.png>)
 
+디자이너 2명이 바이브 코딩(Vibe Coding)으로 직접 만든 웹사이트입니다.
+
 | 이름 | 역할 | 담당 페이지 |
 | --- | --- | --- |
 | Shin Chanhee | Designer · Developer | Wash Up, Lunch Time, Secret Break, Ready For Sleep |
