@@ -46,6 +46,10 @@ function washupFitViewport() {
   overlay.style.top = ((1080 - h) / 2) + 'px';
 }
 washupFitViewport();
+/* 매우 큰 해상도(4K 등)에서 페이지가 곧바로 로드되면 transform 계산은 정확해도
+   브라우저 첫 페인트가 이를 놓쳐 콘텐츠가 좌상단에 눌린 채로 그려지는 경우가 있다
+   — 다음 프레임에 한 번 더 재적용해서 그 스테일 페인트를 강제로 복구한다. */
+requestAnimationFrame(washupFitViewport);
 window.addEventListener('resize', washupFitViewport);
 
 /* 실제 화면 px 좌표(clientX/Y) → 1920x1080 디자인 좌표로 변환. 마우스든 손 추적이든

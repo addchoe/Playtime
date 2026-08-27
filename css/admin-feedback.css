@@ -1,11 +1,12 @@
 /* Time Archive page — a public gallery of Contact-page feedback drawings,
    with an optional password-gated admin mode (delete/hide/reorder).
-   Not part of a Figma "scene" frame, so this is an original layout — it
-   deliberately skips the site's fixed 1920x1080 scaled-canvas pattern
-   (that pattern assumes a non-scrolling stage; a gallery is inherently
-   variable-length and needs to scroll), but reuses the site's palette,
-   Pretendard type, rounded-20 cards and dot-grid motif from the Contact
-   page's drawing canvas so it still feels like part of PLAYTIME. */
+   Figma node 495:1078. The nav chrome (site-logo/contact-btn) is copied
+   verbatim from the other pages' shared pattern so it sits at the exact
+   same screen position when navigating here from Home — only the middle
+   nav-pill (Time clock + game menu) is dropped, since this page isn't part
+   of that menu and Figma doesn't show it here. The gallery below is
+   inherently variable-length, so unlike the other pages it scrolls
+   normally instead of living inside a non-scrolling 1920x1080 stage. */
 
 @font-face {
   font-family: 'SK Concretica';
@@ -33,76 +34,121 @@ body {
   color: #111111;
 }
 
-/* ── HEADER ── */
-.archive-header {
+/* ── NAV LAYER ──
+   position:fixed 전체 화면 오버레이 안에 다른 페이지들과 동일한
+   1920x1080 캔버스를 flex로 중앙 배치하고 동일한 스케일 공식을 적용한다
+   (admin-feedback.js의 archiveFitViewport). 갤러리가 스크롤되어도 이
+   레이어 자체는 절대 움직이지 않아, 페이지를 오갈 때 로고/버튼이 항상
+   같은 화면 좌표에 있다. 빈 영역은 클릭이 아래 갤러리로 그대로
+   통과하도록 pointer-events:none, 실제 컨트롤만 auto로 되돌린다. */
+/* align-items:center 대신 flex-start를 쓴다 — 다른 페이지들은 화면
+   하나짜리 게임이라 세로 중앙 정렬이 맞지만, 이 페이지는 스크롤되는
+   갤러리의 상단 고정 바라서 세로로 좁고 긴 창에서도 네비가 항상
+   화면 맨 위에 붙어 있어야 한다. */
+.archive-nav-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 29px 60px;
+  align-items: flex-start;
+  justify-content: center;
+  pointer-events: none;
 }
 
-.archive-logo img {
+.archive-nav-canvas {
+  position: relative;
+  width: 1920px;
+  height: 1080px;
+  flex-shrink: 0;
+  transform: scale(1);
+  transform-origin: top center;
+}
+
+/* ── LOGO — 다른 페이지의 .site-logo와 완전히 동일한 위치/크기(고정
+   top:29/left:60, 144x36 박스)지만, 아이콘 대신 38px "Time Archive"
+   텍스트를 넣는다. ── */
+.site-logo {
+  position: fixed;
+  top: 29px;
+  left: 60px;
+  z-index: 100;
   width: 144px;
   height: 36px;
-  object-fit: contain;
-  object-position: left center;
-}
-
-.archive-header-actions {
   display: flex;
   align-items: center;
-  gap: 12px;
-}
-
-.archive-home-link {
-  font-family: 'Pretendard', sans-serif;
-  font-size: 18px;
-  letter-spacing: -0.04em;
-  color: rgba(17,17,17,0.5);
+  cursor: pointer;
   text-decoration: none;
-  transition: color 0.15s;
+  pointer-events: auto;
 }
-.archive-home-link:hover { color: #111111; }
 
-.archive-admin-btn {
+.archive-logo {
+  width: auto;
+  height: auto;
+  font-family: 'SK Concretica', 'Pretendard', sans-serif;
+  font-weight: 400;
+  font-size: 38px;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: #111111;
+  white-space: nowrap;
+}
+
+/* ── SETTING BUTTON — 다른 페이지의 .contact-btn과 동일한 위치/크기
+   (고정 top:29/right:60, 114x36), 라벨만 "Setting". 실제로는 관리자
+   로그인/모드 토글 버튼이라 <a>가 아니라 <button>이고, 활성화되면
+   Contact 버튼엔 없는 어두운 active 상태를 추가로 갖는다. ── */
+.contact-btn {
+  position: fixed;
+  top: 29px;
+  right: 60px;
+  z-index: 100;
+  width: 114px;
   height: 36px;
-  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
   border: none;
-  border-radius: 10px;
   background: #E2E2E2;
+  border-radius: 10px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s;
+  pointer-events: auto;
+}
+.contact-btn:hover { background: #D5D5D5; }
+.contact-btn.is-active { background: #111111; }
+.contact-btn.is-active:hover { opacity: 0.85; }
+.contact-btn.is-active .contact-dot { background: #EEEEEE; }
+.contact-btn.is-active .contact-label { color: #EEEEEE; }
+
+.contact-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #111111;
+  flex-shrink: 0;
+}
+.contact-label {
   font-family: 'Pretendard', sans-serif;
   font-weight: 500;
   font-size: 18px;
-  letter-spacing: -0.04em;
   color: #111111;
-  cursor: pointer;
-  transition: background 0.15s, color 0.15s;
 }
-.archive-admin-btn:hover { background: #D5D5D5; }
-.archive-admin-btn.is-active { background: #111111; color: #EEEEEE; }
-.archive-admin-btn.is-active:hover { opacity: 0.85; }
 
-/* ── MAIN ── */
+/* ── MAIN / GALLERY ──
+   nav-layer가 실제 문서 흐름 밖(position:fixed)에 있으므로, 콘텐츠이
+   그 아래에서 가려지지 않도록 위쪽에 로고 높이만큼 여유를 둔다.
+
+   max-width를 고정 1920px로 두면, 뷰포트가 1920x1080보다 커서
+   --ui-scale이 1을 넘는 경우(예: 3840x2160) 네비 캔버스는 실제로
+   1920*scale px까지 커지는데 이 박스는 1920px에 묶여 있어 둘이
+   어긋난다 — max-width도 --ui-scale을 그대로 곱해서 네비 캔버스의
+   실제 렌더링 폭과 항상 정확히 같게 만든다. */
 .archive-main {
-  max-width: 1400px;
+  max-width: calc(1920px * var(--ui-scale, 1));
   margin: 0 auto;
-  padding: 40px 60px 120px;
-}
-
-.archive-title {
-  font-family: 'SK Concretica', 'Pretendard', sans-serif;
-  font-weight: 400;
-  font-size: 40px;
-  letter-spacing: -0.02em;
-  color: #111111;
-}
-
-.archive-subtitle {
-  margin-top: 10px;
-  font-family: 'Pretendard', sans-serif;
-  font-size: 18px;
-  letter-spacing: -0.02em;
-  color: rgba(17,17,17,0.5);
+  padding: 120px calc(60px * var(--ui-scale, 1)) 120px;
 }
 
 .archive-empty-state {
@@ -113,17 +159,22 @@ body {
   text-align: center;
 }
 
+/* 카드 폭/여백을 컨테이너에 맞춰 늘어나는 1fr 대신 --ui-scale에
+   고정한다 — 페이지가 가로로 넓어져도 카드는 커지지 않고 항상 네비와
+   똑같은 비율로만 늘고 준다(587px * ui-scale). 3열은 항상 고정이고,
+   컨테이너 자체가 이미 네비 캔버스 폭에 맞춰 있으므로 3열이 넘칠 일이
+   없어 좁은 화면용 별도 breakpoint도 필요 없다. */
 .archive-grid {
-  margin-top: 40px;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(3, calc(587px * var(--ui-scale, 1)));
+  column-gap: calc(20px * var(--ui-scale, 1));
+  row-gap: calc(22px * var(--ui-scale, 1));
 }
 
-/* ── CARD ── */
+/* ── CARD (Figma node 495:1534 등 — 587x250, 각진 모서리, 10px 인셋
+   이미지 + 하단 날짜 밴드) ── */
 .archive-card {
-  background: #D9D9D9;
-  border-radius: 20px;
+  background: #E2E2E2;
   overflow: hidden;
   transition: opacity 0.15s;
 }
@@ -135,8 +186,10 @@ body {
    grid is a CSS background on the input canvas's wrapper, never drawn to
    the canvas), so this keeps the display consistent with what was sent. */
 .archive-card-image-wrap {
-  aspect-ratio: 890 / 305;
-  background-color: #DEDEDE;
+  margin: calc(10px * var(--ui-scale, 1)) calc(10px * var(--ui-scale, 1)) 0;
+  overflow: hidden;
+  aspect-ratio: 567 / 194;
+  background-color: #EEEEEE;
 }
 
 .archive-card-image {
@@ -146,22 +199,23 @@ body {
   object-fit: contain;
 }
 
+/* 카드 587x250 - 이미지 인셋(10px 위/좌/우 + 194px 높이) = 정확히
+   46px가 남는 하단 밴드. 날짜 텍스트 줄높이에 상관없이 46px로 고정해
+   카드 전체 높이가 항상 587x250 비율을 그대로 유지하도록 한다. */
 .archive-card-meta {
+  height: calc(46px * var(--ui-scale, 1));
   display: flex;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: 8px;
-  padding: 14px 16px;
-  font-family: 'Pretendard', sans-serif;
-  font-size: 13px;
-  letter-spacing: -0.02em;
-  color: rgba(17,17,17,0.6);
+  align-items: center;
+  justify-content: center;
+  padding: 0 calc(16px * var(--ui-scale, 1));
+  text-align: center;
 }
 
-.archive-card-id {
-  font-family: monospace;
-  font-size: 11px;
-  color: rgba(17,17,17,0.35);
+.archive-card-date {
+  font-family: 'SK Concretica', 'Pretendard', sans-serif;
+  font-size: calc(20px * var(--ui-scale, 1));
+  letter-spacing: -0.03em;
+  color: rgba(0,0,0,0.8);
 }
 
 .archive-card-admin-controls {
@@ -194,7 +248,7 @@ body {
 .admin-login-overlay {
   position: fixed;
   inset: 0;
-  z-index: 100;
+  z-index: 200;
   display: flex;
   align-items: center;
   justify-content: center;

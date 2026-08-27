@@ -40,6 +40,7 @@
       flex-shrink: 0;
       transform: scale(1);
       transform-origin: center center;
+      will-change: transform;
     }
 
     /* ── LOGO ── */
@@ -520,10 +521,22 @@
       text-decoration: none;
     }
     .contact-info-tag:first-of-type { margin-top: 0; }
-    a.contact-info-tag { cursor: pointer; transition: color 0.15s; }
-    a.contact-info-tag:hover { color: #111111; }
+    a.contact-info-tag {
+      cursor: pointer;
+      text-underline-offset: 3px;
+      text-decoration-color: transparent;
+      transition: color 0.15s, text-decoration-color 0.15s;
+    }
+    a.contact-info-tag:hover {
+      color: #111111;
+      text-decoration-line: underline;
+      text-decoration-color: currentColor;
+    }
     a.contact-info-tag[aria-disabled="true"] { cursor: default; }
-    a.contact-info-tag[aria-disabled="true"]:hover { color: #979797; }
+    a.contact-info-tag[aria-disabled="true"]:hover {
+      color: #979797;
+      text-decoration-color: transparent;
+    }
 
     .contact-footer-copy {
       position: absolute;
@@ -1336,15 +1349,15 @@
             <p class="contact-info-name">Shin Chanhee</p>
             <p class="contact-info-sub">tcg1502@naver.com</p>
             <hr class="contact-info-divider" />
-            <a class="contact-info-tag" data-contact-link="instagram">instagram</a>
-            <a class="contact-info-tag" data-contact-link="behance">behance</a>
+            <a class="contact-info-tag" data-contact-person="shinChanhee" data-contact-platform="instagram">instagram</a>
+            <a class="contact-info-tag" data-contact-person="shinChanhee" data-contact-platform="behance">behance</a>
           </div>
           <div class="contact-info-col">
             <p class="contact-info-name">Choi Yejun</p>
-            <p class="contact-info-sub">adding.choi@naver.com</p>
+            <p class="contact-info-sub">adding.choi@gmail.com</p>
             <hr class="contact-info-divider" />
-            <a class="contact-info-tag" data-contact-link="instagram">instagram</a>
-            <a class="contact-info-tag" data-contact-link="behance">behance</a>
+            <a class="contact-info-tag" data-contact-person="choiYejun" data-contact-platform="instagram">instagram</a>
+            <a class="contact-info-tag" data-contact-person="choiYejun" data-contact-platform="behance">behance</a>
           </div>
         </div>
         <p class="contact-footer-copy">©2026 AI-assisted Vibe Coding</p>
@@ -1434,6 +1447,10 @@
       }
     }
     fitViewport();
+    /* 매우 큰 해상도(4K 등)에서 페이지가 곧바로 로드되면 transform 계산은 정확해도
+       브라우저 첫 페인트가 이를 놓쳐 콘텐츠가 좌상단에 눌린 채로 그려지는 경우가 있다
+       — 다음 프레임에 한 번 더 재적용해서 그 스테일 페인트를 강제로 복구한다. */
+    requestAnimationFrame(fitViewport);
     window.addEventListener('resize', fitViewport);
 
     function updateTime() {
@@ -1860,10 +1877,11 @@
     setInterval(updateContactClock, 1000);
 
     /* ContactLinks — reads from the contactLinks constant in js/contactLinks.js
-       so swapping in the real Instagram/Behance URLs later only touches that
+       so swapping in a real Instagram/Behance URL later only touches that
        one file. Links without a URL yet render inert (no navigation). */
-    document.querySelectorAll('[data-contact-link]').forEach(link => {
-      const url = contactLinks[link.dataset.contactLink];
+    document.querySelectorAll('[data-contact-person]').forEach(link => {
+      const person = contactLinks[link.dataset.contactPerson];
+      const url = person && person[link.dataset.contactPlatform];
       if (url) {
         link.href = url;
         link.target = '_blank';
