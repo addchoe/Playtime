@@ -6,7 +6,7 @@
 
 | 페이지 | 경로 | 설명 |
 | --- | --- | --- |
-| Home | `index.html` | 게임 허브. Take A Walk 미로 게임이 페이지 내부 섹션으로 포함되어 있음 |
+| Home | `index.html` | 게임 허브. Take A Walk 미로 게임이 페이지 내부 섹션으로 포함되어 있음(준비중 로딩 화면 → 미로 → Game Over/Nice Walk! 결과 화면) |
 | Wash Up | `pages/washup.html` | 웹캠 기반 세안 게임 |
 | Secret Break | `pages/secret-break.html` | 화장실 브레이크 게임 |
 | Ready For Sleep | `pages/ready-for-sleep.html` | 웹캠 사진부스 스타일 카운트다운 게임 |
@@ -60,3 +60,4 @@ playtime/
 
 - `index_1.html`, `test.html`은 어디에서도 링크되지 않은 스크래치 파일입니다.
 - 네비게이션의 Lunch Time 항목은 아직 실제 `lunch-time/` 앱과 연결되어 있지 않습니다(배포 방식 결정 후 연결 예정).
+- 각 게임 결과 화면의 "Next Game" 버튼은 Secret Break → Take A Walk → Drawing → Ready For Sleep → Wash Up 순서로 연결되어 있습니다. Wash Up과 Lunch Time에는 아직 종료(결과) 화면이 없어 Next Game 버튼이 없습니다.
