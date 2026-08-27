@@ -14,7 +14,7 @@
 
 ![Service Flow](<img/2서비스 플로우.png>)
 
-기획 단계의 서비스 흐름입니다. 시계 UI에서 시간대(Wake Up/Daily Choice/Tiny Walk/Sleep Mode)를 고르면 그에 맞는 인터랙션(세수, 점심 고르기, 산책, 잠들기)을 하루치 체험으로 진행하고, 그 결과가 Time Card → Routine Proof → Instagram Share 순으로 이어지는 공유 콘텐츠로 만들어져 "시간을 가지고 노는 일상 기록 방식"이라는 목표로 연결됩니다. 실제 구현에서는 이 시간대들이 Wash Up / Lunch Time(예정) / Take A Walk / Ready For Sleep 등 개별 게임 페이지로 나뉘어 있습니다. (아래 [구성](#구성) 참고)
+기획 단계의 서비스 흐름입니다. 시계 UI에서 시간대(Wake Up/Daily Choice/Tiny Walk/Sleep Mode)를 고르면 그에 맞는 인터랙션(세수, 점심 고르기, 산책, 잠들기)을 하루치 체험으로 진행하고, 그 결과가 Time Card → Routine Proof → Instagram Share 순으로 이어지는 공유 콘텐츠로 만들어져 "시간을 가지고 노는 일상 기록 방식"이라는 목표로 연결됩니다. 실제 구현에서는 이 시간대들이 Wash Up / Lunch Time(예정) / Take A Walk / Ready For Sleep 등 개별 게임 페이지로 나뉘어 있습니다. (아래 [Information Architecture](#information-architecture) 참고)
 
 ### Interaction System
 
@@ -30,7 +30,19 @@
 
 ![Information Architecture](<img/4IA구조도.png>)
 
-Home 하위에 6개 게임이 나란히 연결되는 플랫한 구조입니다. 각 페이지의 실제 경로와 상세 설명은 아래 [구성](#구성) 표를 참고하세요.
+Home 하위에 6개 게임이 나란히 연결되는 플랫한 구조입니다.
+
+| 페이지 | 경로 | 설명 |
+| --- | --- | --- |
+| Home | `index.html` | 게임 허브. Take A Walk 미로 게임이 페이지 내부 섹션으로 포함되어 있음(준비중 로딩 화면 → 미로 → Game Over/Nice Walk! 결과 화면) |
+| Wash Up | `pages/washup.html` | 웹캠 기반 세안 게임 |
+| Secret Break | `pages/secret-break.html` | 화장실 브레이크 게임 |
+| Ready For Sleep | `pages/ready-for-sleep.html` | 웹캠 사진부스 스타일 카운트다운 게임 |
+| Drawing | `pages/drawing.html` | 웹캠 원터치 드로잉 미니게임 |
+| Lunch Time | `lunch-time/` | 별도 Vite/React 앱. 카카오 로컬 API로 주변 식당을 찾는 점심 메뉴 룰렛 |
+| Time Archive | `pages/admin-feedback.html` | Contact 페이지에서 남긴 피드백 드로잉 갤러리 + 비밀번호 기반 관리자 모드 |
+
+각 페이지는 상단 GNB(네비게이션 pill)를 공유하며, 클릭 시 Wash Up / Lunch Time / Secret Break / Take A Walk / Drawing / Ready For Sleep 전체 메뉴로 확장됩니다.
 
 ### Design System
 
@@ -47,20 +59,6 @@ Home 하위에 6개 게임이 나란히 연결되는 플랫한 구조입니다. 
 | --- | --- | --- |
 | Shin Chanhee | Designer · Developer | Wash Up, Lunch Time, Secret Break, Ready For Sleep |
 | Choi Yejun | Designer · Developer | Main, Contact, Take A Walk, Drawing |
-
-## 구성
-
-| 페이지 | 경로 | 설명 |
-| --- | --- | --- |
-| Home | `index.html` | 게임 허브. Take A Walk 미로 게임이 페이지 내부 섹션으로 포함되어 있음(준비중 로딩 화면 → 미로 → Game Over/Nice Walk! 결과 화면) |
-| Wash Up | `pages/washup.html` | 웹캠 기반 세안 게임 |
-| Secret Break | `pages/secret-break.html` | 화장실 브레이크 게임 |
-| Ready For Sleep | `pages/ready-for-sleep.html` | 웹캠 사진부스 스타일 카운트다운 게임 |
-| Drawing | `pages/drawing.html` | 웹캠 원터치 드로잉 미니게임 |
-| Lunch Time | `lunch-time/` | 별도 Vite/React 앱. 카카오 로컬 API로 주변 식당을 찾는 점심 메뉴 룰렛 |
-| Time Archive | `pages/admin-feedback.html` | Contact 페이지에서 남긴 피드백 드로잉 갤러리 + 비밀번호 기반 관리자 모드 |
-
-각 페이지는 상단 GNB(네비게이션 pill)를 공유하며, 클릭 시 Wash Up / Lunch Time / Secret Break / Take A Walk / Drawing / Ready For Sleep 전체 메뉴로 확장됩니다.
 
 ## 기술 스택
 
