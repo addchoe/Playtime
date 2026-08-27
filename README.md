@@ -2,7 +2,35 @@
 
 일상 속 짧은 순간(세안, 화장실 브레이크, 점심, 산책, 드로잉, 잠들기 전)을 미니게임으로 만든 웹사이트입니다.
 
-## 구성
+## 기획
+
+### Overview
+
+![Overview](<img/1개요.png>)
+
+일상 속에서 반복되지만 스쳐 지나가기 쉬운 짧은 순간들(세수, 점심, 산책, 잠들기 등)을 가벼운 인터랙션으로 재해석했습니다. 각 순간을 직관적인 조작의 미니게임으로 만들어, 별다른 설명 없이도 누구나 바로 플레이할 수 있게 하는 것이 목표입니다.
+
+### Service Flow
+
+![Service Flow](<img/2서비스 플로우.png>)
+
+기획 단계의 서비스 흐름입니다. 시계 UI에서 시간대(Wake Up/Daily Choice/Tiny Walk/Sleep Mode)를 고르면 그에 맞는 인터랙션(세수, 점심 고르기, 산책, 잠들기)을 하루치 체험으로 진행하고, 그 결과가 Time Card → Routine Proof → Instagram Share 순으로 이어지는 공유 콘텐츠로 만들어져 "시간을 가지고 노는 일상 기록 방식"이라는 목표로 연결됩니다. 실제 구현에서는 이 시간대들이 Wash Up / Lunch Time(예정) / Take A Walk / Ready For Sleep 등 개별 게임 페이지로 나뉘어 있습니다. (아래 [Information Architecture](#information-architecture) 참고)
+
+### Interaction System
+
+![Interaction System](<img/3인터렉션 설명.png>)
+
+게임마다 성격에 맞는 세 가지 조작 방식을 조합해 사용합니다.
+
+- **Webcam Interaction** — 웹캠으로 실제 동작을 인식(Wash Up, Ready For Sleep의 사진부스 카운트다운 등)
+- **Mouse Interaction** — 마우스 이동/드래그로 화면 속 오브젝트를 조작(Take A Walk의 미로 길찾기 등)
+- **Gesture Interaction** — 손가락 제스처를 트래킹해 그리기 등에 활용(Drawing, Wash Up의 손 트래킹)
+
+### Information Architecture
+
+![Information Architecture](<img/4IA구조도.png>)
+
+Home 하위에 6개 게임이 나란히 연결되는 플랫한 구조입니다.
 
 | 페이지 | 경로 | 설명 |
 | --- | --- | --- |
@@ -15,6 +43,24 @@
 | Time Archive | `pages/admin-feedback.html` | Contact 페이지에서 남긴 피드백 드로잉 갤러리 + 비밀번호 기반 관리자 모드 |
 
 각 페이지는 상단 GNB(네비게이션 pill)를 공유하며, 클릭 시 Wash Up / Lunch Time / Secret Break / Take A Walk / Drawing / Ready For Sleep 전체 메뉴로 확장됩니다.
+
+### Design System
+
+![Design System](<img/5디자인시스템.png>)
+
+- **공통 컴포넌트**: `Playtime!` 로고, Time을 보여주는 GNB(네비게이션 pill), Contact Sub 버튼을 모든 페이지가 공유합니다.
+- **그리드 시스템**: Full HD(1920×1080) 기준 12-column 그리드, 좌우 마진 60px, 거터(gutter) 20px. 실제 구현에서 이 1920×1080 캔버스를 뷰포트에 맞게 스케일하는 방식은 아래 [기술 스택](#기술-스택)에서 설명합니다.
+
+### Team
+
+![Team](<img/6팀소개.png>)
+
+디자이너 2명이 바이브 코딩(Vibe Coding)으로 직접 만든 웹사이트입니다.
+
+| 이름 | 역할 | 담당 페이지 |
+| --- | --- | --- |
+| Shin Chanhee | Designer · Developer | Wash Up, Lunch Time, Secret Break, Ready For Sleep |
+| Choi Yejun | Designer · Developer | Main, Contact, Take A Walk, Drawing |
 
 ## 기술 스택
 
