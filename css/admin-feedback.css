@@ -216,6 +216,7 @@ body {
   font-size: calc(20px * var(--ui-scale, 1));
   letter-spacing: -0.03em;
   color: rgba(0,0,0,0.8);
+  margin-top: calc(4px * var(--ui-scale, 1));
 }
 
 .archive-card-admin-controls {
