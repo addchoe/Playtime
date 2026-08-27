@@ -2,6 +2,32 @@
 
 일상 속 짧은 순간(세안, 화장실 브레이크, 점심, 산책, 드로잉, 잠들기 전)을 미니게임으로 만든 웹사이트입니다.
 
+## 기획
+
+### Overview
+
+![Overview](<img/1개요.png>)
+
+### Service Flow
+
+![Service Flow](<img/2서비스 플로우.png>)
+
+### Interaction System
+
+![Interaction System](<img/3인터렉션 설명.png>)
+
+### Information Architecture
+
+![Information Architecture](<img/4IA구조도.png>)
+
+### Design System
+
+![Design System](<img/5디자인시스템.png>)
+
+### Team
+
+![Team](<img/6팀소개.png>)
+
 ## 구성
 
 | 페이지 | 경로 | 설명 |
