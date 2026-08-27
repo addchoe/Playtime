@@ -725,7 +725,7 @@
       height: 20px;
       margin: -10px 0 0 -9.5px;
       opacity: 0.9;
-      animation: pawFade 5s ease forwards;
+      animation: pawFade 3s ease forwards;
     }
     .paw img { width: 100%; height: 100%; display: block; }
 
@@ -874,11 +874,12 @@
       left: 50%;
       bottom: 18px;
       transform: translateX(-50%);
+      z-index: 5;
       width: max-content;
       max-width: 340px;
-      background: rgba(17,17,17,0.02);
-      backdrop-filter: blur(2.4px);
-      -webkit-backdrop-filter: blur(2.4px);
+      background: rgba(238,238,238,0.88);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       border: 0.96px solid rgba(17,17,17,0.3);
       border-radius: 44px;
       box-shadow: inset 0 3.379px 3.379px 0 rgba(255,255,255,0.25);
@@ -1823,7 +1824,7 @@
     }
 
     /* ── TAKE A WALK — MAZE GAME ── */
-    const WALK = { cols: 16, rows: 7, cellSize: 95, entranceRow: 1, exitRow: 5, threshold: 15 };
+    const WALK = { cols: 16, rows: 8, cellSize: 95, entranceRow: 1, exitRow: 5, threshold: 15 };
     const walkState = { segments: [], active: false, over: false, lastPaw: null, pawSide: 1 };
 
     function generateMazeGrid(cols, rows) {
@@ -1933,7 +1934,7 @@
       el.style.transform = 'rotate(' + (angleDeg + 90) + 'deg)';
       el.innerHTML = '<img src="img/paw-icon.svg" alt="" />';
       document.getElementById('walk-footprints').appendChild(el);
-      setTimeout(() => el.remove(), 5000);
+      setTimeout(() => el.remove(), 3000);
     }
 
     function handleWalkMove(e) {
@@ -1968,7 +1969,7 @@
       }
       walkState.lastPos = { x: mx, y: my };
 
-      if (!walkState.lastPaw || Math.hypot(mx - walkState.lastPaw.x, my - walkState.lastPaw.y) > 22) {
+      if (!walkState.lastPaw || Math.hypot(mx - walkState.lastPaw.x, my - walkState.lastPaw.y) > 26) {
         let angle = 0;
         if (walkState.lastPaw) angle = Math.atan2(my - walkState.lastPaw.y, mx - walkState.lastPaw.x) * 180 / Math.PI;
         spawnPaw(mx, my, angle);
