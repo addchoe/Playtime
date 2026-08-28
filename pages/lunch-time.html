@@ -86,10 +86,125 @@
       <p class="lt-intro-tip">Tip. 고민은 룰렛에게 맡겨보세요</p>
     </section>
 
+    <!-- SCREEN 2: 설정 + 룰렛 (Figma node 534:759) -->
+    <section class="lt-screen lt-screen--roulette" id="lt-screen-roulette">
+      <h1 class="lt-sr-only">Lunch Time — 점심 메뉴 룰렛</h1>
+
+      <div class="lt-content">
+        <div class="lt-wheel-column">
+          <div class="lt-wheel-wrap" id="lt-wheel-wrap">
+            <div class="lt-wheel-spin" id="lt-wheel-spin">
+              <svg class="lt-wheel-svg" id="lt-wheel-svg" viewBox="0 0 100 100" aria-hidden="true"></svg>
+              <div class="lt-labels" id="lt-labels"></div>
+            </div>
+
+            <svg class="lt-pointer" viewBox="0 0 185.944 161.532" aria-hidden="true">
+              <path d="M76.5177 28.5C83.8308 15.8333 102.114 15.8333 109.427 28.5L169.49 132.532C176.803 145.199 167.662 161.032 153.035 161.032H32.909C18.2828 161.032 9.14138 145.199 16.4545 132.532L76.5177 28.5Z" fill="#EEEEEE" stroke="black" stroke-width="1.86"/>
+              <path d="M84.3117 54.0442C88.1607 47.3775 97.7832 47.3775 101.632 54.0442L137.764 116.626C141.613 123.293 136.802 131.626 129.104 131.626H56.8403C49.1423 131.626 44.3311 123.293 48.1801 116.626L84.3117 54.0442Z" fill="#D1DAF1" stroke="black" stroke-width="1.86"/>
+            </svg>
+
+            <button type="button" class="lt-go-button" id="lt-go-button" aria-label="룰렛 돌리기" disabled>Go!</button>
+          </div>
+        </div>
+
+        <aside class="lt-sidebar">
+          <section class="lt-panel-stack" aria-label="룰렛 검색 조건">
+            <div class="lt-panel">
+              <p class="lt-label">위치/장소검색</p>
+              <div class="lt-search-row" id="lt-search-row">
+                <div class="lt-search-box">
+                  <input type="text" class="lt-input" id="lt-location-input" placeholder="어디서 먹을까요?" />
+                  <ul class="lt-dropdown" id="lt-dropdown" role="listbox" hidden></ul>
+                  <p class="lt-search-hint" id="lt-search-hint" hidden></p>
+                </div>
+                <button type="button" class="lt-icon-button" id="lt-search-button" aria-label="위치 검색">
+                  <svg width="14" height="14" viewBox="0 0 15.7687 15.7687" fill="none" aria-hidden="true">
+                    <path fill-rule="evenodd" clip-rule="evenodd" fill="currentColor" d="M6.5 1.5C5.17392 1.5 3.90215 2.02678 2.96447 2.96447C2.02678 3.90215 1.5 5.17392 1.5 6.5C1.5 7.82608 2.02678 9.09785 2.96447 10.0355C3.90215 10.9732 5.17392 11.5 6.5 11.5C7.82608 11.5 9.09785 10.9732 10.0355 10.0355C10.9732 9.09785 11.5 7.82608 11.5 6.5C11.5 5.17392 10.9732 3.90215 10.0355 2.96447C9.09785 2.02678 7.82608 1.5 6.5 1.5ZM0 6.5C0 4.77609 0.684819 3.12279 1.90381 1.90381C3.12279 0.684819 4.77609 0 6.5 0C8.22391 0 9.87721 0.684819 11.0962 1.90381C12.3152 3.12279 13 4.77609 13 6.5C13 8.22391 12.3152 9.87721 11.0962 11.0962C9.87721 12.3152 8.22391 13 6.5 13C4.77609 13 3.12279 12.3152 1.90381 11.0962C0.684819 9.87721 0 8.22391 0 6.5Z"/>
+                    <path fill-rule="evenodd" clip-rule="evenodd" fill="currentColor" d="M10.47 10.47C10.6106 10.3295 10.8012 10.2507 11 10.2507C11.1988 10.2507 11.3894 10.3295 11.53 10.47L15.53 14.47C15.6037 14.5387 15.6628 14.6215 15.7038 14.7135C15.7448 14.8055 15.7668 14.9048 15.7686 15.0055C15.7704 15.1062 15.7518 15.2062 15.7141 15.2996C15.6764 15.393 15.6203 15.4778 15.549 15.549C15.4778 15.6203 15.393 15.6764 15.2996 15.7141C15.2062 15.7518 15.1062 15.7704 15.0055 15.7686C14.9048 15.7668 14.8055 15.7448 14.7135 15.7038C14.6215 15.6628 14.5387 15.6037 14.47 15.53L10.47 11.53C10.3295 11.3894 10.2507 11.1988 10.2507 11C10.2507 10.8012 10.3295 10.6106 10.47 10.47Z"/>
+                  </svg>
+                </button>
+                <button type="button" class="lt-icon-button lt-locate-button" id="lt-locate-button" aria-label="현재 위치 사용" title="현재 위치 사용">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M12 22s7-7.58 7-12.5A7 7 0 0 0 5 9.5C5 14.42 12 22 12 22Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                    <circle cx="12" cy="9.5" r="2.4" stroke="currentColor" stroke-width="1.6"/>
+                  </svg>
+                </button>
+              </div>
+              <p class="lt-selected-location" id="lt-selected-location" hidden></p>
+              <p class="lt-locate-error" id="lt-locate-error" hidden></p>
+
+              <div class="lt-divider"></div>
+
+              <p class="lt-label">검색 반경</p>
+              <div class="lt-radius-group" id="lt-radius-group" role="group" aria-label="검색 반경"></div>
+
+              <div class="lt-divider"></div>
+
+              <p class="lt-label">개수</p>
+              <div class="lt-count-row">
+                <button type="button" class="lt-stepper-button" id="lt-count-minus" aria-label="음식점 개수 줄이기">
+                  <svg width="38" height="38" viewBox="0 0 45 45" fill="none" aria-hidden="true">
+                    <rect x="0.5" y="0.5" width="44" height="44" rx="4" fill="#D1DAF1" stroke="#111111"/>
+                    <path d="M16.75 22.5H28.25" stroke="black"/>
+                  </svg>
+                </button>
+                <span class="lt-count-value" id="lt-count-value">5개</span>
+                <button type="button" class="lt-stepper-button" id="lt-count-plus" aria-label="음식점 개수 늘리기">
+                  <svg width="38" height="38" viewBox="0 0 45 45" fill="none" aria-hidden="true">
+                    <rect x="0.5" y="0.5" width="44" height="44" rx="4" fill="#D1DAF1" stroke="#111111"/>
+                    <path d="M16.75 22.375H22.5M28.25 22.375H22.5M22.5 22.375V16.875V28.125" stroke="black"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <label class="lt-consent-panel">
+              <input type="checkbox" class="lt-checkbox" id="lt-consent-checkbox" />
+              위치 기반 음식점 추천을 위한 위치정보 수집·이용에 동의합니다. (필수)
+            </label>
+
+            <button type="button" class="lt-submit-button" id="lt-submit-button" disabled>음식점 불러오기</button>
+          </section>
+
+          <div class="lt-status-area" id="lt-status-area" role="status" aria-live="polite"></div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- SCREEN 3: 결과 (Figma node 338:588) -->
+    <section class="lt-screen lt-screen--result" id="lt-screen-result">
+      <div class="lt-result-heading">
+        <p class="lt-result-title">Baro Baro ...</p>
+        <p class="lt-result-subtitle">결과가 마음에 드나요?</p>
+      </div>
+
+      <div class="lt-result-winner-block">
+        <span class="lt-result-category-pill" id="lt-result-category-pill"></span>
+        <p class="lt-result-winner-name" id="lt-result-winner-name"></p>
+        <a class="lt-result-map-link" id="lt-result-map-link" href="#" target="_blank" rel="noreferrer" hidden>카카오맵에서 보기</a>
+      </div>
+
+      <nav class="lt-result-end" aria-label="다음 동작">
+        <button type="button" class="lt-result-end-item" id="lt-play-again-button">
+          <svg class="lt-result-arrow-icon" viewBox="0 0 12.1244 10.5" aria-hidden="true"><path d="M6.06218 0L12.1244 10.5H0L6.06218 0Z" fill="black" fill-opacity="0.4"/></svg>
+          <span>Play again</span>
+        </button>
+        <a class="lt-result-end-item" href="secret-break.html">
+          <svg class="lt-result-arrow-icon" viewBox="0 0 12.1244 10.5" aria-hidden="true"><path d="M6.06218 0L12.1244 10.5H0L6.06218 0Z" fill="black" fill-opacity="0.4"/></svg>
+          <span>Next Game</span>
+        </a>
+        <a class="lt-result-end-item" href="../index.html">
+          <svg class="lt-result-arrow-icon" viewBox="0 0 12.1244 10.5" aria-hidden="true"><path d="M6.06218 0L12.1244 10.5H0L6.06218 0Z" fill="black" fill-opacity="0.4"/></svg>
+          <span>Home</span>
+        </a>
+      </nav>
+    </section>
+
   </main>
 
   </div>
 
+  <script src="../js/lunch-time-config.js"></script>
   <script src="../js/lunch-time.js"></script>
 </body>
 </html>
