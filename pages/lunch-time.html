@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lunch Time · Playtime!</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/lunch-time.css" />
+</head>
+<body>
+
+  <div class="lt-viewport-scale" id="lt-viewport-scale">
+
+  <a class="site-logo" href="../index.html">
+    <img src="../img/logo.svg" alt="Playtime!" />
+  </a>
+
+  <div class="nav-overlay" id="nav-overlay" onclick="closeNav()"></div>
+
+  <div class="nav-pill" id="nav-pill">
+    <div class="nav-top" onclick="toggleNav()">
+      <div class="nav-top-closed">
+        <span class="nav-label">Time</span>
+        <span class="nav-time" id="nav-time">12:00 AM</span>
+      </div>
+      <div class="nav-top-open">
+        <span class="nav-label">Time</span>
+        <span class="nav-close" onclick="event.stopPropagation(); closeNav()">Close</span>
+      </div>
+    </div>
+
+    <div class="nav-body">
+      <nav class="nav-menu">
+        <a class="nav-menu-item" href="washup.html">Wash Up</a>
+        <a class="nav-menu-item" aria-current="page">Lunch Time</a>
+        <a class="nav-menu-item" href="secret-break.html">Secret Break</a>
+        <a class="nav-menu-item" href="../index.html#walk">Take A Walk</a>
+        <a class="nav-menu-item" href="drawing.html">Drawing</a>
+        <a class="nav-menu-item" href="ready-for-sleep.html">Ready For Sleep</a>
+      </nav>
+
+      <div class="nav-footer">
+        <span class="nav-copyright">©Labvoid</span>
+        <div class="nav-icons">
+          <a class="nav-icon-link" href="https://www.instagram.com/lab_void/" target="_blank">
+            <img src="../img/insta.svg" alt="Instagram" />
+          </a>
+          <a class="nav-icon-link" href="https://www.behance.net/hidc_labvoid" target="_blank">
+            <img src="../img/behance.svg" alt="Behance" />
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <a class="contact-btn" id="contact-btn" href="../index.html#contact">
+    <span class="contact-dot"></span>
+    <span class="contact-label">Contact</span>
+  </a>
+
+  <main class="lt-root">
+
+    <!-- SCREEN 1: 로딩 (Figma node 338:474, 1920x1080 절대좌표 그대로) -->
+    <section class="lt-screen lt-screen--loading active" id="lt-screen-loading">
+      <p class="lt-intro-title">Lunch Time</p>
+      <p class="lt-intro-sub">오늘 뭐먹지... 점심 메뉴를 골라봐요!</p>
+
+      <div class="lt-intro-wheel-wrap" aria-hidden="true">
+        <svg class="lt-intro-wheel" viewBox="0 0 140.902 148.095" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <g class="lt-intro-wheel-spin">
+            <circle cx="70.4511" cy="70.4509" r="57.7642" stroke="black" stroke-width="1.81906"/>
+            <circle cx="70.4509" cy="70.4509" r="69.5414" stroke="black" stroke-width="1.81906"/>
+            <path d="M70.4515 12.6867L70.4515 128.215" stroke="black" stroke-width="1.81906"/>
+            <path d="M12.6869 70.4509L128.215 70.4509" stroke="black" stroke-width="1.81906"/>
+            <path d="M29.5326 29.467L111.436 111.37" stroke="black" stroke-width="1.81906"/>
+            <path d="M111.436 29.3103L29.5328 111.213" stroke="black" stroke-width="1.81906"/>
+          </g>
+          <g class="lt-intro-wheel-pointer">
+            <path d="M64.5536 101.571C67.0706 97.2114 73.363 97.2114 75.88 101.571L96.5521 137.376C99.0691 141.736 95.9229 147.185 90.8889 147.185L49.5446 147.185C44.5107 147.185 41.3645 141.736 43.8815 137.376L64.5536 101.571Z" fill="#EEEEEE" stroke="black" stroke-width="1.81906"/>
+            <path d="M67.2356 110.362C68.5603 108.068 71.8721 108.068 73.1969 110.362L85.6324 131.901C86.9571 134.196 85.3012 137.064 82.6517 137.064L57.7807 137.064C55.1313 137.064 53.4754 134.196 54.8001 131.901L67.2356 110.362Z" fill="#D1DAF1" stroke="black" stroke-width="1.81906"/>
+          </g>
+        </svg>
+      </div>
+
+      <p class="lt-intro-loading-label">Loading ...</p>
+      <p class="lt-intro-tip">Tip. 고민은 룰렛에게 맡겨보세요</p>
+    </section>
+
+  </main>
+
+  </div>
+
+  <script src="../js/lunch-time.js"></script>
+</body>
+</html>
