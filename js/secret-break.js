@@ -54,8 +54,10 @@ const SB_DOOR_CLOSED_SRC = SB_ASSET_DIR + 'door-closed.svg';
 const SB_DOOR_OPEN_SRC = SB_ASSET_DIR + 'door-open.svg';
 const SB_TOILET_SRC = SB_ASSET_DIR + 'toilet.png';
 const SB_MASCOT_SRC = SB_ASSET_DIR + 'mascot.svg';
+const SB_MASCOT_SURPRISED_SRC = SB_ASSET_DIR + 'mascot-surprised.svg';
+const SB_MASCOT_SURPRISE_DELAY = 500;
 
-const SB_SLOT_CENTERS = [29.90, 51.36, 72.81]; // .sb-game-area(1280px 고정 폭) 기준 %, 각 슬롯 중앙 x (말풍선 위치 계산용)
+const SB_SLOT_CENTERS = [28.70, 50.16, 71.61]; // .sb-game-area(1920px 고정 폭) 기준 %, 각 슬롯 중앙 x (말풍선 위치 계산용)
 
 const SB_LEVEL_CONFIG = {
   1: { shuffleDuration: 3000, stepInterval: 500 },
@@ -178,6 +180,17 @@ function sbFindTargetSlotIndex() {
   });
 }
 
+/* 문이 열려 캐릭터 칸이 드러날 때: 처음엔 기본 얼굴로 보이다가 1초 뒤 놀라는 얼굴로 바뀐다. */
+function sbFindMascotContentEl() {
+  return sbContentEls.find((img) => img.dataset.kind === 'mascot');
+}
+function sbScheduleMascotSurprise() {
+  const mascotEl = sbFindMascotContentEl();
+  if (!mascotEl) return;
+  mascotEl.src = SB_MASCOT_SRC;
+  sbSetTimeout(() => { mascotEl.src = SB_MASCOT_SURPRISED_SRC; }, SB_MASCOT_SURPRISE_DELAY);
+}
+
 function sbShowBubble(text, slotIndex) {
   sbGameBubbleTextEl.textContent = text;
   sbGameBubbleEl.style.left = (SB_SLOT_CENTERS[slotIndex] + 3) + '%';
@@ -271,6 +284,7 @@ function sbOnDoorClick(doorEl) {
   sbSetAllDoors('open');
 
   const correct = clickedContent.dataset.kind === 'mascot';
+  if (correct) sbScheduleMascotSurprise();
   const targetSlotIndex = correct ? slotIndex : sbFindTargetSlotIndex();
   sbShowBubble(correct ? '제법인데~' : '여기였어~', targetSlotIndex);
   sbStatusEl.textContent = correct ? '정답입니다!' : '틀렸습니다.';
