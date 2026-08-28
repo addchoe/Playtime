@@ -1,0 +1,1 @@
+window.LT_KAKAO_JS_KEY = '0788922ec32046dcc98d847b1d434f66';
