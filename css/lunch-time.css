@@ -276,17 +276,18 @@ body {
   display: flex;
   flex-direction: column;
   gap: 18px;
-  width: 366px;
+  width: 400px;
 }
 
 /* ── 룰렛 휠 ── */
 
 .lt-wheel-wrap {
   position: relative;
-  width: 560px;
+  width: 720px;
   aspect-ratio: 1;
   margin: 0 auto;
   flex-shrink: 0;
+  transform: translateY(35px);
 }
 
 .lt-wheel-spin {
@@ -392,7 +393,7 @@ body {
   flex-direction: column;
   gap: 28px;
   width: 100%;
-  max-width: 366px;
+  max-width: 400px;
 }
 
 .lt-panel {
