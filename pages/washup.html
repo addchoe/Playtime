@@ -14,6 +14,10 @@
        이 레이어를 스케일 wrapper 밖으로 빼도 좌표 정합성에는 영향 없다. -->
   <video id="washup-video" class="washup-video-bg" autoplay muted playsinline></video>
 
+  <!-- 대기화면 배경: 1920x1080 스케일 박스 바깥(레터박스 영역)까지 실제 창 전체를
+       #EEEEEE로 덮어서, 대기 중에는 창 비율과 무관하게 카메라가 비치지 않게 한다. -->
+  <div class="washup-loading-backdrop" id="washup-loading-backdrop"></div>
+
   <div class="washup-viewport-scale" id="washup-viewport-scale">
 
   <a class="site-logo" href="../index.html">
@@ -66,6 +70,19 @@
     <span class="contact-dot"></span>
     <span class="contact-label">Contact</span>
   </a>
+
+  <!-- SCREEN 1: 실행 전 대기화면 (Figma node 379:2725, 1920x1080 절대좌표 그대로) -->
+  <div class="washup-screen--loading" id="washup-screen-loading">
+    <p class="washup-intro-title">Wash Up</p>
+    <p class="washup-intro-sub">뽀득뽀득! 깨끗하게 씻어봐요!</p>
+
+    <div class="washup-intro-duck-wrap" aria-hidden="true">
+      <img src="../public/assets/washup/loading-duck.svg" alt="" />
+    </div>
+
+    <p class="washup-intro-loading-label">Loading ...</p>
+    <p class="washup-intro-tip">Tip. 오리는 좋은 친구가 될 거예요</p>
+  </div>
 
   <main class="washup-stage" id="washup-stage">
     <canvas id="washup-canvas" class="washup-canvas" aria-hidden="true"></canvas>
