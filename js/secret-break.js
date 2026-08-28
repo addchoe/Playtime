@@ -76,7 +76,6 @@ let sbSlotEls;       // [slot0, slot1, slot2] — 고정 위치 컨테이너, �
 let sbDoorGroupEls;  // [group0, group1, group2] — hiddenContent+door 묶음, 슬롯 사이를 이동
 let sbDoorEls, sbDoorPanelEls, sbContentEls; // doorGroup 내부 요소 (원래 group index 기준, 안정적)
 let sbGameBubbleEl, sbGameBubbleTextEl, sbStatusEl;
-let sbPopupOverlayEl, sbPopupTitleEl, sbPopupSubEl;
 
 let sbLevel = 1;
 let sbGameState = 'idle'; // idle | reveal | closed | shuffling | selectable | judging
@@ -94,9 +93,6 @@ function sbCacheDom() {
   sbGameBubbleEl = document.getElementById('sb-game-bubble');
   sbGameBubbleTextEl = document.getElementById('sb-game-bubble-text');
   sbStatusEl = document.getElementById('sb-status');
-  sbPopupOverlayEl = document.getElementById('sb-popup-overlay');
-  sbPopupTitleEl = document.getElementById('sb-popup-title');
-  sbPopupSubEl = document.getElementById('sb-popup-sub');
 
   // 각 doorGroup을 자기 원래 슬롯 안에 배치
   sbSlotContents = sbSlotEls.map((slotEl, i) => {
@@ -109,6 +105,7 @@ function sbCacheDom() {
   });
 
   document.getElementById('sb-result-retry').addEventListener('click', sbResultRetry);
+  document.getElementById('sb-success-retry').addEventListener('click', sbSuccessRetry);
 }
 
 function sbSlotIndexOfGroup(groupEl) {
@@ -223,12 +220,16 @@ function sbCloseRound() {
 function sbShuffleOnce(stepDurationMs) {
   const firstRects = sbDoorGroupEls.map((g) => g.getBoundingClientRect());
 
-  for (let i = sbSlotContents.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    const tmp = sbSlotContents[i];
-    sbSlotContents[i] = sbSlotContents[j];
-    sbSlotContents[j] = tmp;
-  }
+  // 매 스텝마다 서로 다른 두 슬롯을 확실하게 맞바꾼다 — Fisher-Yates는 항등 순열이
+  // 나올 수 있어서(3칸 기준 약 1/6 확률) 가끔 문이 아예 안 움직이는 스텝이 생기고,
+  // 그게 셔플 도중 멈칫하는 느낌으로 보였다.
+  const a = Math.floor(Math.random() * sbSlotContents.length);
+  let b = Math.floor(Math.random() * (sbSlotContents.length - 1));
+  if (b >= a) b++;
+  const swapTmp = sbSlotContents[a];
+  sbSlotContents[a] = sbSlotContents[b];
+  sbSlotContents[b] = swapTmp;
+
   sbSlotEls.forEach((slotEl, i) => slotEl.appendChild(sbSlotContents[i]));
 
   sbDoorGroupEls.forEach((g, idx) => {
@@ -241,7 +242,7 @@ function sbShuffleOnce(stepDurationMs) {
     g.style.transform = 'translate(' + dx + 'px, ' + dy + 'px)';
     void g.offsetWidth; // 강제 리플로우로 transition:none을 확정시킴
     requestAnimationFrame(() => {
-      g.style.transition = 'transform ' + stepDurationMs + 'ms ease-in-out';
+      g.style.transition = 'transform ' + stepDurationMs + 'ms ease-out';
       g.style.transform = 'translate(0px, 0px)';
     });
   });
@@ -301,7 +302,8 @@ function sbOnDoorClick(doorEl) {
 function sbOnCorrect() {
   sbHideBubble();
   if (sbLevel >= SB_MAX_LEVEL) {
-    sbShowPopup();
+    sbGameState = 'idle';
+    sbShowScreen('sb-screen-success');
     return;
   }
   sbSetAllDoors('closed');
@@ -325,24 +327,11 @@ function sbResultRetry() {
   sbStartRound();
 }
 
-/* ── 팝업 (성공 시에만 사용) ── */
-function sbShowPopup() {
-  sbGameState = 'idle';
-  sbPopupTitleEl.textContent = 'Good~';
-  sbPopupSubEl.textContent = '월루 잡기 제법인데?';
-  sbPopupOverlayEl.hidden = false;
-}
-
-function sbRetry() {
-  sbPopupOverlayEl.hidden = true;
+function sbSuccessRetry() {
   sbClearTimers();
   sbLevel = 1;
+  sbShowScreen('sb-screen-game');
   sbStartRound();
-}
-
-function sbQuit() {
-  sbClearTimers();
-  window.location.href = '../index.html';
 }
 
 /* ── 초기화 ── */
