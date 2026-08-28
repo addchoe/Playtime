@@ -83,6 +83,16 @@ const washupReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)'
 
 let washupStream = null;
 
+/* ── 실행 전 대기화면 → 본 화면 전환 (카메라/손 추적 워밍업은 대기화면 동안 백그라운드로 진행) ── */
+const washupScreenLoadingEl = document.getElementById('washup-screen-loading');
+const washupLoadingBackdropEl = document.getElementById('washup-loading-backdrop');
+const WASHUP_LOADING_DURATION = 2000;
+function washupEnterStage() {
+  washupScreenLoadingEl.classList.add('washup-fade-out');
+  washupLoadingBackdropEl.classList.add('washup-fade-out');
+  washupStageEl.classList.add('is-active');
+}
+
 /* ── 카메라 ── */
 function washupInit() {
   washupHandleWrapEl.addEventListener('pointerdown', washupOnHandlePointerDown);
@@ -106,6 +116,7 @@ function washupInit() {
   requestWashUpCamera();
   washupInitMediaPipe();
   washupAnimate();
+  setTimeout(washupEnterStage, WASHUP_LOADING_DURATION);
 }
 
 async function requestWashUpCamera() {

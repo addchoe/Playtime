@@ -277,11 +277,123 @@ body {
   --washup-hot: #F2573F;
 }
 
+/* ── 실행 전 대기화면 (Figma node 379:2725, 1920x1080 절대좌표) ──
+   다른 게임들의 SCREEN 1과 동일한 구조 — 카메라/손 추적 워밍업이 끝나길 기다리지 않고
+   정해진 시간(washup.js의 WASHUP_LOADING_DURATION) 뒤 자동으로 본 화면으로 전환된다. */
+
+/* 스케일 wrapper 밖(washup-video-bg와 같은 레벨)에서 실제 브라우저 창 전체를 덮는
+   배경 — 1920x1080 박스만 덮으면 창 비율이 16:9가 아닐 때 레터박스에 카메라가
+   비쳐 보이므로, 대기 중에는 이 레이어로 창 전체를 #EEEEEE로 가린다. */
+.washup-loading-backdrop {
+  position: fixed;
+  inset: 0;
+  background: #EEEEEE;
+  opacity: 1;
+  transition: opacity 0.35s ease;
+}
+.washup-loading-backdrop.washup-fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.washup-screen--loading {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  opacity: 1;
+  transition: opacity 0.35s ease;
+}
+.washup-screen--loading.washup-fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.washup-intro-title {
+  position: absolute;
+  left: 50%;
+  top: 321px;
+  transform: translateX(-50%);
+  font-family: 'SK Concretica', 'Pretendard', sans-serif;
+  font-weight: 400;
+  font-size: 56px;
+  color: #000000;
+  white-space: nowrap;
+}
+.washup-intro-sub {
+  position: absolute;
+  left: 50%;
+  top: 401px;
+  transform: translateX(-50%);
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 400;
+  font-size: 28px;
+  color: #000000;
+  white-space: nowrap;
+}
+.washup-intro-duck-wrap {
+  position: absolute;
+  left: 871px;
+  top: 483px;
+  width: 178px;
+  height: 178px;
+  animation: washupIntroDuckBob 1.8s ease-in-out infinite;
+}
+.washup-intro-duck-wrap img {
+  width: 100%;
+  height: 100%;
+}
+@keyframes washupIntroDuckBob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+.washup-intro-loading-label {
+  position: absolute;
+  left: 50%;
+  top: 710px;
+  transform: translateX(-50%);
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 400;
+  font-size: 24px;
+  color: rgba(0,0,0,0.29);
+  white-space: nowrap;
+}
+.washup-intro-tip {
+  position: absolute;
+  left: 50%;
+  top: 765px;
+  transform: translateX(-50%);
+  width: 288px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.05);
+  border-radius: 100px;
+  overflow: hidden;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  color: rgba(0,0,0,0.8);
+  text-align: center;
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .washup-intro-duck-wrap { animation: none; }
+}
+
 .washup-stage {
   position: fixed;
   inset: 0;
   z-index: 1;
   overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+.washup-stage.is-active {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 /* 스케일 wrapper 밖에서 실제 브라우저 창(진짜 뷰포트) 전체를 덮는 배경 레이어.
