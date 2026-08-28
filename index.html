@@ -6,6 +6,8 @@
   <title>Playtime!</title>
   <link rel="icon" type="image/png" href="img/favicon.png" />
   <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Saira+Extra+Condensed:wght@600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@600&display=swap" rel="stylesheet" />
   <style>
     @font-face {
       font-family: 'SK Concretica';
@@ -637,9 +639,6 @@
     #page-walk { display: none; }
     #page-walk.active { display: block; position: absolute; inset: 0; }
 
-    .walk-screen { display: none; position: absolute; inset: 0; }
-    .walk-screen.active { display: block; }
-
     .walk-stage {
       position: absolute;
       inset: 0;
@@ -647,14 +646,7 @@
       align-items: center;
       justify-content: center;
       padding: 140px 260px 100px;
-      filter: blur(0);
-      transition: filter 0.45s ease;
     }
-    /* backdrop-filter can't see through <canvas> content in some rendering
-       engines, so the maze is blurred directly instead of relying on the
-       result overlay's backdrop-filter alone. Kept fairly light so the maze
-       stays softly visible instead of turning into a flat wash. */
-    .walk-stage.blurred { filter: blur(5px); }
 
     .maze-wrap {
       position: relative;
@@ -678,7 +670,7 @@
     .walk-start { left: -210px; width: 190px; }
     .walk-end { right: -110px; width: 90px; }
 
-    .dog-icon-svg { width: 108px; height: 51px; transform: scaleX(-1); }
+    .dog-icon-svg { width: 108px; height: 51px; }
 
     .start-btn {
       font-family: 'Pretendard', sans-serif;
@@ -725,7 +717,7 @@
       height: 20px;
       margin: -10px 0 0 -9.5px;
       opacity: 0.9;
-      animation: pawFade 3s ease forwards;
+      animation: pawFade 5s ease forwards;
     }
     .paw img { width: 100%; height: 100%; display: block; }
 
@@ -735,151 +727,52 @@
       100% { opacity: 0; }
     }
 
-    /* ── 게임오버/성공 — Drawing의 블러 페이드 오버레이(.drawing-end-overlay)와 동일 구조 ── */
-    .walk-result-overlay {
+    .walk-overlay {
       position: absolute;
       inset: 0;
-      z-index: 20;
-      background: rgba(238,238,238,0.8);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.45s ease;
-    }
-    .walk-result-overlay.show { opacity: 1; pointer-events: auto; }
-
-    /* ── 준비중 (Figma node 338:491) — Drawing 페이지의 로딩 점 애니메이션과 동일 구조 ── */
-    .walk-heading-title,
-    .walk-result-title {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      font-family: 'SK Concretica', 'Pretendard', sans-serif;
-      font-size: 56px;
-      letter-spacing: -0.04em;
-      color: #111111;
-      text-align: center;
-      white-space: nowrap;
-    }
-    .walk-heading-title { top: 321px; }
-    .walk-result-title { top: 415px; }
-
-    .walk-heading-sub,
-    .walk-result-sub {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      font-family: 'Pretendard', sans-serif;
-      font-weight: 400;
-      font-size: 28px;
-      letter-spacing: -0.04em;
-      color: #111111;
-      text-align: center;
-      white-space: nowrap;
-    }
-    .walk-heading-sub { top: 401px; }
-    .walk-result-sub { top: 495px; }
-
-    .walk-loading-dog-icon,
-    .walk-result-dog-icon {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 206px;
-      height: 96px;
-    }
-    .walk-loading-dog-icon { top: 550px; }
-    .walk-result-dog-icon { top: 644px; }
-    .walk-loading-dog-icon img,
-    .walk-result-dog-icon img { width: 100%; height: 100%; display: block; }
-
-    .walk-loading-label {
-      position: absolute;
-      left: 50%;
-      top: 710px;
-      transform: translateX(-50%);
-      font-family: 'Pretendard', sans-serif;
-      font-weight: 400;
-      font-size: 24px;
-      letter-spacing: -0.04em;
-      color: rgba(0,0,0,0.29);
-      white-space: nowrap;
-    }
-    .walk-loading-dots { display: inline-block; min-width: 1.4em; text-align: left; }
-
-    .walk-loading-tip {
-      position: absolute;
-      left: 50%;
-      top: 765px;
-      transform: translateX(-50%);
-      width: 412px;
-      height: 45px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(0,0,0,0.05);
-      border-radius: 100px;
-      font-family: 'Pretendard', sans-serif;
-      font-weight: 400;
-      font-size: 20px;
-      letter-spacing: -0.04em;
-      color: rgba(0,0,0,0.8);
-      text-align: center;
-      white-space: nowrap;
-    }
-
-    /* ── 결과 화면(게임오버/성공) 버튼 — Secret Break의 sb-result-actions/sb-result-btn과 동일한 컴포넌트 ── */
-    .walk-result-actions {
-      position: absolute;
-      left: 1618px;
-      top: 813px;
-      width: 180px;
       display: flex;
       flex-direction: column;
-      gap: 20px;
-    }
-
-    .walk-result-btn {
-      display: flex;
       align-items: center;
-      gap: 20px;
-      background: none;
-      border: none;
-      padding: 0;
-      cursor: pointer;
-      text-decoration: none;
-      font-family: 'SK Concretica', 'Pretendard', sans-serif;
-      font-size: 30px;
-      letter-spacing: -1.2px;
-      color: rgba(0, 0, 0, 0.4);
-      transition: color 0.25s ease;
-    }
-    .walk-result-btn:hover { color: #111111; }
-
-    .walk-result-arrow {
-      flex-shrink: 0;
-      width: 0;
-      height: 0;
-      border-top: 9px solid transparent;
-      border-bottom: 9px solid transparent;
-      border-left: 12px solid currentColor;
+      justify-content: center;
+      gap: 16px;
+      background: rgba(238,238,238,0.92);
       opacity: 0;
-      transition: opacity 0.25s ease;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
     }
-    .walk-result-btn:hover .walk-result-arrow { opacity: 1; }
+    .walk-overlay.show { opacity: 1; pointer-events: auto; }
+
+    .walk-overlay-msg {
+      font-family: 'Pretendard', sans-serif;
+      font-weight: 600;
+      font-size: 24px;
+      color: #111111;
+      text-align: center;
+    }
+
+    .walk-retry {
+      font-family: 'Pretendard', sans-serif;
+      font-weight: 500;
+      font-size: 14px;
+      color: #EEEEEE;
+      background: #111111;
+      border: none;
+      border-radius: 999px;
+      padding: 10px 24px;
+      cursor: pointer;
+    }
+    .walk-retry:hover { opacity: 0.85; }
 
     .walk-hint {
       position: absolute;
       left: 50%;
       bottom: 18px;
       transform: translateX(-50%);
-      z-index: 5;
       width: max-content;
       max-width: 340px;
-      background: rgba(238,238,238,0.88);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      background: rgba(17,17,17,0.02);
+      backdrop-filter: blur(2.4px);
+      -webkit-backdrop-filter: blur(2.4px);
       border: 0.96px solid rgba(17,17,17,0.3);
       border-radius: 44px;
       box-shadow: inset 0 3.379px 3.379px 0 rgba(255,255,255,0.25);
@@ -912,17 +805,6 @@
       transform-origin: 0px 0px;
     }
 
-    /* 분침/시침 — 실시간으로 되돌아갈 때 부드러운 애니메이션 */
-    [id$="-hour"],
-    [id$="-minute"] {
-      transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-    }
-
-    /* 드래그 중인 시계는 즉각 반응해야 하므로 transition 끔 */
-    [id$="-hour"].dragging,
-    [id$="-minute"].dragging {
-      transition: none;
-    }
   </style>
 </head>
 <body>
@@ -982,9 +864,9 @@
   <section class="page active" id="page-main">
     <svg id="clocks-svg" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg">
 
-      <!-- ── Clock-1 ── cx=455.93, cy=612.0 -->
-      <g id="clock-1" transform="translate(455.93, 612.0)">
-        <g id="clock-1-body" transform="translate(-312.50, -303.00)" fill="none">
+      <!-- ── Clock-1 ── cx=455.93, cy=480.329 (중심점 얼굴판 세로 중앙 정렬) -->
+      <g id="clock-1" transform="translate(455.93, 480.329)">
+        <g id="clock-1-body" transform="translate(-312.50, -171.329)" fill="none">
           <rect x="0.515137" y="0.514893" width="623.859" height="342.657" fill="#EEEEEE" stroke="#111111" stroke-width="1.03"/>
 <path d="M45.9346 171.789H61.5364" stroke="#111111" stroke-width="1.03"/>
 <path d="M128.104 171.789H174.563" stroke="#111111" stroke-width="1.03"/>
@@ -1061,16 +943,16 @@
 <circle cx="403.074" cy="112.279" r="2.77366" transform="rotate(57 403.074 112.279)" stroke="#111111" stroke-width="1.03"/>
 <circle cx="212.327" cy="236.152" r="2.77366" transform="rotate(57 212.327 236.152)" stroke="#111111" stroke-width="1.03"/>
         </g>
-        <g id="clock-1-hour" class="clock-hand" transform="translate(-13.0, -89.0)" fill="none">
+        <g id="clock-1-hour" class="clock-hand" transform="translate(-20, -20)" fill="none">
           <path d="M15.2111 103.595L9.87777 103.595L0.544438 7.55492L12.5444 0.595466L24.5444 7.55492L15.2111 103.595Z" fill="#D1DAF1" stroke="#111111" stroke-width="1.03"/>
         </g>
-        <g id="clock-1-minute" class="clock-hand" transform="translate(-9.0, -126.0)" fill="none">
+        <g id="clock-1-minute" class="clock-hand" transform="translate(-14.5, -25.669)" fill="none">
           <path d="M10.9545 150.669L6.09436 150.669L0.52442 7.2932L8.52442 0.668694L16.5244 7.29321L10.9545 150.669Z" fill="#D1DAF1" stroke="#111111" stroke-width="1.03"/>
         </g>
-        <g id="clock-1-second" class="clock-hand" transform="translate(-0.5, -126.0)" fill="none">
+        <g id="clock-1-second" class="clock-hand" transform="translate(-3, 3.000)" fill="none">
           <path d="M0.5 0L0.499994 126" stroke="black"/>
         </g>
-        <g id="clock-1-center" transform="translate(-9.0, -9.0)" fill="none">
+        <g id="clock-1-center" transform="translate(-16.0, -9.0)" fill="none">
           <circle cx="8.51514" cy="8.51489" r="8" transform="rotate(-90 8.51514 8.51489)" fill="#EEEEEE" stroke="#111111" stroke-width="1.03"/>
 <circle cx="8.51514" cy="8.51489" r="6" transform="rotate(-90 8.51514 8.51489)" fill="#EEEEEE" stroke="#111111" stroke-width="1.03"/>
         </g>
@@ -1098,6 +980,9 @@
 <rect x="497.067" y="109.952" width="139.765" height="136.253" rx="5.6187" stroke="#111111" stroke-width="1.03"/>
 <rect x="497.067" y="109.952" width="139.765" height="131.337" rx="5.6187" stroke="#111111" stroke-width="1.03"/>
 <path d="M497.067 160.521C498.619 160.521 499.877 161.779 499.877 163.33V187.912C499.877 189.463 498.619 190.721 497.067 190.721V160.521Z" stroke="#111111" stroke-width="1.03"/>
+<path d="M497.067 160.521C498.619 160.521 499.877 161.779 499.877 163.33V187.912C498.619 190.721 497.067 190.721 497.067 190.721V160.521Z" 
+      stroke="#111111" stroke-width="1.03" 
+      transform="translate(-412, 0)" />
 <path d="M636.833 190.721C635.281 190.721 634.023 189.463 634.023 187.912L634.023 163.33C634.023 161.778 635.281 160.52 636.833 160.52L636.833 190.721Z" stroke="#111111" stroke-width="1.03"/>
 <path d="M499.877 175.621H634.024" stroke="#111111" stroke-width="1.03"/>
 <circle cx="364.326" cy="183.698" r="80.9561" stroke="#111111" stroke-width="1.03"/>
@@ -1151,21 +1036,34 @@
 <path d="M275.308 183.87L257.399 183.87" stroke="#111111" stroke-width="1.03"/>
 <path d="M456.932 130.405L441.422 139.36" stroke="#111111" stroke-width="1.03"/>
 <path d="M287.232 228.381L271.722 237.335" stroke="#111111" stroke-width="1.03"/>
+<text x="364.326" y="147.35" text-anchor="middle" dominant-baseline="middle"
+  font-family="'Saira Extra Condensed', 'Pretendard', sans-serif"
+  font-weight="400" font-size="14" letter-spacing="0.65" fill="#111111" stroke="#EEEEEE" stroke-width="0.25">YEJUN</text>
+<text x="364.326" y="221.85" text-anchor="middle" dominant-baseline="middle"
+  font-family="'Saira Extra Condensed', 'Pretendard', sans-serif" stroke="#EEEEEE" stroke-width="0.25"
+  font-weight="400" font-size="14" letter-spacing="0.65" fill="#111111">ADDCHOI</text>
         </g>
-        <g id="clock-2-hour" class="clock-hand" transform="translate(-16.0, -65.8)" fill="none">
+        <g id="clock-2-hour" class="clock-hand" transform="translate(-15.515, -16.000)" fill="none">
           <path d="M15.5454 80.0813C12.2484 80.0813 9.57576 77.4086 9.57568 74.1116L9.57569 29.2922C4.24586 26.9915 0.515338 21.689 0.515142 15.5149C0.515143 7.23062 7.23087 0.514891 15.5151 0.514891C23.7994 0.514892 30.5151 7.23062 30.5151 15.5149C30.5149 21.6656 26.8126 26.9512 21.5151 29.2659L21.5151 74.1116C21.5151 77.4085 18.8424 80.0812 15.5454 80.0813Z" fill="#D1DAF1"/>
 <path d="M15.5454 80.0813L15.5454 80.5963L15.5454 80.5963L15.5454 80.0813ZM9.57568 74.1116L9.06068 74.1116L9.06068 74.1116L9.57568 74.1116ZM9.57569 29.2922L10.0907 29.2922L10.0907 28.9536L9.77979 28.8194L9.57569 29.2922ZM0.515142 15.5149L0.000142974 15.5149L0.000142974 15.5149L0.515142 15.5149ZM15.5151 0.514891L15.5151 -0.000108123V-0.000108123L15.5151 0.514891ZM30.5151 15.5149L31.0301 15.5149L31.0301 15.5149L30.5151 15.5149ZM21.5151 29.2659L21.3089 28.7939L21.0001 28.9289L21.0001 29.2659L21.5151 29.2659ZM21.5151 74.1116L22.0301 74.1116L22.0301 74.1116L21.5151 74.1116ZM15.5454 80.0813L15.5454 79.5663C12.5328 79.5663 10.0908 77.1242 10.0907 74.1116L9.57568 74.1116L9.06068 74.1116C9.06076 77.693 11.964 80.5963 15.5454 80.5963L15.5454 80.0813ZM9.57568 74.1116L10.0907 74.1116L10.0907 29.2922L9.57569 29.2922L9.06069 29.2922L9.06068 74.1116L9.57568 74.1116ZM9.57569 29.2922L9.77979 28.8194C4.63188 26.5972 1.03033 21.4762 1.03014 15.5149L0.515142 15.5149L0.000142974 15.5149C0.000344594 21.9018 3.85984 27.3858 9.37158 29.7651L9.57569 29.2922ZM0.515142 15.5149L1.03014 15.5149C1.03014 7.51504 7.5153 1.02989 15.5151 1.02989L15.5151 0.514891L15.5151 -0.000108123C6.94644 -0.000108872 0.000143723 6.94619 0.000142974 15.5149L0.515142 15.5149ZM15.5151 0.514891L15.5151 1.02989C23.515 1.02989 30.0001 7.51505 30.0001 15.5149L30.5151 15.5149L31.0301 15.5149C31.0301 6.9462 24.0838 -0.000107374 15.5151 -0.000108123L15.5151 0.514891ZM30.5151 15.5149L30.0001 15.5149C30 21.4536 26.4257 26.5583 21.3089 28.7939L21.5151 29.2659L21.7213 29.7378C27.1996 27.3442 31.0299 21.8776 31.0301 15.5149L30.5151 15.5149ZM21.5151 29.2659L21.0001 29.2659L21.0001 74.1116L21.5151 74.1116L22.0301 74.1116L22.0301 29.2659L21.5151 29.2659ZM21.5151 74.1116L21.0001 74.1116C21.0001 77.1241 18.5579 79.5662 15.5454 79.5663L15.5454 80.0813L15.5454 80.5963C19.1268 80.5962 22.0301 77.693 22.0301 74.1116L21.5151 74.1116Z" fill="#111111"/>
         </g>
-        <g id="clock-2-minute" class="clock-hand" transform="translate(-5.0, -99.0)" fill="none">
+        <g id="clock-2-minute" class="clock-hand" transform="translate(-4.515, -0.515)" fill="none">
           <path d="M8.51514 93.515C8.51514 95.7242 6.72427 97.515 4.51513 97.515C2.30599 97.515 0.515133 95.7242 0.515133 93.515L0.515141 0.515012L8.51515 0.515013L8.51514 93.515Z" fill="#D1DAF1" stroke="#111111" stroke-width="1.03"/>
         </g>
-        <g id="clock-2-second" class="clock-hand" transform="translate(-3.0, -100.0)" fill="none">
+        <g id="clock-2-second" class="clock-hand" transform="translate(-2.522, -0.515)" fill="none">
           <path d="M4.52198 0.515015L3.18864 98.515L1.8553 98.515L0.521977 0.515014L4.52198 0.515015Z" fill="#D1DAF1" stroke="#111111" stroke-width="1.03"/>
         </g>
         <g id="clock-2-center" transform="translate(-9.0, -9.0)" fill="none">
           <circle cx="8.51514" cy="8.51501" r="8" transform="rotate(-90 8.51514 8.51501)" fill="#EEEEEE" stroke="#111111" stroke-width="1.03"/>
         </g>
       </g>
+      <!-- 요일/날짜 (2번 시계 플립카드 위, 실시간 업데이트) -->
+      <text id="flip-weekday-text" x="188.73" y="813" text-anchor="start" dominant-baseline="hanging"
+        font-family="'Saira Extra Condensed', 'Pretendard', sans-serif"
+        font-weight="600" font-size="90" fill="none" stroke="#111111" stroke-width="1.03" letter-spacing="-1"></text>></text>
+      <text id="flip-date-text" x="605" y="807" text-anchor="start" dominant-baseline="hanging"
+        font-family="'Saira Extra Condensed', 'Pretendard', sans-serif"
+        font-weight="600" font-size="100" fill="none" stroke="#111111" stroke-width="1.03"letter-spacing="-2"></text>></text>
       <!-- ── Clock-3 ── cx=1108.31, cy=730.31 -->
       <g id="clock-3" transform="translate(1108.31, 730.31)">
         <g id="clock-3-body" transform="translate(-302.31, -302.31)" fill="none">
@@ -1187,15 +1085,15 @@
 <path d="M328.981 464.31H277.481" stroke="#111111" stroke-width="1.03"/>
 <path d="M282.454 497.7H281.162L277.276 491.82V497.7H275.984V489.815H277.276L281.162 495.683V489.815H282.454V497.7ZM285.101 490.868V493.18H287.821V494.233H285.101V496.647H288.16V497.7H283.81V489.815H288.16V490.868H285.101ZM299.665 489.826L297.331 497.7H295.87L294.215 491.741L292.459 497.7L291.009 497.712L288.777 489.826H290.148L291.779 496.239L293.547 489.826H294.997L296.64 496.205L298.283 489.826H299.665ZM300.3 493.746C300.3 492.976 300.477 492.284 300.832 491.673C301.195 491.061 301.682 490.585 302.294 490.245C302.913 489.898 303.589 489.724 304.322 489.724C305.16 489.724 305.904 489.932 306.554 490.347C307.211 490.755 307.687 491.337 307.982 492.092H306.429C306.225 491.676 305.942 491.367 305.58 491.163C305.217 490.959 304.798 490.857 304.322 490.857C303.801 490.857 303.336 490.974 302.928 491.208C302.521 491.442 302.2 491.778 301.965 492.216C301.739 492.655 301.625 493.164 301.625 493.746C301.625 494.328 301.739 494.837 301.965 495.276C302.2 495.714 302.521 496.054 302.928 496.295C303.336 496.529 303.801 496.647 304.322 496.647C304.798 496.647 305.217 496.545 305.58 496.341C305.942 496.137 306.225 495.827 306.429 495.412H307.982C307.687 496.167 307.211 496.748 306.554 497.156C305.904 497.564 305.16 497.768 304.322 497.768C303.582 497.768 302.906 497.598 302.294 497.258C301.682 496.911 301.195 496.431 300.832 495.819C300.477 495.208 300.3 494.516 300.3 493.746ZM315.442 489.826V497.7H314.15V494.256H310.445V497.7H309.154V489.826H310.445V493.202H314.15V489.826H315.442ZM321.549 496.091H318.252L317.686 497.7H316.338L319.159 489.815H320.654L323.476 497.7H322.116L321.549 496.091ZM321.187 495.038L319.907 491.378L318.615 495.038H321.187ZM330.832 497.7H329.54L325.654 491.82V497.7H324.362V489.815H325.654L329.54 495.683V489.815H330.832V497.7Z" fill="#111111"/>
         </g>
-        <g id="clock-3-hour" class="clock-hand" transform="translate(-21.0, -162.0)" fill="none">
+        <g id="clock-3-hour" class="clock-hand" transform="translate(-20.515, 0.000)" fill="none">
           <path d="M17.8833 136.032C17.8833 123.132 5.04211 111.829 1.4126 99.4495C0.826311 97.4497 0.515173 95.311 0.515143 93.0881C0.515143 83.6769 6.91553 75.7726 15.5689 73.554L15.5689 0.51489L25.5689 0.514891L25.5689 73.5823C34.1676 75.8386 40.5151 83.716 40.5151 93.0881C40.5151 95.311 40.204 97.4497 39.6177 99.4495C35.9882 111.829 23.147 123.132 23.147 136.032L23.147 160.932L17.8833 160.932L17.8833 136.032Z" fill="#D1DAF1"/>
 <path d="M17.8833 136.032L17.3683 136.032L17.8833 136.032ZM1.4126 99.4495L0.918405 99.5944L0.918405 99.5944L1.4126 99.4495ZM0.515143 93.0881L0.00014326 93.0881L0.00014326 93.0881L0.515143 93.0881ZM15.5689 73.554L15.6968 74.0528L16.0839 73.9536L16.0839 73.554L15.5689 73.554ZM15.5689 0.51489L15.5689 -0.000108992L15.0539 -0.000109037L15.0539 0.51489L15.5689 0.51489ZM25.5689 0.514891L26.0839 0.514891L26.0839 -0.000108073L25.5689 -0.000108118L25.5689 0.514891ZM25.5689 73.5823L25.0539 73.5823L25.0539 73.9796L25.4381 74.0804L25.5689 73.5823ZM40.5151 93.0881L41.0301 93.0881L41.0301 93.0881L40.5151 93.0881ZM39.6177 99.4495L40.1119 99.5944L40.1119 99.5944L39.6177 99.4495ZM23.147 136.032L22.632 136.032L23.147 136.032ZM23.147 160.932L23.147 161.447L23.662 161.447L23.662 160.932L23.147 160.932ZM17.8833 160.932L17.3683 160.932L17.3683 161.447L17.8833 161.447L17.8833 160.932ZM17.8833 136.032L18.3983 136.032C18.3983 129.422 15.1102 123.259 11.4483 117.277C7.75726 111.247 3.69658 105.409 1.9068 99.3046L1.4126 99.4495L0.918405 99.5944C2.75813 105.869 6.9328 111.873 10.5698 117.814C14.2358 123.804 17.3683 129.742 17.3683 136.032L17.8833 136.032ZM1.4126 99.4495L1.9068 99.3046C1.33457 97.3528 1.03017 95.2629 1.03014 93.0881L0.515143 93.0881L0.00014326 93.0881C0.000173579 95.3591 0.318052 97.5467 0.918405 99.5944L1.4126 99.4495ZM0.515143 93.0881L1.03014 93.0881C1.03014 83.9153 7.26811 76.2139 15.6968 74.0528L15.5689 73.554L15.441 73.0551C6.56295 75.3313 0.000144104 83.4386 0.00014326 93.0881L0.515143 93.0881ZM15.5689 73.554L16.0839 73.554L16.0839 0.51489L15.5689 0.51489L15.0539 0.51489L15.0539 73.554L15.5689 73.554ZM15.5689 0.51489L15.5689 1.02989L25.5689 1.02989L25.5689 0.514891L25.5689 -0.000108118L15.5689 -0.000108992L15.5689 0.51489ZM25.5689 0.514891L25.0539 0.514891L25.0539 73.5823L25.5689 73.5823L26.0839 73.5823L26.0839 0.514891L25.5689 0.514891ZM25.5689 73.5823L25.4381 74.0804C33.8137 76.2782 40.0001 83.9534 40.0001 93.0881L40.5151 93.0881L41.0301 93.0881C41.0301 83.4785 34.5215 75.399 25.6996 73.0841L25.5689 73.5823ZM40.5151 93.0881L40.0001 93.0881C40.0001 95.2629 39.6957 97.3528 39.1235 99.3046L39.6177 99.4495L40.1119 99.5944C40.7122 97.5467 41.0301 95.3591 41.0301 93.0881L40.5151 93.0881ZM39.6177 99.4495L39.1235 99.3046C37.3337 105.409 33.273 111.247 29.582 117.277C25.9201 123.259 22.632 129.422 22.632 136.032L23.147 136.032L23.662 136.032C23.662 129.742 26.7944 123.804 30.4605 117.814C34.0975 111.873 38.2722 105.869 40.1119 99.5944L39.6177 99.4495ZM23.147 136.032L22.632 136.032L22.632 160.932L23.147 160.932L23.662 160.932L23.662 136.032L23.147 136.032ZM23.147 160.932L23.147 160.417L17.8833 160.417L17.8833 160.932L17.8833 161.447L23.147 161.447L23.147 160.932ZM17.8833 160.932L18.3983 160.932L18.3983 136.032L17.8833 136.032L17.3683 136.032L17.3683 160.932L17.8833 160.932Z" fill="#111111"/>
         </g>
-        <g id="clock-3-minute" class="clock-hand" transform="translate(-19.0, -221.0)" fill="none">
+        <g id="clock-3-minute" class="clock-hand" transform="translate(-18.5, -19)" fill="none">
           <path d="M12.146 163.673L15.1977 36.2092C6.84113 34.6525 0.515129 27.3228 0.515129 18.5149C0.515151 8.57379 8.57402 0.514894 18.5151 0.514893C28.456 0.515137 36.5151 8.57393 36.5151 18.5149C36.5151 27.2304 30.3205 34.4996 22.0942 36.1594L25.146 163.673L19.8765 237.57L17.4155 237.57L12.146 163.673Z" fill="#D1DAF1"/>
 <path d="M12.146 163.673L11.6311 163.661L11.6306 163.685L11.6323 163.71L12.146 163.673ZM15.1977 36.2092L15.7126 36.2216L15.7231 35.7832L15.2921 35.7029L15.1977 36.2092ZM0.515129 18.5149L0.000129311 18.5149V18.5149L0.515129 18.5149ZM18.5151 0.514893L18.5151 -0.000106153L18.5151 -0.000106153L18.5151 0.514893ZM36.5151 18.5149L37.0301 18.5149V18.5149L36.5151 18.5149ZM22.0942 36.1594L21.9924 35.6546L21.569 35.74L21.5794 36.1718L22.0942 36.1594ZM25.146 163.673L25.6597 163.71L25.6614 163.685L25.6608 163.661L25.146 163.673ZM19.8765 237.57L19.8765 238.085L20.356 238.085L20.3902 237.606L19.8765 237.57ZM17.4155 237.57L16.9018 237.606L16.9359 238.085L17.4155 238.085L17.4155 237.57ZM12.146 163.673L12.6608 163.685L15.7126 36.2216L15.1977 36.2092L14.6829 36.1969L11.6311 163.661L12.146 163.673ZM15.1977 36.2092L15.2921 35.7029C7.17483 34.1908 1.03013 27.0703 1.03013 18.5149L0.515129 18.5149L0.000129311 18.5149C0.000129643 27.5754 6.50743 35.1142 15.1034 36.7155L15.1977 36.2092ZM0.515129 18.5149L1.03013 18.5149C1.03015 8.85822 8.85845 1.02989 18.5151 1.02989L18.5151 0.514893L18.5151 -0.000106153C8.28959 -0.000105778 0.000151825 8.28937 0.000129311 18.5149L0.515129 18.5149ZM18.5151 0.514893L18.5151 1.02989C28.1716 1.03012 36.0001 8.85837 36.0001 18.5149L36.5151 18.5149L37.0301 18.5149C37.0301 8.2895 28.7404 0.000137614 18.5151 -0.000106153L18.5151 0.514893ZM36.5151 18.5149L36.0001 18.5149C36.0001 26.9804 29.9831 34.0423 21.9924 35.6546L22.0942 36.1594L22.1961 36.6642C30.658 34.9569 37.0301 27.4803 37.0301 18.5149L36.5151 18.5149ZM22.0942 36.1594L21.5794 36.1718L24.6311 163.685L25.146 163.673L25.6608 163.661L22.6091 36.1471L22.0942 36.1594ZM25.146 163.673L24.6323 163.636L19.3628 237.533L19.8765 237.57L20.3902 237.606L25.6597 163.71L25.146 163.673ZM19.8765 237.57L19.8765 237.055L17.4155 237.055L17.4155 237.57L17.4155 238.085L19.8765 238.085L19.8765 237.57ZM17.4155 237.57L17.9292 237.533L12.6597 163.636L12.146 163.673L11.6323 163.71L16.9018 237.606L17.4155 237.57Z" fill="#111111"/>
         </g>
-        <g id="clock-3-second" class="clock-hand" transform="translate(-3.0, -179.0)" fill="none">
+        <g id="clock-3-second" class="clock-hand" transform="translate(-2.515, -0.515)" fill="none">
           <path d="M0.515129 177.515L0.515145 0.515127L4.51515 0.515127L4.51514 177.515L0.515129 177.515Z" stroke="#111111" stroke-width="1.03"/>
         </g>
         <g id="clock-3-center" transform="translate(-14.0, -14.0)" fill="none">
@@ -1277,13 +1175,13 @@
 <path d="M193.025 178V182" stroke="#FF0000"/>
 <path d="M195.025 180L191.025 180" stroke="#FF0000"/>
         </g>
-        <g id="clock-4-hour" class="clock-hand" transform="translate(-13.0, -92.0)" fill="none">
+        <g id="clock-4-hour" class="clock-hand" transform="translate(-13, -24.881)" fill="none">
           <path d="M12.5361 111.881L0.536133 17.5348L12.5361 0.880858L24.5361 17.5348L12.5361 111.881Z" fill="#D1DAF1" stroke="black" stroke-width="1.03"/>
         </g>
-        <g id="clock-4-minute" class="clock-hand" transform="translate(-13.0, -142.0)" fill="none">
+        <g id="clock-4-minute" class="clock-hand" transform="translate(-12.3, -28.210)" fill="none">
           <path d="M12.5244 171.21L0.524419 26.7157L12.5244 1.20972L24.5244 26.7157L12.5244 171.21Z" fill="#D1DAF1" stroke="black" stroke-width="1.03"/>
         </g>
-        <g id="clock-4-second" class="clock-hand" transform="translate(-0.5, -128.0)" fill="none">
+        <g id="clock-4-second" class="clock-hand" transform="translate(-1.0, 0.000)" fill="none">
           <path d="M0.5 0L0.499994 128" stroke="black"/>
         </g>
         <g id="clock-4-center" transform="translate(-8.0, -8.0)" fill="none">
@@ -1390,15 +1288,21 @@
 <path d="M190.057 187.898V191.898" stroke="#FF0000"/>
 <path d="M192.057 189.898L188.057 189.898" stroke="#FF0000"/>
         </g>
-        <g id="clock-5-hour" class="clock-hand" transform="translate(-16.0, -145.0)" fill="none">
+        <text x="0" y="65.63" text-anchor="middle" dominant-baseline="middle"
+          font-family="'Roboto Flex', 'Pretendard', sans-serif"letter-spacing="-1"
+          font-weight="700" font-size="40" fill="none" stroke="#111111" stroke-width="1.1">New</text>
+        <text x="0" y="98.91" text-anchor="middle" dominant-baseline="middle"
+          font-family="'Pretendard', sans-serif"
+          font-weight="400" font-size="13" letter-spacing="-0.39" fill="#111111">©2026</text>
+        <g id="clock-5-hour" class="clock-hand" transform="translate(-16.1, -33.000)" fill="none">
           <path d="M9.51466 46.2659C4.21712 43.9511 0.51466 38.6657 0.514661 32.5149C0.514661 26.3642 4.21731 21.0797 9.51466 18.7649L9.51466 0.514891L21.5147 0.514892L21.5147 18.7649C26.812 21.0797 30.5147 26.3642 30.5147 32.5149C30.5147 38.6657 26.8122 43.9511 21.5147 46.2659L21.5146 175.515L9.51465 175.515L9.51466 46.2659Z" fill="#D1DAF1"/>
 <path d="M9.51466 46.2659L10.0297 46.2659L10.0297 45.9289L9.72086 45.7939L9.51466 46.2659ZM9.51466 18.7649L9.72088 19.2368L10.0297 19.1019L10.0297 18.7649L9.51466 18.7649ZM9.51466 0.514891L9.51466 -0.000108647L8.99966 -0.000108692L8.99966 0.514891L9.51466 0.514891ZM21.5147 0.514892L22.0297 0.514892L22.0297 -0.000107553L21.5147 -0.000107598L21.5147 0.514892ZM21.5147 18.7649L20.9997 18.7649L20.9997 19.1019L21.3084 19.2368L21.5147 18.7649ZM21.5147 46.2659L21.3085 45.7939L20.9997 45.9289L20.9997 46.2659L21.5147 46.2659ZM21.5146 175.515L21.5146 176.03L22.0296 176.03L22.0296 175.515L21.5146 175.515ZM9.51465 175.515L8.99965 175.515L8.99965 176.03L9.51465 176.03L9.51465 175.515ZM9.51466 46.2659L9.72086 45.7939C4.60408 43.5582 1.02966 38.4537 1.02966 32.5149L0.514661 32.5149L-0.000338451 32.5149C-0.000339007 38.8777 3.83016 44.3441 9.30846 46.7378L9.51466 46.2659ZM0.514661 32.5149L1.02966 32.5149C1.02966 26.5763 4.60423 21.4727 9.72088 19.2368L9.51466 18.7649L9.30845 18.293C3.8304 20.6868 -0.000337894 26.1521 -0.000338451 32.5149L0.514661 32.5149ZM9.51466 18.7649L10.0297 18.7649L10.0297 0.514891L9.51466 0.514891L8.99966 0.514891L8.99966 18.7649L9.51466 18.7649ZM9.51466 0.514891L9.51466 1.02989L21.5147 1.02989L21.5147 0.514892L21.5147 -0.000107598L9.51466 -0.000108647L9.51466 0.514891ZM21.5147 0.514892L20.9997 0.514892L20.9997 18.7649L21.5147 18.7649L22.0297 18.7649L22.0297 0.514892L21.5147 0.514892ZM21.5147 18.7649L21.3084 19.2368C26.4251 21.4727 29.9997 26.5763 29.9997 32.5149L30.5147 32.5149L31.0297 32.5149C31.0297 26.1521 27.1989 20.6868 21.7209 18.293L21.5147 18.7649ZM30.5147 32.5149L29.9997 32.5149C29.9997 38.4537 26.4252 43.5582 21.3085 45.7939L21.5147 46.2659L21.7209 46.7378C27.1992 44.3441 31.0297 38.8777 31.0297 32.5149L30.5147 32.5149ZM21.5147 46.2659L20.9997 46.2659L20.9996 175.515L21.5146 175.515L22.0296 175.515L22.0297 46.2659L21.5147 46.2659ZM21.5146 175.515L21.5146 175L9.51465 175L9.51465 175.515L9.51465 176.03L21.5146 176.03L21.5146 175.515ZM9.51465 175.515L10.0296 175.515L10.0297 46.2659L9.51466 46.2659L8.99966 46.2659L8.99965 175.515L9.51465 175.515Z" fill="black"/>
         </g>
-        <g id="clock-5-minute" class="clock-hand" transform="translate(-11.0, -160.0)" fill="none">
+        <g id="clock-5-minute" class="clock-hand" transform="translate(-10, -43.000)" fill="none">
           <path d="M7.27833 52.9768C3.34444 51.6314 0.514662 47.9046 0.514662 43.5149C0.514663 39.1253 3.3446 35.3994 7.27833 34.054L7.27834 0.514891L14.8135 0.514892L14.8135 34.4846C18.1849 36.0923 20.5147 39.5309 20.5147 43.5149C20.5147 47.499 18.1851 50.9386 14.8135 52.5461L14.8135 201.572L7.27832 201.572L7.27833 52.9768Z" fill="#D1DAF1"/>
 <path d="M7.27833 52.9768L7.79333 52.9768L7.79333 52.6087L7.44499 52.4895L7.27833 52.9768ZM7.27833 34.054L7.445 34.5412L7.79334 34.4221L7.79334 34.054L7.27833 34.054ZM7.27834 0.514891L7.27834 -0.000107969L6.76334 -0.000108014L6.76334 0.514891L7.27834 0.514891ZM14.8135 0.514892L15.3285 0.514892L15.3285 -0.000107265L14.8135 -0.00010731L14.8135 0.514892ZM14.8135 34.4846L14.2985 34.4846L14.2985 34.8096L14.5918 34.9495L14.8135 34.4846ZM14.8135 52.5461L14.5918 52.0813L14.2985 52.2211L14.2985 52.5461L14.8135 52.5461ZM14.8135 201.572L14.8135 202.087L15.3285 202.087L15.3285 201.572L14.8135 201.572ZM7.27832 201.572L6.76332 201.572L6.76332 202.087L7.27832 202.087L7.27832 201.572ZM7.27833 52.9768L7.44499 52.4895C3.71282 51.2131 1.02966 47.6775 1.02966 43.5149L0.514662 43.5149L-0.000337134 43.5149C-0.000337538 48.1318 2.97606 52.0497 7.11168 53.4641L7.27833 52.9768ZM0.514662 43.5149L1.02966 43.5149C1.02966 39.3524 3.71291 35.8177 7.445 34.5412L7.27833 34.054L7.11167 33.5667C2.97629 34.9811 -0.000336731 38.8981 -0.000337134 43.5149L0.514662 43.5149ZM7.27833 34.054L7.79334 34.054L7.79334 0.514891L7.27834 0.514891L6.76334 0.514891L6.76333 34.054L7.27833 34.054ZM7.27834 0.514891L7.27834 1.02989L14.8135 1.02989L14.8135 0.514892L14.8135 -0.00010731L7.27834 -0.000107969L7.27834 0.514891ZM14.8135 0.514892L14.2985 0.514892L14.2985 34.4846L14.8135 34.4846L15.3285 34.4846L15.3285 0.514892L14.8135 0.514892ZM14.8135 34.4846L14.5918 34.9495C17.7909 36.4749 19.9997 39.737 19.9997 43.5149L20.5147 43.5149L21.0297 43.5149C21.0297 39.3249 18.5789 35.7096 15.0352 34.0198L14.8135 34.4846ZM20.5147 43.5149L19.9997 43.5149C19.9997 47.293 17.791 50.5559 14.5918 52.0813L14.8135 52.5461L15.0351 53.011C18.5792 51.3212 21.0297 47.7049 21.0297 43.5149L20.5147 43.5149ZM14.8135 52.5461L14.2985 52.5461L14.2985 201.572L14.8135 201.572L15.3285 201.572L15.3285 52.5461L14.8135 52.5461ZM14.8135 201.572L14.8135 201.057L7.27832 201.057L7.27832 201.572L7.27832 202.087L14.8135 202.087L14.8135 201.572ZM7.27832 201.572L7.79332 201.572L7.79333 52.9768L7.27833 52.9768L6.76333 52.9768L6.76332 201.572L7.27832 201.572Z" fill="black"/>
         </g>
-        <g id="clock-5-second" class="clock-hand" transform="translate(-5.0, -170.0)" fill="none">
+        <g id="clock-5-second" class="clock-hand" transform="translate(-4.5, -55.000)" fill="none">
           <path d="M8.51514 37.5149L5.82764 37.5149L4.87061 226.515L4.15869 226.515L3.20264 37.5149L0.515137 37.5149L0.515137 0.514893L8.51514 0.514893L8.51514 37.5149Z" fill="#EEEEEE"/>
 <path d="M8.51514 37.5149L8.51514 38.0299L9.03014 38.0299L9.03014 37.5149L8.51514 37.5149ZM5.82764 37.5149L5.82764 36.9999L5.31524 36.9999L5.31264 37.5123L5.82764 37.5149ZM4.87061 226.515L4.87061 227.03L5.38301 227.03L5.3856 226.518L4.87061 226.515ZM4.15869 226.515L3.6437 226.518L3.64629 227.03L4.15869 227.03L4.15869 226.515ZM3.20264 37.5149L3.71763 37.5123L3.71504 36.9999L3.20264 36.9999L3.20264 37.5149ZM0.515137 37.5149L0.000136985 37.5149L0.000136988 38.0299L0.515137 38.0299L0.515137 37.5149ZM0.515137 0.514893L0.515137 -0.000107408L0.00013673 -0.000107404L0.000136733 0.514893L0.515137 0.514893ZM8.51514 0.514893L9.03014 0.514893L9.03014 -0.000107465L8.51514 -0.000107462L8.51514 0.514893ZM8.51514 37.5149L8.51514 36.9999L5.82764 36.9999L5.82764 37.5149L5.82764 38.0299L8.51514 38.0299L8.51514 37.5149ZM5.82764 37.5149L5.31264 37.5123L4.35561 226.512L4.87061 226.515L5.3856 226.518L6.34263 37.5175L5.82764 37.5149ZM4.87061 226.515L4.87061 226L4.15869 226L4.15869 226.515L4.15869 227.03L4.87061 227.03L4.87061 226.515ZM4.15869 226.515L4.67369 226.512L3.71763 37.5123L3.20264 37.5149L2.68764 37.5175L3.6437 226.518L4.15869 226.515ZM3.20264 37.5149L3.20264 36.9999L0.515137 36.9999L0.515137 37.5149L0.515137 38.0299L3.20264 38.0299L3.20264 37.5149ZM0.515137 37.5149L1.03014 37.5149L1.03014 0.514893L0.515137 0.514893L0.000136733 0.514893L0.000136985 37.5149L0.515137 37.5149ZM0.515137 0.514893L0.515137 1.02989L8.51514 1.02989L8.51514 0.514893L8.51514 -0.000107462L0.515137 -0.000107408L0.515137 0.514893ZM8.51514 0.514893L8.00014 0.514893L8.00014 37.5149L8.51514 37.5149L9.03014 37.5149L9.03014 0.514893L8.51514 0.514893Z" fill="black"/>
         </g>
@@ -1486,89 +1390,42 @@
   </section>
 
   <section class="page" id="page-walk">
+    <div class="walk-stage" id="walk-stage">
+      <div class="maze-wrap" id="maze-wrap">
+        <canvas id="maze-canvas"></canvas>
 
-    <!-- SCREEN 1: 준비중 (Figma node 338:491, 5초 고정 + Loading 점 애니메이션) -->
-    <div class="walk-screen walk-screen--loading active" id="walk-screen-loading">
-      <p class="walk-heading-title">Take a Walk</p>
-      <p class="walk-heading-sub">작은 친구들과 함께 산책해요!</p>
-      <div class="walk-loading-dog-icon"><img src="img/dog-icon.svg" alt="" /></div>
-      <p class="walk-loading-label">Loading <span class="walk-loading-dots" id="walk-loading-dots">.</span></p>
-      <div class="walk-loading-tip">Tip. 산책로에서 벗어나지 않게 조심조심 산책해요</div>
-    </div>
-
-    <!-- SCREEN 2: 게임 (미로) -->
-    <div class="walk-screen walk-screen--game" id="walk-screen-game">
-      <div class="walk-stage" id="walk-stage">
-        <div class="maze-wrap" id="maze-wrap">
-          <canvas id="maze-canvas"></canvas>
-
-          <div class="walk-start" id="walk-start">
-            <img class="dog-icon-svg" src="img/dog-icon.svg" alt="" />
-            <button class="start-btn" id="walk-start-btn" type="button">
-              Click to Start
-              <img class="tri-icon" src="img/arrow-triangle.svg" alt="" />
-            </button>
-          </div>
-
-          <div class="walk-end" id="walk-end">
-            <span class="walk-end-label">
-              <img class="tri-icon" src="img/arrow-triangle.svg" alt="" />
-              End
-            </span>
-          </div>
-
-          <div class="walk-footprints" id="walk-footprints"></div>
-
-          <div class="walk-hint">
-            산책길을 따라 조심조심!<br />
-            길 밖으로 벗어나지 않고 산책하세요
-          </div>
-        </div>
-      </div>
-
-      <!-- 게임오버 (Figma node 338:604) — Drawing의 블러 페이드 오버레이(.drawing-end-overlay)와 동일 구조 -->
-      <div class="walk-result-overlay" id="walk-screen-gameover">
-        <p class="walk-result-title">Game Over</p>
-        <p class="walk-result-sub">이번 판은 연습이었어요! 아마도...</p>
-        <div class="walk-result-dog-icon"><img src="img/dog-icon.svg" alt="" /></div>
-        <div class="walk-result-actions">
-          <button type="button" class="walk-result-btn" id="walk-gameover-retry">
-            <span class="walk-result-arrow"></span>Play again
+        <div class="walk-start" id="walk-start">
+          <img class="dog-icon-svg" src="img/dog-icon.svg" alt="" />
+          <button class="start-btn" id="walk-start-btn" type="button">
+            Click to Start
+            <img class="tri-icon" src="img/arrow-triangle.svg" alt="" />
           </button>
-          <a class="walk-result-btn" href="pages/drawing.html">
-            <span class="walk-result-arrow"></span>Next Game
-          </a>
-          <a class="walk-result-btn" onclick="showPage('main')">
-            <span class="walk-result-arrow"></span>Home
-          </a>
         </div>
-      </div>
 
-      <!-- 성공 (Figma node 379:640) -->
-      <div class="walk-result-overlay" id="walk-screen-success">
-        <p class="walk-result-title">Nice Walk!</p>
-        <p class="walk-result-sub">오늘의 산책을 마쳤어요</p>
-        <div class="walk-result-dog-icon"><img src="img/dog-icon.svg" alt="" /></div>
-        <div class="walk-result-actions">
-          <button type="button" class="walk-result-btn" id="walk-success-retry">
-            <span class="walk-result-arrow"></span>Play again
-          </button>
-          <a class="walk-result-btn" href="pages/drawing.html">
-            <span class="walk-result-arrow"></span>Next Game
-          </a>
-          <a class="walk-result-btn" onclick="showPage('main')">
-            <span class="walk-result-arrow"></span>Home
-          </a>
+        <div class="walk-end" id="walk-end">
+          <span class="walk-end-label">
+            <img class="tri-icon" src="img/arrow-triangle.svg" alt="" />
+            End
+          </span>
+        </div>
+
+        <div class="walk-footprints" id="walk-footprints"></div>
+
+        <div class="walk-hint">
+          산책길을 따라 조심조심!<br />
+          길 밖으로 벗어나지 않고 산책하세요
+        </div>
+
+        <div class="walk-overlay" id="walk-overlay">
+          <div class="walk-overlay-msg" id="walk-overlay-msg"></div>
+          <button class="walk-retry" id="walk-retry" type="button">Retry</button>
         </div>
       </div>
     </div>
-
   </section>
 
 </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/services/supabaseConfig.js"></script>
   <script src="js/services/feedbackService.js"></script>
   <script src="js/drawingCanvas.js"></script>
   <script src="js/contactLinks.js"></script>
@@ -1621,166 +1478,7 @@
     updateTime();
     setInterval(updateTime, 1000);
 
-    /* ── 시계 설정 ── */
-    const CLOCKS = [1, 2, 3, 4, 5];
-    const CENTERS = {
-      1: { x: 455.93,  y: 612.00  },
-      2: { x: 439.81,  y: 868.00  },
-      3: { x: 1108.31, y: 730.31  },
-      4: { x: 1586.87, y: 444.40  },
-      5: { x: 1631.81, y: 835.81  },
-    };
-
-    const IDS = [1, 2, 3, 4, 5];
-
-    // 각 시계의 마지막 적용 각도(누적, normalize 안 됨) — 최단 경로 회전 계산용
-    const lastHourDeg = {};
-    const lastMinDeg = {};
-    IDS.forEach(id => { lastHourDeg[id] = 0; lastMinDeg[id] = 0; });
-
-    function shortestDeg(last, target) {
-      // target(0~360)에 대해 last와 가장 가까운 등가 각도를 반환
-      const lastMod = ((last % 360) + 360) % 360;
-      let diff = target - lastMod;
-      if (diff > 180) diff -= 360;
-      if (diff < -180) diff += 360;
-      return last + diff;
-    }
-
-    let isDragging = false;
-    let dragStartAngle = 0;
-    let activeDragId = null;       // 현재 드래그 중인 시계 id
-    let draggedMinDeg = null;      // 드래그로 설정된 분침 각도 (해당 시계만)
-
-    function getAngle(cx, cy, px, py) {
-      return Math.atan2(py - cy, px - cx) * (180 / Math.PI) + 90;
-    }
-
-    function normalizeDeg(deg) {
-      return ((deg % 360) + 360) % 360;
-    }
-
-    function svgPoint(svg, clientX, clientY) {
-      const rect = svg.getBoundingClientRect();
-      const scaleX = 1920 / rect.width;
-      const scaleY = 1080 / rect.height;
-      return {
-        x: (clientX - rect.left) * scaleX,
-        y: (clientY - rect.top)  * scaleY,
-      };
-    }
-    /* ── 드래그: 프레스한 시계의 분침만 조절 ── */
-    const svg = document.getElementById('clocks-svg');
-
-    function startDrag(clientX, clientY) {
-      const pt = svgPoint(svg, clientX, clientY);
-      let minDist = Infinity;
-      let nearestId = null;
-      Object.entries(CENTERS).forEach(([id, c]) => {
-        const dist = Math.hypot(pt.x - c.x, pt.y - c.y);
-        if (dist < minDist) { minDist = dist; nearestId = parseInt(id); }
-      });
-
-      activeDragId = nearestId;
-      const c = CENTERS[activeDragId];
-      dragStartAngle = getAngle(c.x, c.y, pt.x, pt.y);
-
-      // 드래그 시작 시점의 실제(실시간) 분침 각도(누적값 기준)를 시작점으로 사용
-      draggedMinDeg = lastMinDeg[activeDragId];
-
-      // 드래그 중에는 transition 제거 (즉각 반응)
-      const mEl = document.getElementById(`clock-${activeDragId}-minute`);
-      const hEl = document.getElementById(`clock-${activeDragId}-hour`);
-      if (mEl) mEl.classList.add('dragging');
-      if (hEl) hEl.classList.add('dragging');
-
-      isDragging = true;
-    }
-
-    function moveDrag(clientX, clientY) {
-      if (!isDragging || activeDragId === null) return;
-      const pt = svgPoint(svg, clientX, clientY);
-      const c = CENTERS[activeDragId];
-      const currentAngle = getAngle(c.x, c.y, pt.x, pt.y);
-      let delta = currentAngle - dragStartAngle;
-      if (delta > 180)  delta -= 360;
-      if (delta < -180) delta += 360;
-
-      draggedMinDeg = draggedMinDeg + delta;
-      dragStartAngle = currentAngle; // 다음 move 때 누적되도록 갱신
-      lastMinDeg[activeDragId] = draggedMinDeg;
-      lastHourDeg[activeDragId] = draggedMinDeg / 12;
-
-      // 드래그 중인 시계의 분침만 즉시 반영 (시침도 함께, 자연스러운 시계 동작)
-      const m = document.getElementById(`clock-${activeDragId}-minute`);
-      const h = document.getElementById(`clock-${activeDragId}-hour`);
-      if (m) m.style.transform = `rotate(${draggedMinDeg}deg)`;
-      if (h) {
-        h.style.transform = `rotate(${draggedMinDeg / 12}deg)`;
-      }
-    }
-
-    function endDrag() {
-      // 놓는 순간 transition을 다시 켜서, 다음 updateHourMinute 때 부드럽게 복귀
-      if (activeDragId !== null) {
-        const mEl = document.getElementById(`clock-${activeDragId}-minute`);
-        const hEl = document.getElementById(`clock-${activeDragId}-hour`);
-        if (mEl) mEl.classList.remove('dragging');
-        if (hEl) hEl.classList.remove('dragging');
-      }
-      isDragging = false;
-      activeDragId = null;
-      draggedMinDeg = null;
-      // 놓는 즉시 실시간 값으로 부드럽게 복귀 시작
-      updateHourMinute();
-    }
-
-    svg.addEventListener('mousedown', e => { startDrag(e.clientX, e.clientY); e.preventDefault(); });
-    window.addEventListener('mousemove', e => moveDrag(e.clientX, e.clientY));
-    window.addEventListener('mouseup', endDrag);
-
-    svg.addEventListener('touchstart', e => { startDrag(e.touches[0].clientX, e.touches[0].clientY); e.preventDefault(); }, { passive: false });
-    window.addEventListener('touchmove', e => { if(isDragging) moveDrag(e.touches[0].clientX, e.touches[0].clientY); }, { passive: false });
-    window.addEventListener('touchend', endDrag);
-
-    /* ── 실시간 업데이트 ── */
-    function updateHourMinute() {
-      const now = new Date();
-      const sec  = now.getSeconds() + now.getMilliseconds() / 1000;
-      const min  = now.getMinutes() + sec / 60;
-      const hour = (now.getHours() % 12) + min / 60;
-      const minDeg  = normalizeDeg(min  * 6);
-      const hourDeg = normalizeDeg(hour * 30);
-
-      IDS.forEach(id => {
-        // 현재 드래그 중인 시계는 실시간 업데이트 건너뜀 (드래그 핸들러가 직접 제어)
-        if (isDragging && id === activeDragId) return;
-        const h = document.getElementById(`clock-${id}-hour`);
-        const m = document.getElementById(`clock-${id}-minute`);
-        const newHourDeg = shortestDeg(lastHourDeg[id], hourDeg);
-        const newMinDeg  = shortestDeg(lastMinDeg[id], minDeg);
-        lastHourDeg[id] = newHourDeg;
-        lastMinDeg[id] = newMinDeg;
-        if (h) h.style.transform = `rotate(${newHourDeg}deg)`;
-        if (m) m.style.transform = `rotate(${newMinDeg}deg)`;
-      });
-      updateTime();
-    }
-
-    function updateSeconds() {
-      const now = new Date();
-      const sec = now.getSeconds() + now.getMilliseconds() / 1000;
-      const secDeg = sec * 6;
-      IDS.forEach(id => {
-        const s = document.getElementById(`clock-${id}-second`);
-        if (s) s.style.transform = `rotate(${secDeg}deg)`;
-      });
-      requestAnimationFrame(updateSeconds);
-    }
-
-    updateHourMinute();
-    setInterval(updateHourMinute, 1000);
-    requestAnimationFrame(updateSeconds);
+    /* 시계 바늘 자동 회전 + 드래그 인터랙션 제거됨 — 이제 각 바늘은 수동으로 rotate() 값을 지정 */
 
     let isOpen = false;
 
@@ -1814,7 +1512,7 @@
       if (name === 'contact') {
         contactBtn.classList.add('active');
       }
-      if (name === 'walk') walkEnterPage();
+      if (name === 'walk') resetWalkGame();
     }
 
     /* Label always stays "Contact" — only the pill's color changes on the
@@ -1825,8 +1523,11 @@
       showPage(onContact ? 'main' : 'contact');
     }
 
+    if (location.hash === '#contact') showPage('contact');
+    else if (location.hash === '#walk') showPage('walk');
+
     /* ── TAKE A WALK — MAZE GAME ── */
-    const WALK = { cols: 16, rows: 8, cellSize: 95, entranceRow: 1, exitRow: 5, threshold: 15 };
+    const WALK = { cols: 16, rows: 7, cellSize: 95, entranceRow: 1, exitRow: 5, threshold: 15 };
     const walkState = { segments: [], active: false, over: false, lastPaw: null, pawSide: 1 };
 
     function generateMazeGrid(cols, rows) {
@@ -1931,12 +1632,12 @@
       const oy = y + Math.sin(rad) * forward + Math.sin(perpRad) * side;
       el.style.left = ox + 'px';
       el.style.top = oy + 'px';
-      /* the paw artwork's toes point straight up (-90deg) at rest, so add
-         90deg to align the toes with the travel direction */
-      el.style.transform = 'rotate(' + (angleDeg + 90) + 'deg)';
+      /* the paw artwork's toes naturally point ~20deg above the pad-to-toe
+         axis at rest, so add that offset to align the toes with travel direction */
+      el.style.transform = 'rotate(' + (angleDeg + 20) + 'deg)';
       el.innerHTML = '<img src="img/paw-icon.svg" alt="" />';
       document.getElementById('walk-footprints').appendChild(el);
-      setTimeout(() => el.remove(), 3000);
+      setTimeout(() => el.remove(), 5000);
     }
 
     function handleWalkMove(e) {
@@ -1971,7 +1672,7 @@
       }
       walkState.lastPos = { x: mx, y: my };
 
-      if (!walkState.lastPaw || Math.hypot(mx - walkState.lastPaw.x, my - walkState.lastPaw.y) > 26) {
+      if (!walkState.lastPaw || Math.hypot(mx - walkState.lastPaw.x, my - walkState.lastPaw.y) > 22) {
         let angle = 0;
         if (walkState.lastPaw) angle = Math.atan2(my - walkState.lastPaw.y, mx - walkState.lastPaw.x) * 180 / Math.PI;
         spawnPaw(mx, my, angle);
@@ -1988,29 +1689,16 @@
       document.querySelector('.walk-hint').classList.add('hidden');
     }
 
-    function walkShowScreen(id) {
-      document.querySelectorAll('#page-walk .walk-screen').forEach(s => s.classList.remove('active'));
-      document.getElementById(id).classList.add('active');
-    }
-
-    function walkHideResultOverlays() {
-      document.getElementById('walk-screen-gameover').classList.remove('show');
-      document.getElementById('walk-screen-success').classList.remove('show');
-      document.getElementById('walk-stage').classList.remove('blurred');
-    }
-
-    function gameOverWalk() {
+    function showWalkOverlay(message) {
       walkState.active = false;
       walkState.over = true;
-      document.getElementById('walk-stage').classList.add('blurred');
-      document.getElementById('walk-screen-gameover').classList.add('show');
+      const overlay = document.getElementById('walk-overlay');
+      document.getElementById('walk-overlay-msg').textContent = message;
+      overlay.classList.add('show');
     }
-    function winWalkGame() {
-      walkState.active = false;
-      walkState.over = true;
-      document.getElementById('walk-stage').classList.add('blurred');
-      document.getElementById('walk-screen-success').classList.add('show');
-    }
+
+    function gameOverWalk() { showWalkOverlay('Game Over 🐾'); }
+    function winWalkGame() { showWalkOverlay('산책 완료! 🐾'); }
 
     function resetWalkGame() {
       walkState.segments = buildMaze();
@@ -2019,46 +1707,13 @@
       walkState.lastPaw = null;
       walkState.lastPos = null;
       document.getElementById('walk-start').classList.remove('hidden');
+      document.getElementById('walk-overlay').classList.remove('show');
       document.getElementById('walk-footprints').innerHTML = '';
       document.querySelector('.walk-hint').classList.remove('hidden');
-      walkHideResultOverlays();
-      walkShowScreen('walk-screen-game');
-    }
-
-    /* ── 준비중 화면: Drawing 페이지의 로딩 점 애니메이션(1개 → 4개 순차 반복)과 동일 구조 ── */
-    const WALK_LOADING_DURATION = 5000;
-    const WALK_LOADING_DOT_INTERVAL = 420;
-    let walkLoadingDotsTimer = null;
-    let walkLoadingTimer = null;
-
-    function walkStartLoadingDots() {
-      const el = document.getElementById('walk-loading-dots');
-      let n = 1;
-      el.textContent = '.'.repeat(n);
-      walkLoadingDotsTimer = setInterval(() => {
-        n = (n % 4) + 1;
-        el.textContent = '.'.repeat(n);
-      }, WALK_LOADING_DOT_INTERVAL);
-    }
-    function walkStopLoadingDots() {
-      if (walkLoadingDotsTimer) clearInterval(walkLoadingDotsTimer);
-      walkLoadingDotsTimer = null;
-    }
-
-    function walkEnterPage() {
-      walkStopLoadingDots();
-      clearTimeout(walkLoadingTimer);
-      walkShowScreen('walk-screen-loading');
-      walkStartLoadingDots();
-      walkLoadingTimer = setTimeout(() => {
-        walkStopLoadingDots();
-        resetWalkGame();
-      }, WALK_LOADING_DURATION);
     }
 
     document.getElementById('walk-start-btn').addEventListener('click', startWalkGame);
-    document.getElementById('walk-gameover-retry').addEventListener('click', resetWalkGame);
-    document.getElementById('walk-success-retry').addEventListener('click', resetWalkGame);
+    document.getElementById('walk-retry').addEventListener('click', resetWalkGame);
     document.getElementById('maze-wrap').addEventListener('mousemove', handleWalkMove);
 
     /* ── CONTACT PAGE ── */
@@ -2075,6 +1730,63 @@
     }
     updateContactClock();
     setInterval(updateContactClock, 1000);
+
+    /* 2번 시계 플립카드 — 요일/날짜 실시간 업데이트 */
+    const WEEKDAY_LABELS = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+    function updateFlipWeekdayDate() {
+      const now = new Date();
+      const weekdayEl = document.getElementById('flip-weekday-text');
+      const dateEl = document.getElementById('flip-date-text');
+      if (weekdayEl) weekdayEl.textContent = WEEKDAY_LABELS[now.getDay()];
+      if (dateEl) dateEl.textContent = String(now.getDate());
+    }
+    updateFlipWeekdayDate();
+    setInterval(updateFlipWeekdayDate, 60000);
+
+    /* 시계 바늘 자동 회전 — 각 바늘 <g>에 수동으로 넣어둔 translate(개별 중심점 보정)는
+       그대로 두고, 그 앞에 rotate()만 붙여서 시계 중심(각 clock-N 그룹의 원점) 기준으로
+       회전시킨다. 기본 상태(rotate 없음)가 6시 방향(아래)을 가리키도록 만들어져 있으므로,
+       12시=0°인 일반적인 시계 각도 계산값에 180°를 더해서 실제 rotate 값을 구한다. */
+    const CLOCK_IDS = ['clock-1', 'clock-2', 'clock-3', 'clock-4', 'clock-5'];
+    const clockHandBaseTransforms = {};
+    CLOCK_IDS.forEach(id => {
+      ['hour', 'minute', 'second'].forEach(part => {
+        const el = document.getElementById(id + '-' + part);
+        if (el) clockHandBaseTransforms[id + '-' + part] = el.getAttribute('transform') || '';
+      });
+    });
+
+    function setHandRotation(handId, angleDeg) {
+      const el = document.getElementById(handId);
+      const base = clockHandBaseTransforms[handId];
+      if (!el || base === undefined) return;
+      el.setAttribute('transform', 'rotate(' + angleDeg + ') ' + base);
+    }
+
+    function updateClockHands() {
+      const now = new Date();
+      const h = now.getHours() % 12;
+      const m = now.getMinutes();
+      const s = now.getSeconds();
+      const ms = now.getMilliseconds();
+
+      const secAngle = (s + ms / 1000) * 6 + 180;
+      const minAngle = (m + s / 60) * 6 + 180;
+      const hourAngle = (h + m / 60) * 30 + 180;
+
+      CLOCK_IDS.forEach(id => {
+        setHandRotation(id + '-hour', hourAngle);
+        setHandRotation(id + '-minute', minAngle);
+        setHandRotation(id + '-second', secAngle);
+      });
+    }
+    /* setInterval(1000ms) 대신 requestAnimationFrame으로 매 프레임 갱신 —
+       각도가 초 단위로 뚝뚝 끊기지 않고 부드럽게(스위핑) 돌아간다 */
+    function clockHandsLoop() {
+      updateClockHands();
+      requestAnimationFrame(clockHandsLoop);
+    }
+    requestAnimationFrame(clockHandsLoop);
 
     /* ContactLinks — reads from the contactLinks constant in js/contactLinks.js
        so swapping in a real Instagram/Behance URL later only touches that
@@ -2138,12 +1850,6 @@
         });
       });
     }
-
-    /* 초기 라우팅은 스크립트 맨 끝에서 실행한다 — walkEnterPage() 등 여기서 호출하는
-       함수들이 참조하는 let/const 선언이 스크립트 앞부분에 있으면, 이 체크가 그보다
-       먼저 실행되면서 TDZ ReferenceError로 스크립트 전체가 중단되는 문제가 있었다. */
-    if (location.hash === '#contact') showPage('contact');
-    else if (location.hash === '#walk') showPage('walk');
   </script>
 </body>
 </html>
