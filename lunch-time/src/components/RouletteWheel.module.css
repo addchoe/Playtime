@@ -1,6 +1,6 @@
 .wheelWrap {
   position: relative;
-  width: min(56vw, 620px);
+  width: min(50vw, 560px);
   aspect-ratio: 1;
   margin: 0 auto;
   flex-shrink: 0;
@@ -29,6 +29,12 @@
   stroke-width: 0.15;
 }
 
+.innerRing {
+  fill: none;
+  stroke: #111111;
+  stroke-width: 0.15;
+}
+
 .spoke {
   stroke: #111111;
   stroke-width: 0.1;
@@ -50,7 +56,7 @@
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  width: 26%;
+  width: 25%;
   text-align: center;
 }
 
@@ -58,7 +64,7 @@
   border: 1px solid #111111;
   border-radius: 999px;
   padding: 3px 12px;
-  font-size: clamp(10px, 1.1vw, 14px);
+  font-size: calc(clamp(10px, 1.1vw, 14px) * var(--segment-font-scale, 1));
   letter-spacing: -0.04em;
   color: #111111;
   white-space: nowrap;
@@ -67,7 +73,7 @@
 
 .itemName {
   font-weight: 500;
-  font-size: clamp(13px, 1.8vw, 22px);
+  font-size: calc(clamp(13px, 1.8vw, 22px) * var(--segment-font-scale, 1));
   letter-spacing: -0.04em;
   color: #111111;
   line-height: 1.25;
@@ -89,11 +95,8 @@
   left: 50%;
   bottom: -6%;
   width: 15%;
-  aspect-ratio: 186 / 161;
+  aspect-ratio: 185.944 / 161.532;
   transform: translateX(-50%);
-  background: var(--color-accent);
-  border: 1.5px solid #111111;
-  clip-path: polygon(50% 0%, 4% 96%, 96% 96%);
 }
 
 .goButton {
@@ -107,7 +110,7 @@
   background: var(--color-accent);
   border: none;
   font-family: var(--font-display);
-  font-weight: 300;
+  font-weight: 400;
   font-size: clamp(20px, 2.6vw, 32px);
   color: #111111;
   cursor: pointer;
@@ -124,12 +127,13 @@
 
 .goButton:disabled {
   cursor: not-allowed;
-  opacity: 0.7;
+  background: #cfcfcf;
+  color: rgba(17, 17, 17, 0.45);
 }
 
 @media (max-width: 1024px) {
   .wheelWrap {
-    width: min(70vw, 520px);
+    width: min(66vw, 460px);
   }
 }
 

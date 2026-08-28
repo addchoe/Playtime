@@ -1,5 +1,13 @@
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
 
+@font-face {
+  font-family: 'SK Concretica';
+  src: url('/fonts/SK-Concretica-Trial.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --color-bg: #eeeeee;
   --color-surface: #ffffff;
@@ -8,7 +16,7 @@
   --color-border: #111111;
   --color-accent: #d1daf1;
   --font-sans: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --font-display: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-display: 'SK Concretica', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   color-scheme: light;
 }
 
