@@ -2,94 +2,115 @@ import { useRef, useState } from 'react';
 import { TopNav } from '../components/TopNav';
 import { ControlPanel } from '../components/ControlPanel';
 import { RouletteWheel } from '../components/RouletteWheel';
-import { geocodeLocation, pickRandomSubset, searchNearbyRestaurants } from '../api/kakao';
+import { ResultPage } from '../components/ResultPage';
+import { pickRandomSubset, searchNearbyRestaurants } from '../api/kakao';
 import { computeSpinDelta } from '../utils/wheel';
-import { DEFAULT_WHEEL_ITEMS } from '../data/defaultWheelItems';
-import type { RestaurantCount, WheelItem } from '../types';
+import { DEFAULT_COUNT, DEFAULT_RADIUS } from '../types';
+import type { Restaurant, SelectedLocation } from '../types';
 import styles from './LunchTimePage.module.css';
 
-type Status = 'idle' | 'loading' | 'error' | 'spinning' | 'result';
+type Status = 'idle' | 'loading' | 'error' | 'ready' | 'spinning' | 'result';
 
 export function LunchTimePage() {
-  const [location, setLocation] = useState('');
-  const [radius, setRadius] = useState('1000');
-  const [count, setCount] = useState<RestaurantCount>(8);
+  const [selectedLocation, setSelectedLocation] = useState<SelectedLocation | null>(null);
+  const [radius, setRadius] = useState(DEFAULT_RADIUS);
+  const [count, setCount] = useState(DEFAULT_COUNT);
   const [consent, setConsent] = useState(false);
 
-  const [wheelItems, setWheelItems] = useState<WheelItem[]>(DEFAULT_WHEEL_ITEMS);
+  // Empty until a real search populates it — the wheel shows `count` blank
+  // slices in the meantime (see RouletteWheel's `previewCount`), never mock
+  // restaurant data.
+  const [wheelItems, setWheelItems] = useState<Restaurant[]>([]);
   const [rotation, setRotation] = useState(0);
   const [status, setStatus] = useState<Status>('idle');
   const [message, setMessage] = useState<string | null>(null);
-  const [winner, setWinner] = useState<WheelItem | null>(null);
-  const winnerRef = useRef<WheelItem | null>(null);
+  const [winner, setWinner] = useState<Restaurant | null>(null);
+  const winnerRef = useRef<Restaurant | null>(null);
 
-  const spinning = status === 'spinning';
-  const busy = status === 'loading' || spinning;
+  const busy = status === 'loading' || status === 'spinning';
+  const wheelReady = status === 'ready';
 
-  async function handleGoClick() {
-    if (busy) return;
+  /** Settings changed after a real search already populated the wheel — that
+   * pool no longer matches the new settings, so drop back to idle and make
+   * the user re-fetch. Never touched while a fetch or spin is in flight. */
+  function invalidateLoadedWheel() {
+    if (status === 'ready' || status === 'error') {
+      setStatus('idle');
+      setMessage(null);
+    }
+  }
+
+  async function handleLoadRestaurants() {
+    if (busy || !selectedLocation || !consent) return;
     setMessage(null);
-
-    if (!consent) {
-      setStatus('error');
-      setMessage('개인정보 수집/이용에 동의해주세요.');
-      return;
-    }
-    if (!location.trim()) {
-      setStatus('error');
-      setMessage('현재 위치를 입력해주세요.');
-      return;
-    }
-    if (!radius) {
-      setStatus('error');
-      setMessage('검색 반경을 선택해주세요.');
-      return;
-    }
-
     setStatus('loading');
     setWinner(null);
 
     try {
-      const coord = await geocodeLocation(location.trim());
-      const found = await searchNearbyRestaurants(coord, Number(radius));
+      const pool = await searchNearbyRestaurants({ x: selectedLocation.x, y: selectedLocation.y }, radius);
 
-      if (found.length === 0) {
+      if (pool.length === 0) {
         setStatus('error');
-        setMessage('반경 내 음식점 검색 결과가 없습니다. 반경을 넓혀서 다시 시도해주세요.');
+        setMessage('이 범위에서는 음식점을 찾지 못했어요. 검색 범위를 넓혀보세요.');
         return;
       }
 
-      const picked = pickRandomSubset(found, count);
-      if (picked.length < count) {
-        setMessage(`주변에 음식점이 ${picked.length}곳뿐이라 ${picked.length}개로 룰렛을 구성했습니다.`);
-      }
-
+      const picked = pickRandomSubset(pool, count);
       setWheelItems(picked);
+      setRotation(0);
+      setStatus('ready');
 
-      const winnerIndex = Math.floor(Math.random() * picked.length);
-      winnerRef.current = picked[winnerIndex];
-
-      // Commit the "spinning" class (which carries the transition rule) in
-      // its own paint first — changing it and the transform in the same
-      // commit lets the browser skip straight to the end value with no
-      // animation.
-      setStatus('spinning');
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          const delta = computeSpinDelta(winnerIndex, picked.length);
-          setRotation((prev) => prev + delta);
-        });
-      });
+      if (picked.length < count) {
+        setMessage(`이 범위에서는 음식점을 ${picked.length}곳만 찾았어요. 검색 범위를 넓혀보세요.`);
+      }
     } catch (err) {
       setStatus('error');
       setMessage(err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다.');
     }
   }
 
+  function handleGoClick() {
+    if (status !== 'ready' || wheelItems.length === 0) return;
+
+    // Winner is decided first; the animation is just however long it takes
+    // the wheel to visually arrive at that already-decided segment.
+    const winnerIndex = Math.floor(Math.random() * wheelItems.length);
+    winnerRef.current = wheelItems[winnerIndex];
+
+    setStatus('spinning');
+    // Commit the "spinning" class (which carries the transition rule) in its
+    // own paint first — changing it and the transform in the same commit
+    // lets the browser skip straight to the end value with no animation.
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        const delta = computeSpinDelta(winnerIndex, wheelItems.length);
+        setRotation((prev) => prev + delta);
+      });
+    });
+  }
+
   function handleSpinEnd() {
     if (status !== 'spinning') return;
     setStatus('result');
     setWinner(winnerRef.current);
+  }
+
+  function handlePlayAgain() {
+    setStatus('idle');
+    setMessage(null);
+    setWinner(null);
+    winnerRef.current = null;
+    setWheelItems([]);
+    setRotation(0);
+  }
+
+  if (status === 'result' && winner) {
+    return (
+      <div className={styles.page}>
+        <TopNav />
+        <ResultPage winner={winner} onPlayAgain={handlePlayAgain} />
+      </div>
+    );
   }
 
   return (
@@ -100,40 +121,54 @@ export function LunchTimePage() {
         <h1 className={styles.srOnly}>Lunch Time — 점심 메뉴 룰렛</h1>
 
         <section className={styles.wheelColumn} aria-label="음식점 룰렛">
-
           <RouletteWheel
             items={wheelItems}
+            previewCount={count}
             rotation={rotation}
-            spinning={spinning}
+            spinning={status === 'spinning'}
             winner={winner}
             onSpinEnd={handleSpinEnd}
             onGoClick={handleGoClick}
-            goDisabled={busy}
+            ready={wheelReady}
           />
         </section>
 
         <aside className={styles.sidebar}>
           <ControlPanel
-            location={location}
-            onLocationChange={setLocation}
+            selectedLocation={selectedLocation}
+            onSelectLocation={(location) => {
+              setSelectedLocation(location);
+              invalidateLoadedWheel();
+            }}
             radius={radius}
-            onRadiusChange={setRadius}
+            onRadiusChange={(value) => {
+              setRadius(value);
+              invalidateLoadedWheel();
+            }}
             count={count}
-            onCountChange={setCount}
+            onCountChange={(value) => {
+              setCount(value);
+              invalidateLoadedWheel();
+            }}
             consent={consent}
             onConsentChange={setConsent}
             disabled={busy}
+            onSubmit={handleLoadRestaurants}
+            submitDisabled={busy || !selectedLocation || !consent}
+            submitLabel={status === 'loading' ? '불러오는 중...' : '음식점 불러오기'}
           />
 
           <div className={styles.statusArea} role="status" aria-live="polite">
             {status === 'loading' && <p className={styles.statusLoading}>주변 음식점을 찾는 중...</p>}
             {status === 'error' && message && <p className={styles.statusError}>{message}</p>}
-            {status === 'result' && winner && (
+            {status === 'ready' && (
               <p className={styles.statusResult}>
-                오늘 점심은 <strong>{winner.name}</strong> 어때요?
+                음식점 {wheelItems.length}곳으로 룰렛을 구성했어요.
+                <br />
+                Go!를 눌러 돌려보세요.
               </p>
             )}
-            {status === 'result' && message && <p className={styles.statusNote}>{message}</p>}
+            {status === 'ready' && message && <p className={styles.statusNote}>{message}</p>}
           </div>
         </aside>
       </main>

@@ -6,7 +6,9 @@ export function TopNav() {
 
   return (
     <header className={styles.topNav}>
-      <span className={styles.logo}>Playtime!</span>
+      <a className={styles.logo} href="../index.html">
+        Playtime!
+      </a>
 
       <div className={styles.timePill} aria-label={`현재 시각 ${time}`}>
         <span className={styles.timeLabel}>Time</span>

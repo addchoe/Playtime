@@ -34,11 +34,12 @@
 .sidebar {
   position: absolute;
   left: clamp(24px, 6vw, 100px);
-  bottom: 48px;
+  top: 50%;
+  transform: translateY(-50%);
   display: flex;
   flex-direction: column;
   gap: 16px;
-  width: min(380px, 32vw);
+  width: min(326px, 32vw);
 }
 
 .statusArea {
@@ -59,7 +60,8 @@
 
 .statusResult {
   margin: 0;
-  font-size: 18px;
+  font-size: 14px;
+  line-height: 1.4;
   letter-spacing: -0.03em;
 }
 
@@ -76,7 +78,7 @@
 
   .sidebar {
     left: clamp(20px, 4vw, 48px);
-    width: min(360px, 40vw);
+    width: min(326px, 40vw);
   }
 }
 
